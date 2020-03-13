@@ -1,9 +1,5 @@
 package com.gx.web;
 
-import com.gx.po.BedroomPo;
-import com.gx.po.EmptyroomPo;
-import com.gx.po.RoomSetPo;
-import com.gx.po.StayRegisterPo;
 import com.gx.service.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +15,11 @@ public class TimerTask {
     @Autowired
     private RoomSetService roomSetService;
     @Autowired
-    private StayRegisterService stayRegisterService;
-    @Autowired
     private OrderService orderService;
-    @Autowired
-    private BedRoomService bedRoomService;
-    @Autowired
-    private BedroomdetailsSerivce bedroomdetailsSerivce;
-    @Autowired
-    private EmptyRoomSerivce emptyRoomSerivce;
-
 
 
     //定时结账
-    @Scheduled(cron = "0 0 1 * * ?")
+    /*@Scheduled(cron = "0 0 1 * * ?")
     public void payTime(){
         Date currentDate = new java.sql.Date(System.currentTimeMillis());
 
@@ -90,5 +77,5 @@ public class TimerTask {
             }
         }
 
-    }
+    }*/
 }

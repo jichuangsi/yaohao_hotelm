@@ -3,9 +3,18 @@ package com.gx.po;
 public class SupplierPo {
 
     private Integer id;
-
     private String supplierName;
-    private Integer isenabled;
+    private Integer isenabled;//1启用 2禁用
+    private Integer have;//是否为自有  1是 2不是
+
+
+    public Integer getHave() {
+        return have;
+    }
+
+    public void setHave(Integer have) {
+        this.have = have;
+    }
 
     public void setId(Integer id) {
         this.id = id;

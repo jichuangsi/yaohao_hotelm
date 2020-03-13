@@ -1,10 +1,10 @@
 package com.gx.po;
 
 public class PlatformPo {
-    private Integer id;
 
+    private Integer id;
     private String name;
-    private Integer isYong;
+    private Integer isYong;//1启用 2禁用
 
     public Integer getId() {
         return id;

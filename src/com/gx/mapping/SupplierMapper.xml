@@ -14,76 +14,81 @@
     </constructor>
   </resultMap>
 
-<!--   查看客房等级 -->
-  <select id="listAll" resultType="com.gx.po.SupplierPo" >
-    SELECT * FROM supplier WHERE isenabled=0
+    <!--   分页模糊查询 -->
+    <select id="pageFuzzyselect" resultType="com.gx.po.SupplierPo">
+      select *
+      from supplier
+      WHERE supplierName like CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
+      AND have=1 AND isenabled=0
+      limit #{start},#{pageSize}
   </select>
 
 
+    <select id="countFuzzyselect" resultType="java.lang.Integer">
+      select count(*) from supplier
+    WHERE supplierName like CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
+     AND isenabled=0   AND have=1
+  </select>
 
-  <!--   新增 -->
-  <insert id="insertAll" parameterType="com.gx.po.SupplierPo" >
-     INSERT INTO supplier (supplierName,isenabled)
-     values (#{supplierName,jdbcType=VARCHAR},0)
+    <!--   新增 -->
+    <insert id="insertAll" parameterType="com.gx.po.SupplierPo" useGeneratedKeys="true"  keyProperty="id">
+     INSERT INTO supplier (supplierName,isenabled,have)
+     values (#{supplierName,jdbcType=VARCHAR},0,#{have,jdbcType=INTEGER})
   </insert>
 
-  <!--   修改要用的精确查询 -->
-  <select id="selectById" resultType="com.gx.po.SupplierPo" parameterType="java.lang.Integer">
+    <!--   修改要用的精确查询 -->
+    <select id="selectById" resultType="com.gx.po.SupplierPo" parameterType="java.lang.Integer">
     select * from supplier where id=#{id,jdbcType=INTEGER}
    </select>
 
-  <!--    修改 -->
-  <update id="updateById" parameterType="com.gx.po.SupplierPo">
+    <!--    修改 -->
+    <update id="updateById" parameterType="com.gx.po.SupplierPo">
       UPDATE supplier SET supplierName=#{supplierName,jdbcType=VARCHAR}
                    WHERE id = #{id,jdbcType=INTEGER}
    </update>
 
-  <delete id="deleteById" parameterType="java.lang.Integer">
+    <delete id="deleteById" parameterType="java.lang.Integer">
      UPDATE supplier SET isenabled=1
                    WHERE id = #{id,jdbcType=INTEGER}
   </delete>
+
+  <select id="selectYZ" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM supplier Where supplierName=#{supplierName}
+  </select>
     <delete id="enabledById" parameterType="java.lang.Integer">
      UPDATE supplier SET isenabled=0
                    WHERE id = #{id,jdbcType=INTEGER}
   </delete>
 
-  <!--   分页模糊查询 -->
-  <select id="pageFuzzyselect" resultType="com.gx.po.SupplierPo">
+    <select id="listHaveAll" resultType="com.gx.po.SupplierPo">
+        SELECT * FROM supplier WHERE have=1 and  isenabled=0
+    </select>
+
+
+
+    <!--///////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+    <!--   分页模糊查询 -->
+    <select id="pageAll" resultType="com.gx.po.SupplierPo">
       select *
       from supplier
       WHERE supplierName like CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
+      AND have=2 AND isenabled=0
       limit #{start},#{pageSize}
   </select>
 
 
-  <select id="countFuzzyselect" resultType="java.lang.Integer">
+    <select id="countAll" resultType="java.lang.Integer">
       select count(*) from supplier
     WHERE supplierName like CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
-     AND isenabled=0
+     AND isenabled=0   AND have=2
   </select>
 
 
-  <select id="selectYZ" resultType="java.lang.Integer">
-    SELECT COUNT(*) FROM supplier Where supplierName=#{supplierName}
-  </select>
-
-  <!--   无分页模糊查询 -->
-  <select id="fuzzySelect" resultType="com.gx.po.SupplierPo">
-      select *
-    from supplier
-    WHERE supplierName like CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
-  </select>
+    <select id="HaveAll" resultType="com.gx.po.SupplierPo">
+        SELECT * FROM supplier WHERE hava=2 and  isenabled=0
+    </select>
 
 
 
-
-    <!--查询所有启用得酒店-->
-    <select id="listTrueAll"  resultType="com.gx.po.SupplierPo" >
-     SELECT * FROM supplier WHERE  isenabled=0
-     and supplierName like CONCAT('%',#{name,jdbcType=VARCHAR},'%')  limit #{start},#{pageSize}
-  </select>
-    <select id="listTrueAllCount" resultType="java.lang.Integer">
-     SELECT COUNT(*) FROM supplier Where  isenabled=0
-     AND supplierName like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
-</select>
 </mapper>

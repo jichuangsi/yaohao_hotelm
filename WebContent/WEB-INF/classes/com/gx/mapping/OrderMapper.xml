@@ -9,76 +9,322 @@
     -->
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="orderID" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="orderNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
-       <arg column="platformId" jdbcType="VARCHAR" javaType="java.lang.String" />
-        <arg column="stayDetailsId" jdbcType="INTEGER" javaType="java.lang.Integer" />
-        <arg column="predeterID" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="platformId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="money" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="currency" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="hotelmId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="roomId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="checkinTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+      <arg column="checkoutTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+      <arg column="orderTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+      <arg column="passengerId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="isdao" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="daoTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+      <arg column="checkinNumber" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="account" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="checkinDay" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="in" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="out" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
 
-
-  <!--   新增 -->
-  <insert id="inserAll" parameterType="com.gx.po.OrderPo" >
-     INSERT INTO `order` (orderID,status,platformId,stayDetailsId,predeterID)
-     values (#{orderID,jdbcType=INTEGER},#{status,jdbcType=VARCHAR}
-     ,#{platformId,jdbcType=INTEGER},#{stayDetailsId,jdbcType=INTEGER}
-     ,#{predeterID,jdbcType=INTEGER})
+<!--  //新增订单-->
+  <insert id="inserAll" parameterType="com.gx.po.OrderPo" useGeneratedKeys="true"  keyProperty="id">
+     INSERT INTO `order` (orderNumber,status,platformId,money,currency,hotelmId,roomId,checkinTime,checkoutTime,orderTime,
+     passengerId,isdao,daoTime,checkinNumber,account,checkinDay,`type`)
+     values (#{orderNumber,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}
+     ,#{platformId,jdbcType=INTEGER},#{money,jdbcType=DOUBLE}
+     ,#{currency,jdbcType=INTEGER},#{hotelmId,jdbcType=INTEGER},#{roomId,jdbcType=INTEGER},#{checkinTime,jdbcType=TIMESTAMP}
+     ,#{checkoutTime,jdbcType=TIMESTAMP},#{orderTime,jdbcType=TIMESTAMP},#{passengerId,jdbcType=INTEGER},#{isdao,jdbcType=INTEGER}
+     ,#{daoTime,jdbcType=TIMESTAMP},#{checkinNumber,jdbcType=INTEGER},#{account,jdbcType=INTEGER},#{checkinDay,jdbcType=INTEGER},
+    #{type,jdbcType=INTEGER} )
   </insert>
-
-  <!--修改 -->
-    <update id="upadeStatus" parameterType="com.gx.po.OrderPo">
-      UPDATE `order`
-        SET status=#{status,jdbcType=VARCHAR}
-                   WHERE orderID = #{orderID,jdbcType=INTEGER}
-   </update>
-    <update id="updateStatuaByCS" parameterType="com.gx.po.OrderPo">
-      UPDATE `order`
-        SET status=#{status,jdbcType=VARCHAR},
-            stayDetailsId=#{stayDetailsId,jdbcType=INTEGER}
-                   WHERE orderID = #{orderID,jdbcType=INTEGER}
-   </update>
-
-<select id="selectStatua" resultType="com.gx.po.OrderPo">
-   SELECT o.*,p.name AS pname
-	FROM `order` o
-	INNER JOIN platform p ON o.platformId=p.id
-	WHERE orderID=#{orderID,jdbcType=VARCHAR}
-</select>
-
-    <select id="listAll" resultType="com.gx.po.OrderPo">
-       SELECT o.*,p.name AS pname
-        FROM `order` o
-        INNER JOIN `platform` p ON o.platformId=p.id
-        WHERE orderID like CONCAT('%',#{orderID,jdbcType=VARCHAR},'%')
-         limit #{start},#{pageSize}
-    </select>
-
-    <select id="countFuzzyselect" resultType="java.lang.Integer">
-      select count(*) from `order`
-    WHERE orderID like CONCAT('%',#{orderID,jdbcType=VARCHAR},'%')
+<!--已确认-->
+  <select id="list" resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    /*WHERE `type`=1*/
+    WHERE <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    AND--> `type`=1 AND o.status=2
+    ORDER BY `checkinTime`
+    LIMIT #{start},#{size}
   </select>
 
-    <delete id="deletedorder" parameterType="java.lang.String">
-      DELETE FROM `order` WHERE orderID = #{orderID,jdbcType=VARCHAR}
-  </delete>
+  <select id="countList" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE `type`=1 AND o.status=2
+    <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>-->
+
+  </select>
+  <!--已入住-->
+  <select id="checkinorder" resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    /*WHERE `type`=1*/
+    WHERE <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    AND--> `type`=1 AND o.status=5
+    ORDER BY `checkinTime`
+    LIMIT #{start},#{size}
+  </select>
+
+  <select id="countcheckinorder" resultType="java.lang.Integer">
+  SELECT COUNT(*)
+  FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+  INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+  ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+  INNER JOIN `account` a ON a.`id`=o.`account`
+  WHERE `type`=1 AND o.status=5
+  <!--1=1
+  <if test="orderNumber!=''">
+    AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+  </if>
+  <if test="passengerId!=null">
+    AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+  </if>-->
+  </select>
+    <!--已退房-->
+  <select id="checkoutorder" resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    /*WHERE `type`=1*/
+    WHERE <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    AND--> `type`=1 AND o.status=6
+    ORDER BY `checkinTime`
+    LIMIT #{start},#{size}
+  </select>
+
+  <select id="countcheckoutorder" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE `type`=1 AND o.status=6
+    <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>-->
+  </select>
+<!--已到账-->
+  <select id="myaccount" resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    /*WHERE `type`=1*/
+    WHERE <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    AND--> `type`=1 AND o.isdao=2
+    ORDER BY `checkinTime`
+    LIMIT #{start},#{size}
+  </select>
+
+  <select id="countmyaccount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE `type`=1 AND o.isdao=2
+    <!--1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>-->
+  </select>
+   <!-- 入住情况-->
+  <select id="selectRoomByTime" resultType="com.gx.vo.OrderTimeVo">
+    SELECT  rt.`number`,r.`roomAmount`,r.`roomAmount`-rt.`number` AS remainingBeds,
+	r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
+	FROM `room` r LEFT JOIN `roomandtime` rt ON rt.`roomId`=r.id
+	INNER JOIN `supplier` s ON s.id=r.`supplierID`
+	WHERE s.`have`=1
+	OR #{time,jdbcType=TIMESTAMP} BETWEEN `intime` AND `outtime`
+	 LIMIT #{start},#{size}
+  </select>
 
 
-    <select id="selectBypredetermineID" resultType="java.lang.String">
-        SELECT orderID FROM `order` WHERE `predeterID`=#{predeterID，jdbc=INTEGER}
+
+
+  <select id="countSelectRoomByTime" resultType="java.lang.Integer">
+      SELECT COUNT(*)
+	FROM `roomandtime` rt RIGHT JOIN `room` r ON rt.`roomId`=r.id
+	INNER JOIN `supplier` s ON s.id=r.`supplierID`
+	WHERE TO_DAYS(`intime`)=TO_DAYS(time)
+	OR r.`id` NOT IN(
+		SELECT `roomId` FROM `roomandtime` WHERE isout=1
+	)
+	AND s.`have`=1
+	AND s.`isenabled`=0
+  </select>
+
+  <update id="updateStatus">
+      UPDATE `order` SET `status`=#{status,jdbcType=INTEGER} WHERE `orderNumber`=#{orderNumber,jdbcType=VARCHAR}
+    </update>
+
+  <select id="selectByOrderNumber" resultType="com.gx.po.OrderPo">
+        SELECT * from `order` where `orderNumber`=#{orderNumber,jdbcType=VARCHAR}
     </select>
 
-    <select id="codeNumberYZ" resultType="java.lang.Integer">
-        SELECT COUNT(*) FROM `order` WHERE orderID= #{orderID,jdbcType=VARCHAR}
-    </select>
-    <select id="byID" resultType="com.gx.po.OrderPo">
-          SELECT o.*,p.name AS pname
-            FROM `order` o
-            INNER JOIN `stayregisterdetails` ss ON ss.id=o.`stayDetailsId`
-            INNER JOIN `platform` p ON o.`platformId`=p.id
-            WHERE ss.`stayRegisterID`=#{id，jdbc=INTEGER}
-    </select>
-    <select id="selectBypredeID" resultType="com.gx.po.OrderPo">
-          SELECT * FROM `order` WHERE `predeterID`=#{predeterID，jdbc=INTEGER}
-    </select>
+  <select id="selectCheckinList" resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.id AS orderID,o.`orderNumber` AS orderNumber,o.`status` AS `status`,o.`money` AS money,
+    o.`checkinTime`AS checkintime,o.`checkoutTime` AS checkoutTime,o.`orderTime` AS orderTime,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE 1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    <if test="time!=0">
+      AND `checkinTime`>=#{time,jdbcType=BIGINT}
+    </if>
+    AND `type`=1
+    ORDER BY `checkinTime`
+    LIMIT #{start},#{size}
+  </select>
+
+  <select id="countSelectCheckinList" resultType="java.lang.Integer">
+     SELECT COUNT(*)
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE 1=1
+    <if test="orderNumber!=''">
+      AND  o.`orderNumber` like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="passengerId!=null">
+      AND `passengerId`= #{passengerId,jdbcType=INTEGER}
+    </if>
+    <if test="time!=0">
+      AND `checkinTime`>=#{time,jdbcType=BIGINT}
+    </if>
+    AND `type`=1
+  </select>
+
+<select id="checkinDay" resultType="com.gx.vo.IndayVo">
+  SELECT TIMESTAMPDIFF(DAY ,DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m-%d'),
+  DATE_FORMAT(o.`checkoutTime`,'%Y-%m-%d')) AS count,`checkinNumber`AS `number`
+  FROM `order` o WHERE `status`!=6 AND `roomId`=#{roomId,jdbcType=INTEGER} AND o.`type`=1
+</select>
+  <select id="codeNumberYZ" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM `order` WHERE `orderNumber`=#{orderNumber,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateMoney">
+      UPDATE `order` SET `isdao`=2,`daoTime`=#{time,jdbcType=TIMESTAMP} WHERE `id`=#{id,jdbcType=INTEGER}
+  </update>
+
+
+<!--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<select id="allContractOrder"  resultType="com.gx.vo.OrderDetailsVo">
+    SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE 1=1
+    <if test="name!=null">
+      pa.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+  <if test="orderNumber!=null">
+    o.orderNumber like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+  </if>
+  AND o.type=2
+  AND s.`have`=2
+  AND s.`isenabled`=0
+  LIMIT #{start},#{size}
+</select>
+
+  <select id="countallContractOrder"  resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE 1=1
+    <if test="name!=null">
+      pa.name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="orderNumber!=null">
+      o.orderNumber like CONCAT('%',#{orderNumber,jdbcType=VARCHAR},'%')
+    </if>
+    AND o.type=2
+    AND s.`have`=2
+    AND s.`isenabled`=0
+  </select>
 </mapper>

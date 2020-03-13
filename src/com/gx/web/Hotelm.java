@@ -1,3 +1,4 @@
+/*
 package com.gx.web;
 
 import com.google.gson.Gson;
@@ -49,11 +50,31 @@ public class Hotelm {
     @Autowired
     private RoomTimePoService roomTimePoService;
 
-    //所有酒店list查询
-    @RequestMapping("/tolist")
+    //查询自有酒店
+    @RequestMapping("/toHaveList")
+    public ModelAndView toHaveList(Integer currentPage, String txtname){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/hotelmCheckin/list");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        if(txtname==null)
+        {
+            txtname="";
+        }
+        Page<SupplierPo> vo=new Page<SupplierPo>();
+        vo.setCurrentPage(currentPage);
+        vo=this.supplierService.listHaveTrueAll(txtname,vo);
+        mv.addObject("list",vo);
+        return mv;
+    }
+    //查询酒店
+    @RequestMapping("/toList")
     public ModelAndView tolist(Integer currentPage, String txtname){
         ModelAndView mv=null;
-      //  List<PlatformPo> listAll=platformService.listTrueAll();
+        //  List<PlatformPo> listAll=platformService.listTrueAll();
         mv=new ModelAndView("/hotelmCheckin/list");
         if (currentPage==null) {
             currentPage=1;
@@ -90,9 +111,25 @@ public class Hotelm {
         mv.addObject("supper",id);
         return mv;
     }
-
     //根据酒店和房号查询房间
-    @RequestMapping("/toRoom")
+    @RequestMapping("/day")
+    public ModelAndView day(Integer id,Integer supplierId){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/hotelmCheckin/day");
+        List<EmptyroomPo> vo=  emptyRoomSerivce.listByRoomId(id);
+        mv.addObject("list",vo);
+        mv.addObject("id",id);//房间id
+        mv.addObject("supplierId",supplierId);//房间id
+
+        return mv;
+    }
+
+
+
+
+  //根据酒店和房号查询房间
+  */
+/*  @RequestMapping("/toRoom")
     public ModelAndView toRoom(Integer currentPage, String supperId,String txtname,Integer guestRoomLevelID){
         ModelAndView mv=null;
         mv=new ModelAndView("/hotelmCheckin/roomset");
@@ -110,20 +147,9 @@ public class Hotelm {
         mv.addObject("supper",supperId);
         mv.addObject("guestRoomLevelID",guestRoomLevelID);
         return mv;
-    }
+    }*//*
 
-    //根据酒店和房号查询房间
-    @RequestMapping("/day")
-    public ModelAndView day(Integer id,Integer supplierId){
-        ModelAndView mv=null;
-        mv=new ModelAndView("/hotelmCheckin/day");
-        List<EmptyroomPo> vo=  emptyRoomSerivce.listByRoomId(id);
-        mv.addObject("list",vo);
-        mv.addObject("id",id);//房间id
-        mv.addObject("supplierId",supplierId);//房间id
 
-        return mv;
-    }
 
     //根据酒店和房号查询房间
     @ResponseBody
@@ -189,7 +215,8 @@ public class Hotelm {
         return mv;
     }
 
-    @RequestMapping("/addRoom")
+   */
+/* @RequestMapping("/addRoom")
     public ModelAndView addRoom(AddPassengerVo vo){
         ModelAndView mv=null;
         mv=new ModelAndView("/hotelmCheckin/day");
@@ -198,8 +225,12 @@ public class Hotelm {
         int pid=0;
        if (po1==null){
            po.setName(vo.getName());
-           po.setGenderID(vo.getGenderID());
-           po.setContactPhoneNumber(vo.getContactPhoneNumber());
+         *//*
+*/
+/*  po.setGenderID(vo.getGenderID());
+           po.setContactPhoneNumber(vo.getContactPhoneNumber());*//*
+*/
+/*
            passengerService.insertAll(po);
          pid=po.getId();
        }else {
@@ -259,13 +290,16 @@ public class Hotelm {
         mv.addObject("id",vo.getRoomid());//房间id
         mv.addObject("supplierId",vo.getSupperId());//房间id
         return mv;
-    }
+    }*//*
+
 
     @ResponseBody
     @RequestMapping(value = "/viewRoom",produces="text/jsp;charset=UTF-8")
     public Object addRoom(Integer id){
-      /*  ModelAndView mv=null;
-        mv=new ModelAndView("/hotelmCheckin/day");*/
+      */
+/*  ModelAndView mv=null;
+        mv=new ModelAndView("/hotelmCheckin/day");*//*
+
         RoomTimePo roomTimePo=roomTimePoService.list();
         EmptyroomPo vo=  emptyRoomSerivce.selectById(id);
         StayRegisterPo stayRegisterPo=null;
@@ -298,7 +332,9 @@ public class Hotelm {
         long time2 = (new SimpleDateFormat("yyyy-MM-dd")).parse(dateStrings, new ParsePosition(0)).getTime() / 1000;
         viewVo.setSorp(vo.getSorp());
         viewVo.setPassenger(passengerPo.getName());
-        viewVo.setPhone(passengerPo.getContactPhoneNumber());
+     */
+/*   viewVo.setPhone(passengerPo.getContactPhoneNumber());*//*
+
         viewVo.setRoomNumber(vo.getRoomNumber());
         viewVo.setCheckin(vo.getCheckin());
         viewVo.setCheckout(vo.getCheckout());
@@ -307,7 +343,8 @@ public class Hotelm {
         viewVo.setCheckouts(roomTimePo.getCheckout());
         Gson gson =new Gson();
         return gson.toJson(viewVo);
-       /* mv.addObject("sorp",vo.getSorp());
+       */
+/* mv.addObject("sorp",vo.getSorp());
         mv.addObject("passenger",passengerPo.getName());
         mv.addObject("phone",passengerPo.getContactPhoneNumber());
         mv.addObject("roomNumber",vo.getRoomNumber());
@@ -315,11 +352,13 @@ public class Hotelm {
         mv.addObject("checkout",vo.getCheckout());
         mv.addObject("id",vo.getRoomid());//房间id
         mv.addObject("supplierId",supperId);
-        return mv;*/
+        return mv;*//*
+
     }
 
 
-    /**
+    */
+/**
      * t退房
      * @param id
      * @param isdao
@@ -327,9 +366,11 @@ public class Hotelm {
      * @param roomid
      * @param supperId
      * @return
-     */
+     *//*
 
-    @RequestMapping(value = "/checkout",produces="text/jsp;charset=UTF-8")
+
+   */
+/* @RequestMapping(value = "/checkout",produces="text/jsp;charset=UTF-8")
     public ModelAndView checkout(Integer id,Integer isdao,Integer currency,Integer roomid,Integer supperId){
         ModelAndView mv=null;
         mv=new ModelAndView("/hotelmCheckin/day");
@@ -344,7 +385,11 @@ public class Hotelm {
 
         RoomSetPo roomSetPo=new RoomSetPo();
         roomSetPo.setId(emptyroomPo.getRoomid());
-        roomSetPo.setRoomStateID(1);
+     *//*
+*/
+/*   roomSetPo.setRoomStateID(1);*//*
+*/
+/*
         roomSetService.updateByIdToRoomState(roomSetPo);
 
         String order =stayRegisterService.orderIDBystayid(id);
@@ -369,16 +414,20 @@ public class Hotelm {
         mv.addObject("id",roomid);//房间id
         mv.addObject("supplierId",supperId);//房间id
         return mv;
-    }
+    }*//*
 
-    /**
+
+    */
+/**
      * 登记
      * @param id
      * @param roomid
      * @param supperId
      * @return
-     */
-    @RequestMapping(value = "/register",produces="text/jsp;charset=UTF-8")
+     *//*
+
+   */
+/* @RequestMapping(value = "/register",produces="text/jsp;charset=UTF-8")
     public ModelAndView register(Integer id,Integer roomid,Integer supperId){
         ModelAndView mv=null;
         mv=new ModelAndView("/hotelmCheckin/day");
@@ -443,10 +492,14 @@ public class Hotelm {
                     codeNumber,opo.getPlatformId());
         }
 
-       /* StayRegisterPo sta=new StayRegisterPo();
+       *//*
+*/
+/* StayRegisterPo sta=new StayRegisterPo();
         sta.setRegisterTime(timestamp);
         sta.setId(emptyroomPo.getStayid());
-        stayRegisterService.regiserTime(sta);*/
+        stayRegisterService.regiserTime(sta);*//*
+*/
+/*
         int stayDetailsId=stayRegisterService.getID(codeNumber);
         if (emptyroomPo.getPreid()!=null){
             orderService.updateStatuaByCS(codeNumber,1,stayDetailsId);
@@ -456,16 +509,20 @@ public class Hotelm {
         mv.addObject("id",roomid);//房间id
         mv.addObject("supplierId",supperId);//房间id
         return mv;
-    }
+    }*//*
 
-    /**
+
+    */
+/**
      * 登记
      * @param id
      * @param roomid
      * @param supperId
      * @return
-     */
-   /* @RequestMapping(value = "/cancel",produces="text/jsp;charset=UTF-8")
+     *//*
+
+   */
+/* @RequestMapping(value = "/cancel",produces="text/jsp;charset=UTF-8")
     public ModelAndView cancel(Integer id,Integer roomid,Integer supperId){
         ModelAndView mv=null;
         mv=new ModelAndView("/hotelmCheckin/day");
@@ -476,5 +533,7 @@ public class Hotelm {
         mv.addObject("id",roomid);//房间id
         mv.addObject("supplierId",supperId);//房间id
         return mv;
-    }*/
+    }*//*
+
 }
+*/

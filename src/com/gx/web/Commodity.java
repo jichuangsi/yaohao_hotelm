@@ -2,9 +2,7 @@ package com.gx.web;
 
 import com.google.gson.Gson;
 import com.gx.page.Page;
-import com.gx.po.AttributePo;
 import com.gx.po.CommodityPo;
-import com.gx.service.AttributeService;
 import com.gx.service.CommodityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,16 +19,12 @@ public class Commodity {
 
 	@Autowired
 	private CommodityService commodityService;
-	
-	@Autowired
-	private AttributeService attributeService;
 
 	
 	//分页和模糊查询
 		@RequestMapping("/tolist")
 		public ModelAndView list(HttpServletRequest request, Integer currentPage, String txtname, Integer commodityTypeID,Integer user){
 			ModelAndView mv=null;
-			List<AttributePo> listOne=attributeService.selectCommodityType();
 			mv=new ModelAndView("/commodity/list");
 			Page<CommodityPo> vo=new Page<CommodityPo>();
 			if (commodityTypeID==null) {
@@ -49,7 +43,6 @@ public class Commodity {
 			vo=this.commodityService.pageFuzzyselect(txtname,commodityTypeID, vo);
 			mv.addObject("list",vo);
 			mv.addObject("txtname",txtname);
-			mv.addObject("listOne",listOne);
 			mv.addObject("commodityType",commodityTypeID);
 			mv.addObject("user",user);
 			return mv;
@@ -59,11 +52,7 @@ public class Commodity {
 		@RequestMapping("/toadd")
 		public ModelAndView toadd(){
 			ModelAndView mv=null;
-			List<AttributePo> listOne=attributeService.selectUOM();
-			List<AttributePo> listTwo=attributeService.selectCommodityType();
 			mv=new ModelAndView("/commodity/add");
-			mv.addObject("listOne",listOne);
-			mv.addObject("listTwo",listTwo);
 			return mv;
 		}
 		
@@ -78,12 +67,8 @@ public class Commodity {
 		@RequestMapping("/toupdate")
 		public ModelAndView toupdate(int id){
 			ModelAndView mv=null;
-			List<AttributePo> listOne=attributeService.selectUOM();
-			List<AttributePo> listTwo=attributeService.selectCommodityType();
 			CommodityPo commodityPo=commodityService.selectById(id);
 			mv=new ModelAndView("/commodity/update");
-			mv.addObject("listOne",listOne);
-			mv.addObject("listTwo",listTwo);
 			mv.addObject("listPo",commodityPo);
 			return mv;
 		}
@@ -121,7 +106,6 @@ public class Commodity {
 		public ModelAndView newadd(String txtname){
 			ModelAndView mv=null;
 			int newid=3;
-			attributeService.insertAll(newid,txtname);
 			mv=new ModelAndView("redirect:/Commodity/tolist.do");
 			return mv;
 		}
@@ -131,7 +115,6 @@ public class Commodity {
 			ModelAndView mv=null;
 			String[] FenGe=id.split(",");
 			for (int i = 0; i < FenGe.length; i++) {
-				attributeService.deleteById(Integer.parseInt(FenGe[i]));
 			}
 			mv=new ModelAndView("redirect:/Commodity/tolist.do");
 			return mv;

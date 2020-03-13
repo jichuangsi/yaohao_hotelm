@@ -4,31 +4,26 @@ import com.google.gson.Gson;
 import com.gx.page.Page;
 import com.gx.po.PlatformPo;
 import com.gx.service.PlatformService;
-import com.gx.service.PredetermineService;
-import com.gx.service.StayRegisterService;
+import com.gx.vo.ResponseModel;
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 @Controller
 @RequestMapping("/Platform")
 public class Platform {
     @Autowired
     private PlatformService platformService;
-    @Autowired
-    private PredetermineService predetermineService;
-    @Autowired
-    private StayRegisterService stayRegisterService;
+    //分页和模糊查询,produces="text/jsp;charset=UTF-8"
 
-    //分页和模糊查询
-    @RequestMapping("/tolist")
-    public ModelAndView list(HttpServletRequest request, Integer currentPage, String txtname){
+    @RequestMapping(value = "/tolist",produces="text/jsp;charset=UTF-8")
+    public ModelAndView list(Integer currentPage, String txtname){
         ModelAndView mv=null;
-        mv=new ModelAndView("/platform/list");
+       mv=new ModelAndView("/platform/merchantManagement");
         Page<PlatformPo> vo=new Page<PlatformPo>();
         if (currentPage==null) {
             currentPage=1;
@@ -41,10 +36,14 @@ public class Platform {
         }
         vo.setCurrentPage(currentPage);
         vo=this.platformService.pageFuzzyselect(txtname, vo);
-        mv.addObject("list",vo);
-        mv.addObject("txtname",txtname);
-        return mv;
+        List<PlatformPo> platforms=platformService.pageFuzzyselects(txtname,vo);
+        int count=platformService.count(txtname);
+        JSONArray data = JSONArray.fromObject(platforms);
+        mv.addObject("list", vo);
+      return mv;
+
     }
+
 
 
     @RequestMapping("/toadd")
@@ -82,8 +81,8 @@ public class Platform {
     @RequestMapping("/delete")
     public ModelAndView delete(Integer id){
         ModelAndView mv=null;
-        Integer pre=predetermineService.selectPrePlatform(id);
-        Integer sta=stayRegisterService.selectStaPlatform(id);
+        Integer pre=0;//predetermineService.selectPrePlatform(id);
+        Integer sta=0;//stayRegisterService.selectStaPlatform(id);
         if (pre>0 || sta>0){
             mv=new ModelAndView("redirect:/Platform/tolist.do");
         }else {

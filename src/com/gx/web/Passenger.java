@@ -2,10 +2,8 @@ package com.gx.web;
 
 import com.google.gson.Gson;
 import com.gx.page.Page;
-import com.gx.po.AttributePo;
 import com.gx.po.PassengerPo;
 import com.gx.po.PlatformPo;
-import com.gx.service.AttributeService;
 import com.gx.service.PassengerService;
 import com.gx.service.PlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/Passenger")
 public class Passenger {
-	
-	@Autowired
-	private AttributeService attributeService;
 	
 	@Autowired
 	private PassengerService passengerService;
@@ -53,7 +48,6 @@ public class Passenger {
 	@RequestMapping("/toadd")
 	public ModelAndView toadd(){
 		ModelAndView mv=null;
-		List<AttributePo> listGender=attributeService.selectGender();                      //性别
 	/*	List<AttributePo> listNation=attributeService.selectNation();                      //民族*/
 	/*	List<AttributePo> listPassengerLevel=attributeService.selectPassengerLevel();      //旅客级别*/
 		/*List<AttributePo> listEducationDegree=attributeService.selectEducationDegree();    //文化程度
@@ -61,7 +55,6 @@ public class Passenger {
 		List<AttributePo> listThingReason=attributeService.selectThingReason();            //事由*/
 		List<PlatformPo> listP=platformService.listAll();
 		mv=new ModelAndView("/passenger/add");
-		mv.addObject("listGender",listGender);
 		/*mv.addObject("listNation",listNation);
 		mv.addObject("listPassengerLevel",listPassengerLevel);
 		mv.addObject("listEducationDegree",listEducationDegree);
@@ -73,8 +66,7 @@ public class Passenger {
 	
 	@RequestMapping("/toupdate")
 	public ModelAndView toupdate(int id){
-		ModelAndView mv=null;
-		List<AttributePo> listGender=attributeService.selectGender();                      //性别
+		ModelAndView mv=null;               //性别
 		/*List<AttributePo> listNation=attributeService.selectNation();                      //民族
 		List<AttributePo> listPassengerLevel=attributeService.selectPassengerLevel();      //旅客级别
 		List<AttributePo> listEducationDegree=attributeService.selectEducationDegree();    //文化程度
@@ -82,7 +74,6 @@ public class Passenger {
 		List<AttributePo> listThingReason=attributeService.selectThingReason();            //事由*/
 		PassengerPo list=passengerService.selectById(id);
 		mv=new ModelAndView("/passenger/update");
-		mv.addObject("listGender",listGender);
 	/*	mv.addObject("listNation",listNation);
 		mv.addObject("listPassengerLevel",listPassengerLevel);
 		mv.addObject("listEducationDegree",listEducationDegree);
@@ -95,6 +86,7 @@ public class Passenger {
 	@RequestMapping("/add")
 	public ModelAndView add(PassengerPo passengerPo){
 		ModelAndView mv=null;
+		passengerPo.setTime(System.currentTimeMillis());
 		passengerService.insertAll(passengerPo);
 		mv=new ModelAndView("redirect:/Passenger/tolist.do");
 		return mv;

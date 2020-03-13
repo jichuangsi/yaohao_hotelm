@@ -2,31 +2,52 @@ package com.gx.service;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.vo.IndayVo;
+import com.gx.vo.OrderDetailsVo;
+import com.gx.vo.OrderTimeVo;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface OrderService {
 
-    public Integer inserAll(String codeNumber,Integer status,int platformID,int stayDetailsId,int predeterID);
+    //添加订单
+    public Integer inserAll(OrderPo orderPo);
+        //已确认
+    public Page<OrderDetailsVo> list(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    //已入住
+    public Page<OrderDetailsVo> checkinorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    //已退房
+    public Page<OrderDetailsVo> checkoutorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    //已到款
+    public Page<OrderDetailsVo> myaccount(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
 
-    //根据订单号修改订单状态updateStatuaByCS
-    public Integer updateStatua(String orderID,int status);
-    public Integer updateStatuaByCS(String orderID,int status,Integer stayDetailsId);
+    //修改订单状态
+    public Integer updateStatus(String orderNumber, Integer status);
+   //根据订单号查询订单
+    public OrderPo selectByOrderNumber(String orderNumber);
+    //查询已确认订单
+    public Page<OrderDetailsVo> selectCheckinList(String orderNumber, Integer passengerId,long time, Page<OrderDetailsVo> vo);
 
-    public OrderPo selectStatua(String orderID);
+    //查询订单明细
+    public Page<OrderDetailsVo> selectOrderDetail(String orderNumber,Page<OrderDetailsVo> vo);
 
-    public Page<OrderPo> listAll(String codeNumber,Page<OrderPo> vo);
+    public Page<OrderDetailsVo> financial(long startTime,long endTime,Page<OrderDetailsVo> vo);
 
-    public Integer deletedorder(String codeNumber);
+    //验证订单号是否存在
+   public Integer codeNumberYZ(String orderNumber);
 
-    public String selectBypredetermineID(Integer predeterID);
+    public Page<OrderTimeVo> selectRoomByTime(Timestamp time, Page<OrderTimeVo> vo);
 
-    public Integer codeNumberYZ(String orderID);
+    public List<IndayVo> checkinDay(String time, int roomId);
 
-    //根据住宿id查订单号
-    public OrderPo byID(Integer id);
+    public int updateMoney(int id,Timestamp time);
 
-    public OrderPo selectBypredeID(Integer predeterID);
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public Page<OrderDetailsVo> allContractOrder(String name,String orderNumber,Page<OrderDetailsVo> vo);
+
+
 
 
 }

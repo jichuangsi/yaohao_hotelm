@@ -10,22 +10,12 @@
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="guestRoomLevelID" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="roomStateID" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="roomNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="roomAmount" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="standardPriceDay" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="standardPrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="maxDuration" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="firstDuration" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="firstPrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
+      <arg column="referencePrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
       <arg column="supplierID" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="discount" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="discountPrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="bedPrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="bedHour" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="bedDayPrice" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="isBed" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
+        <arg column="surplus" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
 
@@ -36,9 +26,6 @@
             </if>
             <if test="supplierID!=null">
                 AND supplierID= #{supplierID,jdbcType=INTEGER}
-            </if>
-            <if test="roomStateID!=null">
-                AND roomStateID= #{roomStateID,jdbcType=INTEGER}
             </if>
             <if test="guestRoomLevelID!=null">
                 AND guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER}
@@ -51,61 +38,39 @@
 
     <!--   新增 -->
     <insert id="insertAll" useGeneratedKeys="true" keyProperty="booksID" parameterType="com.gx.po.RoomSetPo" >
-     INSERT INTO room (guestRoomLevelID,roomStateID,roomNumber,roomAmount,standardPriceDay,
-                       standardPrice,maxDuration,firstDuration,firstPrice,supplierID,discount,discountPrice
-                       ,bedPrice,bedHour,bedDayPrice,isBed,`time`,purchasePrice)
+     INSERT INTO room (guestRoomLevelID,roomNumber,roomAmount,referencePrice,supplierID,`time`)
         values (#{guestRoomLevelID,jdbcType=INTEGER},
-             #{roomStateID,jdbcType=INTEGER},
              #{roomNumber,jdbcType=VARCHAR},
              #{roomAmount,jdbcType=VARCHAR},
-             #{standardPriceDay,jdbcType=DOUBLE},
-             #{standardPrice,jdbcType=DOUBLE},
-             #{maxDuration,jdbcType=VARCHAR},
-             #{firstDuration,jdbcType=VARCHAR},
-             #{firstPrice,jdbcType=DOUBLE},
+             #{referencePrice,jdbcType=DOUBLE},
              #{supplierID,jdbcType=INTEGER},
-             #{discount,jdbcType=DOUBLE},
-             #{discountPrice,jdbcType=DOUBLE},
-            #{bedPrice,jdbcType=DOUBLE},
-             #{bedHour,jdbcType=VARCHAR},
-            #{bedDayPrice,jdbcType=DOUBLE},
-             #{isBed,jdbcType=INTEGER},
-             #{time,jdbcType=TIMESTAMP},
-             #{purchasePrice,jdbcType=DOUBLE})
+             #{time,jdbcType=TIMESTAMP})
   </insert>
   
 
   
 <!--   修改要用的精确查询 -->
    <select id="selectById" resultType="com.gx.po.RoomSetPo" parameterType="java.lang.Integer">
-      SELECT r.*, a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomStateName
-	FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-	INNER JOIN attributedetails b ON r.roomStateID=b.id
+      SELECT r.*
+	  FROM room r
 	WHERE r.id=#{id,jdbcType=INTEGER}
    </select>
    
 <!--    修改 -->
    <update id="updateById" parameterType="com.gx.po.RoomSetPo">
       UPDATE room SET guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER},
-			             roomStateID=#{roomStateID,jdbcType=INTEGER},
 			             roomNumber=#{roomNumber,jdbcType=VARCHAR},
 			             roomAmount=#{roomAmount,jdbcType=VARCHAR},
-			             standardPriceDay=#{standardPriceDay,jdbcType=DOUBLE},
-			             standardPrice=#{standardPrice,jdbcType=DOUBLE},
-			             maxDuration=#{maxDuration,jdbcType=VARCHAR},
-			             firstDuration=#{firstDuration,jdbcType=VARCHAR},
-			             firstPrice=#{firstPrice,jdbcType=DOUBLE},
-			             supplierID=#{supplierID,jdbcType=INTEGER},
-			            discount=#{discount,jdbcType=DOUBLE},
-			             discountPrice=#{discountPrice,jdbcType=DOUBLE},
-			             bedPrice=#{bedPrice,jdbcType=DOUBLE},
-			             bedHour=#{bedHour,jdbcType=VARCHAR},
-			             bedDayPrice=#{bedDayPrice,jdbcType=DOUBLE},
-			             isBed=#{isBed,jdbcType=INTEGER},
-			             purchasePrice=#{purchasePrice,jdbcType=DOUBLE}
+			             referencePrice=#{referencePrice,jdbcType=DOUBLE},
+			             supplierID=#{supplierID,jdbcType=INTEGER}}
                    WHERE id = #{id,jdbcType=INTEGER}
    </update>
-   
+    <!--&lt;!&ndash;    修改 &ndash;&gt;
+    <update id="updateSurpulsById" parameterType="java.lang.Integer">
+      UPDATE room SET  surplus=#{surplus,jdbcType=INTEGER}}
+                   WHERE id = #{id,jdbcType=INTEGER}
+   </update>-->
+
    <delete id="deleteById" parameterType="java.lang.Integer">
     DELETE FROM room WHERE id = #{id,jdbcType=INTEGER}
   </delete>
@@ -113,371 +78,66 @@
 
   
   <!--   分页模糊查询 -->
-   <select id="pageFuzzyselect" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
+   <select id="pageHaveRoom" resultType="com.gx.vo.RoomVo">
+    SELECT r.*,g.`guestroomlevel` AS guestRoomLevelName,g.`id` AS gid,
      su.`supplierName` AS supplierName
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
+    FROM room r INNER JOIN `guestroomlevel` g ON r.guestRoomLevelID=g.id
      INNER JOIN `supplier` su ON r.`supplierID`=su.id
-    WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-    AND su.isenabled=0
+    WHERE 1=1
+    <if test="roomNumber!=null and roomNumber!=''">
+        r.roomNumber LIKE CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
+    </if>
+       <if test="guestRoomLevelID!=null">
+           guestRoomLevelID LIKE CONCAT('%',#{guestRoomLevelID,jdbcType=VARCHAR},'%')
+       </if>
+    AND su.isenabled=0 AND su.have=1
      order by r.roomNumber ASC
     limit #{start},#{pageSize}
   </select>
   
   
-  <select id="countFuzzyselect" resultType="java.lang.Integer">
-     SELECT count(*) FROM room r INNER JOIN attributedetails a 
-     ON r.guestRoomLevelID=a.id INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN `supplier` su ON r.`supplierID`=su.id
-     WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-     AND su.isenabled=0
+  <select id="countHaveRoom" resultType="java.lang.Integer">
+     SELECT count(*)  FROM room r
+     INNER JOIN `guestroomlevel` g ON r.guestRoomLevelID=g.id
+     INNER JOIN `supplier` su ON r.`supplierID`=su.id
+      WHERE 1=1
+      <if test="roomNumber!=null">
+          r.roomNumber LIKE CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="guestRoomLevelID!=null">
+          guestRoomLevelID LIKE CONCAT('%',#{guestRoomLevelID,jdbcType=INTEGER},'%')
+      </if>
+     AND su.isenabled=0 AND su.have=1
      order by r.roomNumber ASC
   </select>
-  
 
-   <select id="selectByLeveId" resultType="com.gx.po.RoomSetPo" parameterType="java.lang.Integer">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName 
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id 
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-    Where guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER}
-  </select>
+
+<select id="selectIDSupplierid" resultType="com.gx.po.RoomSetPo">
+      SELECT * FROM `room` WHERE `supplierID`#{supplierID,jdbcType=INTEGER} AND `roomNumber`#{roomNumber,jdbcType=VARCHAR}
+</select>
+<select id="selectDetailByIds" resultType="com.gx.vo.RoomVo">
+    SELECT r.*,g.`guestroomlevel` AS guestRoomLevelName,g.`id` AS gid,
+    su.`supplierName` AS supplierName
+    FROM room r INNER JOIN `guestroomlevel` g ON r.guestRoomLevelID=g.id
+    INNER JOIN `supplier` su ON r.`supplierID`=su.id
+    WHERE  id =`id`#{id,jdbcType=INTEGER}
+
+</select>
+
+
+
+
+
+
+
+
+
+
   
   
   <select id="selectYZ" resultType="java.lang.Integer">
     SELECT COUNT(*) FROM room Where roomNumber=#{roomNumber} And supplierID=#{supplierID}
   </select>
-
-  
-  <!-- 非本派所用  安排房间时 需要改变当前房间的房态 -->
-  <update id="updateByIdToRoomState" parameterType="com.gx.po.RoomSetPo">
-      UPDATE room SET roomStateID=#{roomStateID,jdbcType=INTEGER}
-                   WHERE id = #{id,jdbcType=INTEGER}
-  </update>
-          <!-- ================================================================================================= ============= -->
-    <!--   分页模糊查询 -->
-    <select id="pageFuzzy" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      su.`supplierName` AS supplierName
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-    INNER JOIN `supplier` su ON r.`supplierID`=su.id
-    WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-     AND r.supplierID =#{supplierID,jdbcType=INTEGER}
-     order by r.roomNumber ASC
-    limit #{start},#{pageSize}
-  </select>
-
-
-    <select id="countFuzzy" resultType="java.lang.Integer">
-     SELECT count(*) FROM room r INNER JOIN attributedetails a
-     ON r.guestRoomLevelID=a.id INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN `supplier` su ON r.`supplierID`=su.id
-     WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-      AND supplierID =#{supplierID,jdbcType=INTEGER}
-     order by r.roomNumber ASC
-  </select>
-
-    <!--  非本派所用  供应商来查询房间信息 -->
-    <select id="levelSelectSupplier" resultType="com.gx.po.RoomSetPo">
-       SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-        WHERE r.supplierID = #{supplierid,jdbcType=INTEGER}
-          AND isBed =1
-  </select>
-
-    <!--  非本派所用  客服等级和供应商来查询房间信息 -->
-    <select id="levelSelectInformationAndsupplier" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-        WHERE r.guestRoomLevelID = #{guestRoomLevelID,jdbcType=INTEGER}
-        AND r.supplierID = #{supplierid,jdbcType=INTEGER}
-          AND isBed =1
-  </select>
-           <!-- 全部-->
-    <select id="selectAll" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-        WHERE isBed=1  AND s.isenabled =0
-  </select>
-
-    <!--  非本派所用  客服等级来查询房间信息 -->
-    <select id="levelSelectInformation" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-        WHERE r.guestRoomLevelID = #{guestRoomLevelID,jdbcType=INTEGER}
-      AND isBed =1
-        AND s.isenabled =0
-  </select>
-    <select id="selectInformation" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-    and r.roomStateID=1 AND s.isenabled =0  AND isBed =1 order by r.roomNumber ASC
-  </select>
-    <select id="selectInformationAndSupplierid" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-    and r.roomStateID=1
-     AND isBed =1
-     AND  r.supplierID = #{supplierid,jdbcType=INTEGER}
-     order by r.roomNumber ASC
-  </select>
-
-    <select id="selectSupplierid" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid
-    FROM room r
-    INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.supplierID = #{supplierid,jdbcType=INTEGER}
-    and r.roomStateID=1  AND isBed =1 order by r.roomNumber ASC
-  </select>
-    <select id="selectDetailByIds" resultType="com.gx.po.RoomSetPo">
-        SELECT *,s.supplierName AS supplierName
-             FROM room r
-            INNER JOIN `supplier` s ON r.`supplierID`=s.id
-            INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-             WHERE r.id=#{id,jdbcType=INTEGER}
-    </select>
-
-    <select id="selectBedInformation" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,s.supplierName AS supplierName,a.attributeDetailsName AS guestRoomLevelName,s.id AS sid
-        ,b.attributeDetailsName AS roomName,be.`surplusAcount` AS surplusAcount
-             FROM `room` r
-             INNER JOIN `supplier` s ON s.id=r.supplierID
-                INNER JOIN attributedetails b ON r.roomStateID=b.id
-             INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-              INNER JOIN `bedroom` be ON be.roomid=r.id
-             WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-             AND isBed =0
-              AND s.isenabled =0
-              and be.surplusAcount>=be.people order by r.roomNumber ASC
-    </select>
-
-    <select id="selectBedInformationAndSupplierid" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,s.supplierName AS supplierName,a.attributeDetailsName AS guestRoomLevelName,s.id AS sid
-        ,b.attributeDetailsName AS roomName,be.`surplusAcount` AS surplusAcount
-        FROM room r
-              INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-                 INNER JOIN attributedetails b ON r.roomStateID=b.id
-              INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-               INNER JOIN `bedroom` be ON be.roomid=r.id
-              WHERE roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-              AND  r.supplierID = #{supplierid,jdbcType=INTEGER}
-               AND isBed =0
-                and be.surplusAcount>=be.people
-              order by r.roomNumber ASC
-  </select>
-
-    <select id="selectBedSupplierid" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,s.supplierName AS supplierName,a.attributeDetailsName AS guestRoomLevelName,s.id AS sid
-      ,b.attributeDetailsName AS roomName,be.`surplusAcount` AS surplusAcount
-    FROM room r
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-         INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-      INNER JOIN `bedroom` be ON be.roomid=r.id
-      WHERE r.supplierID = #{supplierid,jdbcType=INTEGER}
-      AND isBed =0
-       and be.surplusAcount>=be.people
-      order by r.roomNumber ASC
-  </select>
-    <select id="selectIDSupplierid" resultType="com.gx.po.RoomSetPo">
-        SELECT * FROM room
-      WHERE roomNumber= #{roomNumber,jdbcType=VARCHAR}
-      AND supplierid= #{supplierid,jdbcType=INTEGER}
-    </select>
-    <select id="selectRentAll" resultType="com.gx.po.RoomSetPo">
-      SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-            s.supplierName AS supplierName,s.id AS sid,s.id AS sid,be.*
-            FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-            INNER JOIN attributedetails b ON r.roomStateID=b.id
-            INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-            INNER JOIN `bedroom` be ON be.roomid=r.id
-            WHERE isBed=0  AND s.isenabled =0 AND be.`surplusAcount`>=be.`people`
-    </select>
-    <!--  非本派所用  客服等级和供应商来查询房间信息 -->
-    <select id="levelSelectBedInformationAndsupplier" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid,be.*
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-           INNER JOIN `bedroom` be ON be.roomid=r.id
-        WHERE r.guestRoomLevelID = #{guestRoomLevelID,jdbcType=INTEGER}
-        AND r.supplierID = #{supplierid,jdbcType=INTEGER}
-          AND isBed =0 AND be.`surplusAcount`>=be.`people`
-  </select>
-    <!--  非本派所用  客服等级和供应商来查询房间信息 -->
-    <select id="levelSelectBedInformation" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        s.supplierName AS supplierName,s.id AS sid,be.*
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-           INNER JOIN `bedroom` be ON be.roomid=r.id
-        WHERE r.guestRoomLevelID = #{guestRoomLevelID,jdbcType=INTEGER}
-          AND isBed =0  AND s.isenabled =0  AND be.`surplusAcount`>=be.`people`
-  </select>
-
-   <!-- //换房散客//================================-->
-    <select id="selectInformations" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.roomStateID=1  AND s.isenabled =0 AND isBed =1order by r.roomNumber ASC
-  </select>
-    <select id="selectInformationsRoomNumberSupplier" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-      AND r.supplierID = #{supplier,jdbcType=INTEGER}
-    AND r.roomStateID=1  AND isBed =1 order by r.roomNumber ASC
-  </select>
-    <select id="selectInformationsRoomNumber" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-     AND s.isenabled=0
-    and r.roomStateID=1  AND isBed =1 order by r.roomNumber ASC
-  </select>
-    <select id="selectInformationsSupplier" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid
-    FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-    INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-    WHERE r.supplierID = #{supplier,jdbcType=INTEGER}
-     AND r.roomStateID=1  AND isBed =1 order by r.roomNumber ASC
-  </select>
-
-    <select id="selectInformationsRoomNumberSupplierBed" resultType="com.gx.po.RoomSetPo">
-    SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-      s.supplierName AS supplierName,s.id AS sid,be.*
-      FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-      INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN  `supplier` s ON r.`supplierID`=s.id
-      INNER JOIN `bedroom` be ON be.roomid=r.id
-      WHERE r.roomNumber like CONCAT('%',#{roomNuber,jdbcType=VARCHAR},'%')
-      AND r.supplierID = #{supplier,jdbcType=INTEGER}
-      AND isBed =0
-      AND be.`surplusAcount`>=be.`people`
-      AND be.`surplusAcount`>=#{count,jdbcType=INTEGER}
-      order by r.roomNumber ASC
-  </select>
-
-    <select id="selectAllSupplier" resultType="com.gx.po.RoomSetPo">
-         SELECT *
-           FROM room r
-           WHERE r.supplierID = #{supplier,jdbcType=INTEGER}
-    </select>
-
-
-    <!--   分页模糊查询 -->
-    <select id="pageFuzzyAll" resultType="com.gx.po.RoomSetPo">
-         SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-         su.`supplierName` AS supplierName
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-         INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        <include refid="sql"/>
-    </select>
-    <select id="countFuzzyselectAll" resultType="java.lang.Integer">
-     SELECT count(*) FROM room r INNER JOIN attributedetails a
-     ON r.guestRoomLevelID=a.id INNER JOIN attributedetails b ON r.roomStateID=b.id
-      INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        where 1=1
-        <if test="roomNumber!=''">
-            AND roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="supplierID!=null">
-            AND supplierID= #{supplierID,jdbcType=INTEGER}
-        </if>
-        <if test="roomStateID!=null">
-            AND roomStateID= #{roomStateID,jdbcType=INTEGER}
-        </if>
-        <if test="guestRoomLevelID!=null">
-            AND guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER}
-        </if>
-        AND su.isenabled=0
-        order by r.roomNumber ASC
-  </select>
-
-    <!--   分页模糊查询 -->
-    <select id="pageEmptyRooms" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,b.attributeDetailsName AS roomName,
-        su.`supplierName` AS supplierName
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        where 1=1
-        <if test="roomNumber!=''">
-            AND roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-        </if>
-
-        <if test="timeOne!=null and timeTwo==null">
-            AND `time` &gt;= #{timeOne,jdbcType=TIMESTAMP}
-        </if>
-        <if test="timeOne==null and timeTwo!=null">
-            AND `time` &lt;= #{timeTwo,jdbcType=TIMESTAMP}
-        </if>
-        <if test="timeOne!=null and timeTwo!=null">
-            AND `time` between #{timeOne,jdbcType=TIMESTAMP} and #{timeTwo,jdbcType=TIMESTAMP}
-        </if>
-        AND su.isenabled=0
-        order by r.roomNumber ASC
-        limit #{start},#{pageSize}
-    </select>
-    <select id="countEmptyRoomsAll" resultType="java.lang.Integer">
-        SELECT count(*) FROM room r INNER JOIN attributedetails a
-        ON r.guestRoomLevelID=a.id INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        where 1=1
-        <if test="roomNumber!=''">
-            AND roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-        </if>
-
-        <if test="timeOne!=null and timeTwo==null">
-            AND `time` &gt;= #{timeOne,jdbcType=TIMESTAMP}
-        </if>
-        <if test="timeOne==null and timeTwo!=null">
-            AND `time` &lt;= #{timeTwo,jdbcType=TIMESTAMP}
-        </if>
-        <if test="timeOne!=null and timeTwo!=null">
-            AND `time` between #{timeOne,jdbcType=TIMESTAMP} and #{timeTwo,jdbcType=TIMESTAMP}
-        </if>
-        AND su.isenabled=0 AND guestRoomLevelID=1
-        order by r.roomNumber ASC
-    </select>
 
    <!-- ///////////////////////////////////////////////////////////////////////////////////-->
     <select id="countpageRoomSupper" resultType="java.lang.Integer">
@@ -491,32 +151,5 @@
         limit #{start},#{pageSize}
     </select>
 
-    <select id="countpageRoomSupperNumber" resultType="java.lang.Integer">
-        SELECT count(*) FROM room r INNER JOIN attributedetails a
-        ON r.guestRoomLevelID=a.id INNER JOIN attributedetails b ON r.roomStateID=b.id
-        INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        where 1=1
-        <if test="roomNumber!=''">
-            AND roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="guestRoomLevelID!=null">
-            AND guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER}
-        </if>
-       AND r.`supplierID`=#{supplierID,jdbcType=INTEGER}
-    </select>
-    <select id="pageRoomSupperNumber" resultType="com.gx.po.RoomSetPo">
-        SELECT r.*,a.attributeDetailsName AS guestRoomLevelName,
-        su.`supplierName` AS supplierName
-        FROM room r INNER JOIN attributedetails a ON r.guestRoomLevelID=a.id
-        INNER JOIN `supplier` su ON r.`supplierID`=su.id
-        where 1=1
-        <if test="roomNumber!=''">
-            AND roomNumber like CONCAT('%',#{roomNumber,jdbcType=VARCHAR},'%')
-        </if>
-        <if test="guestRoomLevelID!=null">
-            AND guestRoomLevelID=#{guestRoomLevelID,jdbcType=INTEGER}
-        </if>
-        AND r.`supplierID`=#{supplierID,jdbcType=INTEGER}
-        limit #{start},#{pageSize}
-    </select>
+
 </mapper>

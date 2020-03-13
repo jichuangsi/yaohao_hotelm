@@ -9,22 +9,20 @@
     -->
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="genderID" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="genderName" jdbcType="INTEGER" javaType="java.lang.Integer" />
        <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
-     <arg column="contactPhoneNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="remarks" jdbcType="VARCHAR" javaType="java.lang.String" />
-        <arg column="time" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp"/>
+     <arg column="phoneNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <arg column="time" jdbcType="BIGINT" javaType="java.lang.Long"/>
     </constructor>
   </resultMap>
 
 <!--   新增 -->
     <insert id="insertAll" useGeneratedKeys="true" keyProperty="id" parameterType="com.gx.po.PassengerPo" >
-       INSERT INTO passenger (genderID,`name`,contactPhoneNumber,remarks,`time`)
-     values (#{genderID,jdbcType=INTEGER},
+       INSERT INTO passenger (genderName,`name`,phoneNumber,`time`)
+     values (#{genderName,jdbcType=INTEGER},
              #{name,jdbcType=VARCHAR},
-             #{contactPhoneNumber,jdbcType=VARCHAR},
-             #{remarks,jdbcType=VARCHAR},
-             NOW())
+             #{phoneNumber,jdbcType=VARCHAR},
+             #{time,jdbcType=BIGINT})
 
   </insert>
 
@@ -38,10 +36,9 @@
 <!--    修改 -->
    <update id="updateById" parameterType="com.gx.po.PassengerPo">
       UPDATE passenger SET
-					      genderID=#{genderID,jdbcType=INTEGER},
+					      genderName=#{genderName,jdbcType=INTEGER},
 			              `name`=#{name,jdbcType=VARCHAR},
-			              contactPhoneNumber=#{contactPhoneNumber,jdbcType=VARCHAR},
-			              remarks=#{remarks,jdbcType=VARCHAR}
+			              phoneNumber=#{phoneNumber,jdbcType=VARCHAR}
                    WHERE id = #{id,jdbcType=INTEGER}
    </update>
    
@@ -51,9 +48,8 @@
   
    <!--   分页模糊查询 -->
    <select id="pageFuzzyselect" resultType="com.gx.po.PassengerPo">
-       SELECT p.*,c.attributeDetailsName AS genderName
+       SELECT *
      FROM passenger p
-      INNER JOIN attributedetails c ON p.genderID=c.id
      WHERE name like CONCAT('%',#{name,jdbcType=VARCHAR},'%') 
      limit #{start},#{pageSize}
   </select>
@@ -61,14 +57,13 @@
   
   <select id="countFuzzyselect" resultType="java.lang.Integer">
        SELECT count(*) FROM passenger p
-     INNER JOIN attributedetails c ON p.genderID=c.id
      WHERE `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
   </select>
   
   
   
    <select id="selectYZ" resultType="java.lang.Integer">
-    SELECT COUNT(*) FROM passenger Where contactPhoneNumber=#{number,jdbcType=VARCHAR}
+    SELECT COUNT(*) FROM passenger Where phoneNumber=#{number,jdbcType=VARCHAR}
     AND `name`=#{name,jdbcType=VARCHAR}
   </select>
   
@@ -77,23 +72,21 @@
 
 <!--   查询所有数据  非本派所用 -->
    <select id="selectAll" resultType="com.gx.po.PassengerPo">
-    SELECT p.*,c.attributeDetailsName AS genderName
-     FROM passenger p   INNER JOIN attributedetails c ON p.genderID=c.id
-
+    SELECT p.*
+     FROM passenger p
    </select>
    
 <!--  模糊查询 运用 Ajax 非分页 -->
    <select id="selectAjaxList" resultType="com.gx.po.PassengerPo">
-    SELECT p.*, c.attributeDetailsName AS genderName
+    SELECT p.*
         FROM `passenger` p
-     INNER JOIN attributedetails c ON p.genderID=c.id
       WHERE name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
    </select>
 
     <select id="selectNameAndNumber" resultType="com.gx.po.PassengerPo">
-    SELECT p.*,c.attributeDetailsName AS genderName
-     FROM passenger p   INNER JOIN attributedetails c ON p.genderID=c.id
-      WHERE contactPhoneNumber=#{number,jdbcType=VARCHAR}
+    SELECT p.*
+     FROM passenger p
+      WHERE phoneNumber=#{number,jdbcType=VARCHAR}
     AND `name`=#{name,jdbcType=VARCHAR}
    </select>
 

@@ -6,9 +6,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
-    
-    <title></title>
-    
+	  <title>自有公寓-商品</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -18,7 +16,7 @@
  	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	
 <!--   <link rel="stylesheet" href="${ctx}/css/roomset/roomset.css" type="text/css"></link> -->
-  <link rel="stylesheet" href="${ctx}/bootstrap/css/bootstrap.css" type="text/css"></link>
+ <%-- <link rel="stylesheet" href="${ctx}/bootstrap/css/bootstrap.css" type="text/css"></link>
   <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
   <link href="${ctx}/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  <!-- start 响应式布局要添加的 -->
   <link rel="stylesheet" href="${ctx}/css/amazeui.min.css" type="text/css"></link>
@@ -26,266 +24,225 @@
   <script src="${ctx}/bootstrap/js/bootstrap.js"></script>
   <script type="text/javascript" src="${ctx}/js/page.js"></script>
   <script type="text/javascript" src="${ctx }/js/layer/layer.js"></script>
-  <script type="text/javascript" src="${ctx }/js/amazeui.min.js"></script>
-  
-   <style>
-   
-   .container{
-     margin-top: 10px;
-   }
-   
-    .labelroomnumber{
-      position: relative;
-      font-size: 17px;
-      float: left;
-      margin-top: 15px;
-    }
-    
-    .textone{
-    margin-top:12px;
-    }
-    
-    .rightOne{
-    margin-right: 50px;
-    font-size:16px;
-    }
-    
-    .table th,.table td{
-       text-align: center; 
-    }
-    
-    .theadone{
-     background-color: #CCFF99;
-    }
-    
-    .dgvone{
-      margin-top: 12px;
-    }
-    
-    .roomnumberwidth{
-      width:70%;
-    }
-    
+  <script type="text/javascript" src="${ctx }/js/amazeui.min.js"></script>--%>
+	  <link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all" />
+	  <link rel="stylesheet" href="${ctx}//css/index.css" />
+	  <link rel="stylesheet" href="${ctx}//css/administration.css" />
+	  <link rel="stylesheet" href="${ctx}/jslib/layui/css/modules/layui-icon-extend/iconfont.css" />
+	  <script src=${ctx}/js/jquery.min.js"></script>
+	  <script src="${ctx}/js/layui/layui.all.js"></script>
 
-  
-  </style>
-  
-  </head>
- 
+	  <style>
+		  .x-body {
+			  padding: 20px;
+		  }
+		  .widths{
+			  width: 300px;
+		  }
+		  #add_apar {
+			  display: none;
+			  margin-top: 10px;
+		  }
+		  #modify_apar {
+			  display: none;
+			  margin-top: 10px;
+		  }
+		  .layui-form-label{
+			  width: 110px;
+		  }
+		  .layui-input-block {
+			  margin-left: 150px
+		  }
+	  </style>
   <body>
-  <input value="${user}" type="hidden" id="user"/>
-  <div class="container" >
-    <div class="span4">
-	    <div class="row-fluid">
-		    <label class="labelroomnumber" style="font-size:16px;">商品名：<br/>Trade name</label>
-		    <form action="" method="post" style="float: left;">
-			   <input id="txtnameid" name="txtname" class="textone roomnumberwidth" style="border-radius:0px; border-top-left-radius:4px; border-bottom-left-radius:4px;height:27px;" type="text" placeholder="请输入关键字" value="${txtname}">
-			   <div class="input-append">  
-			      <button type="button" onclick="selectFunction()" class="btn btn-success  btn-small textone" style="margin-left:-5px;height:27px;"><li class="icon-search icon-white"></li>search</button>
-			   </div>
-		    </form>
-	    </div>
-    </div>
-    <div class="span6">
-      <div class="row-fluid">
-       <div class="span5">
-         <select id="selectCboId" name="commodityTypeID" class="dgvone" style="width:80%;" onchange="selectChange()">
-            <c:forEach items="${listOne}" var="item">
-				<option value="${item.far_id}" <c:if test="${item.far_id==commodityType}">selected="selected"</c:if>>
-						${item.attributeDetailsName}
-				</option>
+  <div class="x-body">
+	  <div class="layui-row">
+		  <form class="layui-form layui-col-md12">
+			  <!-- <div class="layui-input-inline">
+                  <input type="text" name="username" placeholder="流水号" autocomplete="off" class="layui-input" style="width: 200px;">
+              </div> -->
+			  <div class="layui-input-inline">
+				  <input type="text" name="courierNumber" placeholder="关键字" autocomplete="off" class="layui-input time" style="width: 200px;">
+			  </div>
 
-
-
-	        </c:forEach> 
-		  </select>
-		  <button id="" class="textone"  data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0, width: 300, height: 600}"><li class="icon-plus"></li></button>
-       </div>
-       <div class="span2">
-         <button class="btn btn-info btn-small textone" type="button" onclick="addfunction()"><li class="icon-plus icon-white"></li>Add</button>
-       </div>
-       <div class="span2">
-         <button class="btn btn-warning btn-small textone" type="button" onclick="updatefunction()"><li class="icon-pencil icon-white"></li>modify</button>
-       </div>
-		<c:if test="${user==1}">
-		   <div class="span2">
-			 <button class="btn btn-danger btn-small textone" type="button" onclick="deletefunction()"><li class="icon-remove icon-white"></li>delete</button>
-		   </div>
-		</c:if>
-      </div>
-    </div>
-    <br>
-    <div class="dgvone">
-       <table class="table table-condensed table-bordered table-striped" id="tableid">
-	      <thead class="theadone">
-	        <tr>
-	          <th rowspan="2">选择<br/><span style="font-size: 14px">Choice</span></th>
-	          <th rowspan="2">商品名称<br/><span style="font-size: 14px">Trade name</span></th>
-	          <th rowspan="2">商品类别<br/><span style="font-size: 14px">Commodity category</span></th>
-	          <th rowspan="2">计量单位<br/><span style="font-size: 14px">Unit of measurement</span></th>
-	          <th rowspan="2">销售价格<br/><span style="font-size: 14px">Selling price</span></th>
-	      </thead>
-	      <tbody id="tbody">
-	        <c:forEach items="${list.result}" var="item">
-		        <tr>
-		          <td><input type="checkbox" name="id" value="${item.id}"></td>
-		          <td>${item.commodityName}</td>
-		          <td>${item.commodityTypeName}</td>
-		          <td>${item.uOMName}</td>
-		          <td>${item.salePrice}</td>
-				<%--	<td><a href="${ctx}/Commodity/commdityroom.do?id=${item.id}"style="color: #2a62bc">查看已点房间</a></td>--%>
-		        </tr>
-	        </c:forEach>
-	      </tbody>
-	    </table>
-    </div>
-    <div class="span11">
-      <div class="row-fluid">
-        <div class="tcdPageCode" style="text-align:center;"></div>
-      </div>
-    </div>
+			  <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
+		  </form>
+	  </div>
+	  <table id="demo" lay-filter="test"></table>
   </div>
-  
- 
-<%-- <div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
-		  <div style="background:#fff" class="am-modal-dialog">
-		    <div style="background:#0e90d2; color: #fff" class="am-modal-hd">商品类别操作Commodity category operation
-		      <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
-		    </div>
-		    <!-- 内容 -->
-		  <div>
-<div class="container" >
-  <div class="span3">
-    <div class="span4">
-	    <div class="row-fluid">
-		    <label id="bie" class="labelroomnumber" style="margin-left: -20px; font-size: 15px;">商品名：</label>
-		    <form action="" method="post" style="float: left;">
-			   <input id="newtxtnameid" type="text" placeholder="请输入要新增的商品名称" style="width:120%;height: 26px;margin-top: 11px;">
-		    </form>
-	    </div>
-    </div>
-    <div >
-       <button style="margin-top:-23px;" class="btn btn-info btn-small" type="button" onclick="newaddfunction()"><li class="icon-plus icon-white"></li>新增</button>
-    
-       <button style="margin-top:-23px;" class="btn btn-danger btn-small" type="button" onclick="newdeletefunction()"><li class="icon-remove icon-white"></li>删除</button>
-    </div>
-    <br>
-    <div class="dgvone" style="margin-top:-18px;width:267px;height:443px;overflow:scroll;">
-       <table class="table table-condensed table-bordered table-striped" id="tableid" style="width: 250px;height: 20px;">
-	      <thead class="theadone">
-	        <tr>
-	          <th rowspan="2">选择</th>
-	          <th rowspan="2">商品名称</th>
-	      </thead>
-	      <tbody id="tbody">
-	        <c:forEach items="${listOne}" var="item">
-		        <tr>
-		          <td><input type="checkbox" name="newid" value="${item.far_id}"></td>
-		          <td>${item.attributeDetailsName}</td>
-		        </tr>
-	        </c:forEach>
-	      </tbody>
-	    </table>
-    </div>
-  </div>
- 
-  <div/> --%>
-          <!-- 内容 -->  
-<div/>
-</div>
-<div/>
- 
- 
- <script type="text/javascript">
-   function addfunction(){
-     parent.document.getElementById('Mainid').src='${ctx}/Commodity/toadd.do';
-   }
-   
-   function updatefunction(){
-   var chk_value=[];
-  	$('input[name="id"]:checked').each(function(){
-  		chk_value.push($(this).val());
-  	});
-  	if(chk_value!=""){
-		if(chk_value.toString().indexOf(",")>0){
-		   alert("修改只能选择一条");
-		}else{
-		   parent.document.getElementById("Mainid").src='${ctx}/Commodity/toupdate.do?id='+chk_value;
-		}
-	}else{
-	  alert("请选择一条数据进行修改");
-	}
-  }
-  
-   function deletefunction(){
-       var user=document.getElementById("user").value;
-   var chk_value=[];
-  	$('input[name="id"]:checked').each(function(){
-  		chk_value.push($(this).val());
-  	});
-  	if(chk_value!=""){
-        /*if (user!=1) {
-            alert("您没有权限删除");
-        }else {*/
-  	var flag=window.confirm("注意：您确定要永久删除该信息吗?");
-     if(flag){
-  	  parent.document.getElementById("Mainid").src='${ctx}/Commodity/delete.do?id='+chk_value;
-  	}
-		//}
-  	}else{
-	  alert("请选择一条或多条数据进行删除");
-	}
-	
-  }
-  
-  
-  
-   function selectChange(){
-     var commodityTypeID=document.getElementById("selectCboId").value;
-     parent.document.getElementById('Mainid').src='${ctx}/Commodity/tolist.do?commodityTypeID='+commodityTypeID;
-   }
-  
-   
-   /* 分页要用的 */
-   $(".tcdPageCode").createPage({
-     pageCount:${list.totalPage},
-     current:${list.currentPage},
-     backFn:function(p){
-     var txtname=document.getElementById("txtnameid").value;
-     var commodityTypeID=document.getElementById("selectCboId").value;
-     location.href="${ctx}/Commodity/tolist.do?currentPage="+p+"&txtname="+txtname+"&commodityTypeID="+commodityTypeID;
-     }
-   });
-   
-   function selectFunction(){
-     var txtname=document.getElementById("txtnameid").value;
-     var commodityTypeID=document.getElementById("selectCboId").value;
-     parent.document.getElementById('Mainid').src='${ctx}/Commodity/tolist.do?commodityTypeID='+commodityTypeID+'&txtname='+txtname;
-   }
-   
-   
-   function newaddfunction(){
-   var txtname=document.getElementById("newtxtnameid").value;
-     parent.document.getElementById('Mainid').src='${ctx}/Commodity/newadd.do?txtname='+txtname;
-   }
-   
-   function newdeletefunction(){
-   var chk_value=[];
-  	$('input[name="newid"]:checked').each(function(){
-  		chk_value.push($(this).val());
-  	});
-  	if(chk_value!=""){
-  	var flag=window.confirm("注意：您确定要永久删除该信息吗?");
-     if(flag){
-  	  parent.document.getElementById("Mainid").src='${ctx}/Commodity/newdelete.do?id='+chk_value;
-  	}
-  	}else{
-	  alert("请选择一条或多条数据进行删除");
-	}
-	
-  }
-  
- </script>
-   
   </body>
+  <script type="text/html" id="add">
+	  <div class="layui-btn layui-btn-normal" onclick="add()"><i class=" layui-icon layui-icon-addition "></i>添加</div>
+  </script>
+  <script type="text/html" id="operation">
+	  <div class="layui-btn layui-btn-normal layui-btn-sm" onclick="modify()"><i class=" layui-icon layui-icon-edit "></i>修改</div>
+	  <div class="layui-btn layui-btn-normal layui-btn-sm" ><i class=" layui-icon layui-icon-delete "></i>删除</div>
+  </script>
+  <!-- 添加 -->
+  <div id="add_apar" class="layui-fluid">
+	  <form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">商品名称：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="firstPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">商品类别：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="firstPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">计量单位：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="secondPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">销售价格：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="secondPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <div class="layui-btn" lay-submit lay-filter="update_Pwd">添加</div>
+			  </div>
+		  </div>
+	  </form>
+  </div>
+  <!-- 修改 -->
+  <div id="add_apar" class="layui-fluid">
+	  <form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">商品名称：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="firstPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">商品类别：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="firstPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">计量单位：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="secondPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <label class="layui-form-label">销售价格：</label>
+			  <div class="layui-input-block widths">
+				  <input type="password" name="secondPwd" class="layui-input " lay-verify="required">
+			  </div>
+		  </div>
+		  <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <div class="layui-btn" lay-submit lay-filter="update_Pwd">修改</div>
+			  </div>
+		  </div>
+	  </form>
+  </div>
+  <script>
+      function add() {
+          index = layer.open({
+              type: 1,
+              area: ['30%', '60%'],
+              anim: 2,
+              title: '添加',
+              maxmin: true,
+              shadeClose: true,
+              content: $("#add_apar")
+          });
+      }
+      function modify() {
+          index = layer.open({
+              type: 1,
+              area: ['30%', '60%'],
+              anim: 2,
+              title: '修改',
+              maxmin: true,
+              shadeClose: true,
+              content: $("#modify_apar")
+          });
+      }
+  </script>
+  <script>
+      layui.use(['form', 'table'], function() {
+          var form = layui.form,
+              table = layui.table;
+
+          table.render({
+              elem: '#demo',
+              method: "get",
+              async: false,
+              id: 'idTest',
+              url: '/',
+              cols: [
+                  [{
+                      field: 'id',
+                      title: '序号',
+                      type: 'numbers'
+                  },
+                      {
+                          field: 'account',
+                          align: 'center',
+                          title: '商品名称'
+                      },
+                      {
+                          field: 'account',
+                          align: 'center',
+                          title: '商品类别'
+                      },
+                      {
+                          field: 'userName',
+                          align: 'center',
+                          title: '计量单位'
+                      },
+                      {
+                          field: 'userName',
+                          align: 'center',
+                          title: '销售价格'
+                      },
+                      {
+                          field: 'account',
+                          align: 'center',
+                          title: '操作',
+                          width: 300,
+                          toolbar: '#operation'
+                      }
+                  ]
+              ],
+              toolbar: '#add',
+              defaultToolbar: [],
+              page: true,
+              limit: 10,
+              // loading: true,
+              request: {
+                  pageName: 'pageNum',
+                  limitName: "pageSize"
+              },
+              where: {},
+              parseData: function(res) {
+                  var arr;
+                  var code;
+                  var total = 0;
+                  if (res.code == "0010") {
+                      arr = res.data;
+                      total = res.total;
+                      code = 0;
+                  }
+                  return {
+                      "code": code,
+                      "msg": res.msg,
+                      "count": total,
+                      "data": arr
+                  };
+              }
+          });
+      })
+  </script>
 </html>

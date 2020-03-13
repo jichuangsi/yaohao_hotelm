@@ -17,7 +17,7 @@
   </resultMap>
 
 <!--   新增 -->
-  <insert id="insertAll" parameterType="com.gx.po.CommodityPo" >
+  <insert id="insertAll" parameterType="com.gx.po.CommodityPo"  useGeneratedKeys="true"  keyProperty="id">
      INSERT INTO commodity (commodityTypeID,uOMID,commodityName,salePrice)
      values (#{commodityTypeID,jdbcType=INTEGER},
              #{uOMID,jdbcType=INTEGER},

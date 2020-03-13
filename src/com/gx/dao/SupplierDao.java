@@ -10,9 +10,6 @@ public interface SupplierDao {
 
     //查询所有平台
     public List<SupplierPo> listAll();
-
-    /*public   String selectCode(@Param("id") Integer id);*/
-
     //根据ID删除
     public int deleteById(@Param("id")Integer id);
 
@@ -47,4 +44,21 @@ public interface SupplierDao {
 
     List<SupplierPo> listTrueAll(@Param("name")String name, @Param("start") int start, @Param("pageSize") int pageSize);
     int listTrueAllCount( @Param("name")String name);
+
+    List<SupplierPo> listHaveTrueAll(@Param("name")String name, @Param("start") int start, @Param("pageSize") int pageSize);
+
+    int listHaveTrueAllCount( @Param("name")String name);
+
+    public List<SupplierPo> listHaveAll();
+
+    /////////////////////////////////////////////////////////////////////
+
+    //分页需要
+    public List<SupplierPo> pageAll(@Param("supplierName")String supplierName, @Param("start") int start, @Param("pageSize") int pageSize);
+
+
+    //分页模糊查询总条数
+    public int countAll(@Param("supplierName") String supplierName);
+
+    public List<SupplierPo> HaveAll();
 }
