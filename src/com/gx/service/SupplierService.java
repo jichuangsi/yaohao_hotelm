@@ -37,4 +37,21 @@ public interface SupplierService {
 
     ///////////////////////////////////////////////////////////////////
     public Page<SupplierPo> listTrueAll(String name, Page<SupplierPo> vo);
+
+    public Page<SupplierPo> listHaveTrueAll(String name, Page<SupplierPo> vo);
+
+
+   public List<SupplierPo> listHaveAll();
+
+   ////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+
+    //分页需要
+    Page<SupplierPo> pageAll(String supplierName,Page<SupplierPo> vo);
+
+
+
+    public List<SupplierPo> HaveAll();
+
+    public Integer bySupplier(Integer supplierID);
 }

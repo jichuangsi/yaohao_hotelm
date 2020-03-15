@@ -16,6 +16,25 @@ public class SupplierServiceImpl implements SupplierService {
     @Autowired
     private SupplierDao supplierDao;
 
+
+    @Override
+    public Page<SupplierPo> pageFuzzyselect(String supplierName, Page<SupplierPo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<SupplierPo> list=supplierDao.pageFuzzyselect(supplierName, start, vo.getPageSize());
+        vo.setResult(list);
+        int count=supplierDao.countFuzzyselect(supplierName);
+        vo.setTotal(count);
+        return vo;
+    }
+
+    @Override
+    public Integer bySupplier(Integer supplierID) {
+        return supplierDao.bySupplier(supplierID);
+    }
+
     @Override
     public List<SupplierPo> listAll() {
         return supplierDao.listAll();
@@ -47,18 +66,7 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierDao.fuzzySelect(supplierName);
     }
 
-    @Override
-    public Page<SupplierPo> pageFuzzyselect(String supplierName, Page<SupplierPo> vo) {
-        int start=0;
-        if (vo.getCurrentPage()>1) {
-            start=(vo.getCurrentPage()-1)*vo.getPageSize();
-        }
-        List<SupplierPo> list=supplierDao.pageFuzzyselect(supplierName, start, vo.getPageSize());
-        vo.setResult(list);
-        int count=supplierDao.countFuzzyselect(supplierName);
-        vo.setTotal(count);
-        return vo;
-    }
+
 
     @Override
     public int selectYZ(String supplierName) {
@@ -87,4 +95,43 @@ public class SupplierServiceImpl implements SupplierService {
     /////////////////////////////////////////////////////////////
 
 
+    @Override
+    public Page<SupplierPo> listHaveTrueAll(String name, Page<SupplierPo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<SupplierPo> list=supplierDao.listHaveTrueAll(name,start, vo.getPageSize());
+        vo.setResult(list);
+        int count=supplierDao.listHaveTrueAllCount(name);
+        vo.setTotal(count);
+        return vo;
+    }
+
+    @Override
+    public List<SupplierPo> listHaveAll() {
+        return supplierDao.listHaveAll();
+    }
+
+
+    //////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public Page<SupplierPo> pageAll(String supplierName,Page<SupplierPo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<SupplierPo> list=supplierDao.pageAll(supplierName, start, vo.getPageSize());
+        vo.setResult(list);
+        int count=supplierDao.countAll(supplierName);
+        vo.setTotal(count);
+        return vo;
+    }
+
+    @Override
+    public List<SupplierPo> HaveAll() {
+        return supplierDao.HaveAll();
+    }
 }

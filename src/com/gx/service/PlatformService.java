@@ -2,7 +2,6 @@ package com.gx.service;
 
 import com.gx.page.Page;
 import com.gx.po.PlatformPo;
-import com.gx.po.StayRegisterPo;
 
 import java.util.List;
 
@@ -27,7 +26,9 @@ public interface PlatformService {
 
     //分页需要
     public Page<PlatformPo> pageFuzzyselect(String name, Page<PlatformPo> vo);
+   public List<PlatformPo> pageFuzzyselects(String name, Page<PlatformPo> vo);
 
+   public int count(String name);
     //无分页的模糊查询  非本派所用
     public List<PlatformPo> fuzzySelect(String name);
 

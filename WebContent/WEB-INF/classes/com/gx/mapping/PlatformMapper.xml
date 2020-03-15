@@ -15,14 +15,14 @@
   </resultMap>
 
 <!--   查看客房等级 -->
-  <select id="listAll" resultType="com.gx.po.PlatformPo" >
+  <select id="listAll" resultType="com.gx.po.PlatformPo">
     SELECT * FROM platform WHERE  isYong=0
   </select>
 
 
 
   <!--   新增 -->
-  <insert id="insertAll" parameterType="com.gx.po.PlatformPo" >
+  <insert id="insertAll" parameterType="com.gx.po.PlatformPo"  useGeneratedKeys="true"  keyProperty="id">
      INSERT INTO platform (name,isYong)
      values (#{name,jdbcType=VARCHAR},0)
   </insert>

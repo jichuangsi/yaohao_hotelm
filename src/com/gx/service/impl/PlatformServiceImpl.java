@@ -3,7 +3,6 @@ package com.gx.service.impl;
 import com.gx.dao.PlatformDao;
 import com.gx.page.Page;
 import com.gx.po.PlatformPo;
-import com.gx.po.StayRegisterPo;
 import com.gx.service.PlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,6 +67,23 @@ public class PlatformServiceImpl implements PlatformService {
         int count=platformDao.countFuzzyselect(name);
         vo.setTotal(count);
         return vo;
+    }
+
+    @Override
+    public List<PlatformPo> pageFuzzyselects(String name, Page<PlatformPo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<PlatformPo> list=platformDao.pageFuzzyselect(name, start, vo.getPageSize());
+        vo.setResult(list);
+        return list;
+    }
+
+    @Override
+    public int count(String name) {
+        int count=platformDao.countFuzzyselect(name);
+        return count;
     }
 
     @Override

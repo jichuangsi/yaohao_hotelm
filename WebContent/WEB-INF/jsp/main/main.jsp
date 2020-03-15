@@ -104,33 +104,10 @@
 
 				<ul class="nav nav-list">
 					<li>
-						<a id="dateViewId" onclick="" class="dropdown-toggle">
-						<i class="icon-dashboard"></i>
-							<span class="menu-text">数据视图
-								<br>&nbsp;&nbsp;Data view
-								</span>
-							<b class="arrow icon-angle-down"></b>
-						</a>
-						<ul class="submenu">
-							<li>
-								<a id="yingYeJinEId" onclick="dateView()">
-									<i class="icon-double-angle-right"></i>
-									<span>营业金额
-									<br>Business amount
-									</span>
-								</a>
-							</li>
-
-
-						</ul>
-					</li>
-
-
-					<li>
-						<a id="roomManageId" onclick="roomManage()" class="dropdown-toggle">
+						<a id="privateId" onclick="privateapartment()" class="dropdown-toggle">
 							<i class="icon-home"></i>
-							<span class="menu-text">房间管理
-								<br>&nbsp;Room management
+							<span class="menu-text">自有公寓
+								<br>&nbsp;PrivateApartment
 							</span>
 
 							<b class="arrow icon-angle-down"></b>
@@ -138,140 +115,71 @@
 
 						<ul class="submenu">
 							<li>
-								<a id="emptyroomId" onclick="emptyroom()">
+								<a id="occupancyId" onclick="occupancy()">
 									<i class="icon-double-angle-right"></i>
-									<span>查看空房
-										<br>View empty rooms
+									<span>入住情况
+										<br>Occupancy in
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="myorderId" onclick="myorder()">
+									<i class="icon-double-angle-right"></i>
+									<span>订单
+										<br>Room setup
+									</span>
+								</a>
+							</li>
+							<%--<li>
+								<a id="checkinorderId" onclick="checkinorder()">
+									<i class="icon-double-angle-right"></i>
+									<span>已入住
+										<br>Stay in
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="checkoutorderId" onclick="checkoutorder()">
+									<i class="icon-double-angle-right"></i>
+									<span>已退房
+										<br>Check out
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="myaccountId" onclick="myaccount()">
+									<i class="icon-double-angle-right"></i>
+									<span>已到账
+										<br>Arrival account
+									</span>
+								</a>
+							</li>--%>
+							<%--<li>
+								<a id="myorderStatisticsId" onclick="myorderStatistics()">
+									<i class="icon-double-angle-right"></i>
+									<span>订单明细
+										<br>order details
+									</span>
+								</a>
+							</li>--%>
+							<li>
+								<a id="myfinanceId" onclick="myfinance()">
+									<i class="icon-double-angle-right"></i>
+									<span>财务报表
+										<br>Financeial statistics
 									</span>
 								</a>
 							</li>
 							<li>
 								<a id="roomSetId" onclick="roomSet()">
 									<i class="icon-double-angle-right"></i>
-									<span>客房设置
+									<span>房间管理
 										<br>Room setup
 									</span>
 								</a>
 							</li>
-
 							<li>
-								<a id="commoditySetId" onclick="commoditySet()">
-									<i class="icon-double-angle-right"></i>
-									<span>商品设置
-										<br>Commodity setup
-									</span>
-								</a>
-							</li>
-
-						</ul>
-					</li>
-					
-					
-					
-					<li>
-						<a id="stayManageId" onclick="stayManage()" class="dropdown-toggle" style="height: 60px">
-							<i class="icon-move"></i>
-							<span class="menu-text">住宿管理
-								<br>&nbsp;Accommodation management
-							</span>
-
-							<b class="arrow icon-angle-down"></b>
-						</a>
-
-						<ul class="submenu">
-
-							<li>
-								<a id="reservationsId" onclick="reservations()">
-									<i class="icon-double-angle-right"></i>
-									<span>客房预订
-										<br>Room reservation
-									</span>
-								</a>
-							</li>
-
-							<li>
-								<a id="personageId" onclick="personage()">
-									<i class="icon-double-angle-right"></i>
-									<span>住宿登记
-										<br>Registration of accommodation
-									</span>
-								</a>
-							</li>
-
-						</ul>
-					</li>
-					
-					<li>
-						<a id="financeManageId" onclick="financeManage()" class="dropdown-toggle">
-							<i class="icon-heart"></i>
-							<span class="menu-text">财务管理
-								<br>&nbsp;Financial management
-							</span>
-
-							<b class="arrow icon-angle-down"></b>
-						</a>
-						
-						<ul class="submenu">
-
-							<li>
-								<a id="financeStatisticsId" onclick="financeStatistics()">
-									<i class="icon-double-angle-right"></i>
-									<span>财务统计
-										<br>Financial statistics
-									</span>
-								</a>
-							</li>
-
-						</ul>
-						
-					</li>
-					
-					<li>
-						<a id="passengerManageId" onclick="passengerManage()" class="dropdown-toggle">
-							<i class="icon-user"></i>
-							<span class="menu-text">旅客管理
-								<br>&nbsp;Customer management
-							</span>
-
-							<b class="arrow icon-angle-down"></b>
-						</a>
-						
-						<ul class="submenu">
-
-							<li>
-								<a id="passengerInformationId" onclick="passengerInformation()" href="#">
-									<i class="icon-double-angle-right"></i>
-								<span>旅客信息
-									<br>Customer information
-								</span>
-								</a>
-							</li>
-							<li>
-								<a id="receiveTargetId" onclick="receiveTarget()" href="#">
-									<i class="icon-double-angle-right"></i>
-								<span>接待对象
-									<br>Receptionist
-								</span>
-								</a>
-							</li>
-
-						</ul>
-					</li>
-
-					<li>
-						<a id="platformId" onclick="passengerManage()" class="dropdown-toggle">
-							<i class="icon-user"></i>
-							<span class="menu-text">商家管理
-								<br>&nbsp;Merchant management
-							</span>
-
-							<b class="arrow icon-angle-down"></b>
-						</a>
-
-						<ul class="submenu">
-
-							<li>
-								<a id="platformmanagerId" onclick="platformmanager()" href="#">
+								<a id="platformmanagerId" onclick="platformmanager()">
 									<i class="icon-double-angle-right"></i>
 									<span>平台信息
 										<br>Platform information
@@ -279,16 +187,116 @@
 								</a>
 							</li>
 							<li>
-								<a id="suppliermanager" onclick="suppliermanager()" href="#">
+								<a id="suppliermanager" onclick="suppliermanager()">
+									<i class="icon-double-angle-right"></i>
+									<span>酒店信息
+										<br>Supplier information
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="consumptionId" onclick="consumption()">
+									<i class="icon-double-angle-right"></i>
+									<span>消费记录
+										<br>Records of consumption
+									</span>
+								</a>
+							</li>
+
+						</ul>
+					</li>
+					<li>
+						<a id="contractApartmentId" onclick="contractApartment()" class="dropdown-toggle">
+							<i class="icon-dashboard"></i>
+							<span class="menu-text">合约公寓
+								<br>&nbsp;&nbsp;Order
+								</span>
+							<b class="arrow icon-angle-down"></b>
+						</a>
+						<ul class="submenu">
+							<%--<li>
+								<a id="poccupancyId" onclick="poccupancy()">
+									<i class="icon-double-angle-right"></i>
+									<span>入住情况
+										<br>Occupancy in
+									</span>
+								</a>
+							</li>--%>
+							<li>
+								<a id="pmyorderId" onclick="pmyorder()">
+									<i class="icon-double-angle-right"></i>
+									<span>订单
+										<br>Room setup
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="pcheckinorderId" onclick="pcheckinorder()">
+									<i class="icon-double-angle-right"></i>
+									<span>入住订单
+										<br>Stay in
+									</span>
+								</a>
+							</li>
+								<%--<li>
+                                    <a id="pcheckoutorderId" onclick="pcheckoutorder()">
+                                        <i class="icon-double-angle-right"></i>
+                                        <span>已退房
+                                            <br>Check out
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a id="pmyaccountId" onclick="pmyaccount()">
+                                        <i class="icon-double-angle-right"></i>
+                                        <span>已到账
+                                            <br>Arrival account
+                                        </span>
+                                    </a>
+                                </li>--%>
+							<li>
+								<a id="pmyorderStatisticsId" onclick="pmyorderStatistics()">
+									<i class="icon-double-angle-right"></i>
+									<span>订单明细
+										<br>order details
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="pmyfinanceId" onclick="pmyfinance()">
+									<i class="icon-double-angle-right"></i>
+									<span>财务报表
+										<br>Financeial statistics
+									</span>
+								</a>
+							</li>
+
+							<%--<li>
+								<a id="proomSetId" onclick="proomSet()">
+									<i class="icon-double-angle-right"></i>
+									<span>房间管理
+										<br>Room setup
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="pplatformmanagerId" onclick="pplatformmanager()" href="#">
+									<i class="icon-double-angle-right"></i>
+									<span>平台信息
+										<br>Platform information
+									</span>
+								</a>
+							</li>
+							<li>
+								<a id="psuppliermanager" onclick="psuppliermanager()" href="#">
 									<i class="icon-double-angle-right"></i>
 									<span>供应商信息
 										<br>Supplier information
 									</span>
 								</a>
-							</li>
+							</li>--%>
 						</ul>
 					</li>
-
 					<li>
 						<a id="setup" onclick="passengerManage()" class="dropdown-toggle">
 							<i class=" icon-wrench"></i>
@@ -318,41 +326,9 @@
 							</li>
 
 						</ul>
-				</li>
-					<li>
-						<a id="hotelm2Id" onclick="hotelmManage()" class="dropdown-toggle">
-							<i class=" icon-wrench"></i>
-							<span class="menu-text">酒店入住
-								<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hlotem Check-in
-							</span>
-
-							<b class="arrow icon-angle-down"></b>
-						</a>
-						<ul class="submenu">
-
-							<li>
-								<a id="hotelmId" onclick="hotelm()" href="#">
-									<i class="icon-double-angle-right"></i>
-									<span>酒店入住
-										<br>Hotel check-in
-									</span>
-								</a>
-							</li>
-							<%--<li>
-								<a id="suppliermanager" onclick="suppliermanager()" href="#">
-									<i class="icon-double-angle-right"></i>
-									<span>供应商信息
-										<br>Supplier information
-									</span>
-								</a>
-							</li>--%>
-						</ul>
 					</li>
-					</li>
+				</ul>
 
-					
-					
-				</ul><!--/.nav-list-->
 
 				<div class="sidebar-collapse" id="sidebar-collapse">
 					<i class="icon-double-angle-left"></i>
@@ -431,12 +407,12 @@
 
 		<!--[if !IE]>-->
 
-		<script src="assets/js/jquery-2.0.3.min.js"></script>
+		<script src="${ctx}/assets/js/jquery-2.0.3.min.js"></script>
         
 		<!--<![endif]-->
 
 		<!--[if IE]>
-<script src="assets/js/jquery-1.10.2.min.js"></script>
+<script src="${ctx}/assets/js/jquery-1.10.2.min.js"></script>
 
 <![endif]-->
 
@@ -474,7 +450,7 @@
 		<script src="${ctx}/assets/js/flot/jquery.flot.pie.min.js"></script>
 		<script src="${ctx}/assets/js/flot/jquery.flot.resize.min.js"></script>
 		
-        <script src="/${ctx}/assets/js/ace-extra.min.js"></script>
+        <script src="${ctx}/assets/js/ace-extra.min.js"></script>
 		
 
 		<!--ace scripts-->
@@ -666,96 +642,223 @@
 				
 			
 			})
-			
-			
-			
-			
-			function dateView(){
-			     var a=document.getElementById("dateViewId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("yingYeJinEId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/DateView/tolist.do';
+
+            function privateapartment(){
+
+            }
+            function occupancy(){
+			    var time=getNowFormatDate();
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("occupancyId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+              document.getElementById('Mainid').src='${ctx}/Order/occupancy.do?time='+time;
+                //document.getElementById('Mainid').src='${ctx}/Order/test.do';
+            }
+            //确认
+			function myorder() {
+				var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+				document.getElementById("bigGuide").innerHTML=a+"";
+				var s=document.getElementById("myorderId").getElementsByTagName('span')[0].innerHTML;
+				document.getElementById("smallGuide").innerHTML=s+"";
+			   document.getElementById('Mainid').src='${ctx}/Order/myorder.do';
 			}
-			
-			function passengerManage(){
-			    
-			}
-			
-			function passengerInformation(){
-			     var a=document.getElementById("passengerManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("passengerInformationId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/Passenger/tolist.do';
-			}
-			function receiveTarget(){
-			     var a=document.getElementById("passengerManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("receiveTargetId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/ReceiveTarget/tolist.do';
-			}
-			
-			function roomManage(){
-			    
-			}
-			function roomSet(){
-			     var a=document.getElementById("roomManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("roomSetId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     var user=document.getElementById("user").value;
-			     document.getElementById('Mainid').src='${ctx}/RoomSet/tolist.do?user='+user;
-			}
-			function commoditySet(){
-			     var a=document.getElementById("roomManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("commoditySetId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
+        //已入住
+            function checkinorder() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("checkinorderId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/checkinorder.do';
+            }
+            //已退房
+            function checkoutorder() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("checkoutorderId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/checkoutorder.do';
+            }
+            //订单明细
+            function myorderStatistics() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("myorderStatisticsId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/myorderStatistics.do';
+            }
+
+            //财务报表
+            function myfinance() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("myfinanceId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/myfinance.do';
+            }
+            //已到账
+            function myaccount() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("myaccountId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/myaccount.do';
+            }
+
+
+
+            function roomSet(){
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("roomSetId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
                 var user=document.getElementById("user").value;
-			     document.getElementById('Mainid').src='${ctx}/Commodity/tolist.do?user='+user;
+                document.getElementById('Mainid').src='${ctx}/RoomSet/tolist.do';
+            }
+            function commoditySet(){
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("commoditySetId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/Commodity/tolist.do?user='+user;
+            }
+
+            function consumption(){
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("consumptionId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/Order/addFinance.do?user='+user;
+            }
+
+            //==============================================================================================================================//
+
+            function platformmanager() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("platformmanagerId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Platform/tolist.do';
+                //document.getElementById('Mainid').src='${ctx}/platform/merchantManagement.jsp';
+            }
+
+            function suppliermanager() {
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("suppliermanager").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Supplier/tolist.do';
+            }
+
+            /*////////////////////////////////////合约//////////////////////////////*/
+
+            function  contractApartment(){
+
 			}
-			
-			
-			function stayManage(){
-			    
-			}
-			function reservations(){
-			     var a=document.getElementById("stayManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("reservationsId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/Predetermine/tolist.do';
-			}
-			function personage(){
-			     var a=document.getElementById("stayManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("personageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/StayRegister/tolist.do';
-			}
-			function group(){
-			     var a=document.getElementById("stayManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("groupId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			}
-			
-			
-			function financeManage(){
-			    
-			}
-			function financeStatistics(){
-			     var a=document.getElementById("financeManageId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("bigGuide").innerHTML=a+"";
-			     var s=document.getElementById("financeStatisticsId").getElementsByTagName('span')[0].innerHTML;
-			     document.getElementById("smallGuide").innerHTML=s+"";
-			     document.getElementById('Mainid').src='${ctx}/FinancialStatistics/tolist.do';
-			}
-			//==============================================================================================================================//
-	
-			function operator() {
+
+            function poccupancy(){
+                var time=getNowFormatDate();
+                alert(time);
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("poccupancyId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                // document.getElementById('Mainid').src='${ctx}/Order/occupancy.do?time='+time;
+                document.getElementById('Mainid').src='${ctx}/Order/test.do';
+            }
+            //确认
+            function pmyorder() {
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pmyorderId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Hotelm/allorder.do';
+            }
+            //已入住
+            function pcheckinorder() {
+                var time=getNowFormatDate();
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pcheckinorderId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Hotelm/checkinorder.do?time='+time;
+            }
+            //已退房
+            function pcheckoutorder() {
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pcheckoutorderId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/checkoutorder.do';
+            }
+            //订单明细
+            function pmyorderStatistics() {
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pmyorderStatisticsId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Hotelm/myorderStatistics.do';
+            }
+
+            //财务报表
+            function pmyfinance() {
+                var time=getNowFormatDate();
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pmyfinanceId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Hotelm/myfinance.do?time='+time;
+            }
+            //已到账
+            function pmyaccount() {
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pmyaccountId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Order/myaccount.do';
+            }
+            function proomSet(){
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/RoomSet/tolist.do';
+            }
+
+            function pcommoditySet(){
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pcommoditySetId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/Commodity/tolist.do?user='+user;
+            }
+            //==============================================================================================================================//
+
+
+
+            function pplatformmanager() {
+                var a=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("pplatformmanagerId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Platform/tolist.do';
+                //document.getElementById('Mainid').src='${ctx}/platform/merchantManagement.jsp';
+            }
+
+            function psuppliermanager() {
+                var a=document.getElementById("platformId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("contractApartmentId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                document.getElementById('Mainid').src='${ctx}/Supplier/tolist.do';
+            }
+
+
+            function operator() {
                 var a=document.getElementById("setup").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("bigGuide").innerHTML=a+"";
                 var s=document.getElementById("operator").getElementsByTagName('span')[0].innerHTML;
@@ -763,48 +866,82 @@
                 document.getElementById('Mainid').src='${ctx}/User/tolist.do';
             }
 
-            function platformmanager() {
-                var a=document.getElementById("platformId").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("bigGuide").innerHTML=a+"";
-                var s=document.getElementById("platformmanagerId").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("smallGuide").innerHTML=s+"";
-                document.getElementById('Mainid').src='${ctx}/Platform/tolist.do';
-            }
-
-            function suppliermanager() {
-                var a=document.getElementById("platformId").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("bigGuide").innerHTML=a+"";
-                var s=document.getElementById("suppliermanager").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("smallGuide").innerHTML=s+"";
-                document.getElementById('Mainid').src='${ctx}/Supplier/tolist.do';
-            }
-
-            function emptyroom() {
-                var a=document.getElementById("roomManageId").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("bigGuide").innerHTML=a+"";
-                var s=document.getElementById("emptyroomId").getElementsByTagName('span')[0].innerHTML;
-                document.getElementById("smallGuide").innerHTML=s+"";
-                document.getElementById('Mainid').src='${ctx}/RoomSet/toroomlist.do';
-            }
             function exit() {
-			    var flag=confirm("确定退出吗?");
-			    if (flag==true){
-                    //window.location.href="http://localhost:8080/hotelm/Login/tomain.do";
-                    window.location.href="http://hotelm.sample.jichuangsi.com/hotelm/Login/tomain.do";
+                var flag=confirm("确定退出吗?");
+                if (flag==true){
+                    window.location.href="http://localhost:8080/hotelm/Login/tomain.do";
+                    //window.location.href="http://hotelm.sample.jichuangsi.com/hotelm/Login/tomain.do";
                 }
 
             }
-            /////////////////////////////////////////////////////////////////////////////////////////////
-			function hotelmManage() {
+            //第一天
+            function getCurrentMonthFirst(){
+                var date = new Date();
+                date.setDate(1);
+                var month = parseInt(date.getMonth()+1);
+                var day = date.getDate();
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return date.getFullYear() + '-' + month + '-' + day;
+            }
+            //最后一天
+            function getCurrentMonthLast(){
+                var date=new Date();
+                var currentMonth=date.getMonth();
+                var nextMonth=++currentMonth;
+                var nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1);
+                var oneDay=1000*60*60*24;
+                var lastTime = new Date(nextMonthFirstDay-oneDay);
+                var month = parseInt(lastTime.getMonth()+1);
+                var day = lastTime.getDate();
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return date.getFullYear() + '-' + month + '-' + day;
+            }
+			//获取当前年月
+            function doHandleDate() {
+                var myDate = new Date();
+                var tYear = myDate.getFullYear();
+                var tMonth = myDate.getMonth();
 
-			}
+                var m = tMonth + 1;
+                if (m.toString().length == 1) {
+                    m = "0" + m;
+                }
+                return tYear + m;
+            }
+
+            function getNowFormatDate() {
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                var currentdate = year + seperator1 + month + seperator1 + strDate;
+                return currentdate;
+            }
+			/*
             function hotelm() {
                 var a=document.getElementById("hotelm2Id").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("bigGuide").innerHTML=a+"";
                 var s=document.getElementById("hotelmId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("smallGuide").innerHTML=s+"";
                 document.getElementById('Mainid').src='${ctx}/Hotelm/tolist.do';
-            }
+            }*/
 		</script>
 	</body>
 </html>
