@@ -25,80 +25,69 @@
     <link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css"/>
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
-
+    <script src="${ctx}/js/weeklyCalendar.js"></script>
 </head>
 <style>
-    body {
+    /* 		body {
         background-color: gainsboro;
-    }
-
-    .layui-unselect {
+    } */
+    .layui-unselect{
         margin-bottom: 0.5rem;
     }
-
     /* 	.layui-colla-item{
             margin-top: 0.625rem;
         } */
-    .layui-collapse {
+    .layui-collapse{
         margin-bottom: 1.25rem;
     }
-
-    #add {
+    #add{
         display: none;
         margin-top: 10px;
     }
-
-    .bj {
+    .bj{
         background-color: deepskyblue;
         color: white;
     }
+    /* body {max-width: 400px;margin-left: auto;margin-right: auto} */
+    h3 {margin-top: 40px;}
+
+    ul,li {list-style: none;}
+    .myWeeklyCanlendar {padding: 0;margin: 0}
+    .datetime_header {text-align: center;padding-top:15px;padding-bottom: 15px;font-size: 16px;border-bottom: 1px solid #dedede}
+    .prev_icon,
+    .next_icon {display: inline-block;vertical-align: top;width: 20px;height: 20px;}
+    .prev_icon {margin-right: 20px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBRjM4MjAyQTc1QkYxMUU3OEU5NUNEMTJBNTFEMzFDNSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBRjM4MjAyQjc1QkYxMUU3OEU5NUNEMTJBNTFEMzFDNSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkFGMzgyMDI4NzVCRjExRTc4RTk1Q0QxMkE1MUQzMUM1IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkFGMzgyMDI5NzVCRjExRTc4RTk1Q0QxMkE1MUQzMUM1Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+oFyXSAAAAd9JREFUeNqM1E1IFGEcx/HdJQ+Rq6dgr6V7SgWJrEviSyERZKbiqRBXhNq6qa14EDykZgXRrgaKkC4qQUYEBqEHXw7aC4l0SfSwVxWRTmWH7fvAf+DZh3lm9g8fhpln5sfzNk8wPLQfsNQ9tKPWeL6GaUyqm9+JszmNp1yCmjCDM/iDj9hBFlFcw1W8xl3M6R+HjLARLCCDapzGLXSjB7dRiMv4gdmi4YOkLXAIvRjEBRmarb7gEhKI66FO4A1pfIIBj6AlvDRG9FhC2/TAD9hDv09YPXb1hyzKUy7fMU9oSAW2okDmx1bLEnYHr1zam+XaGZLJ/oufHj2rk7D3bi/QS7WIR2oNQjK5i5awRelZoy1MK7U7Spx9uG00FmMVFajEVsC/fumLkjUagwg7IwrkV1k9sMxoPMZ5rMjqX88jMOoEquHctLxUg2/4nEeoWrSMCnwuv1ip5UW1aF+9Qtl/ES7qlHihAtPy3GsVq7TQmEv7W7mOO3PYIvPY5xO6iYtG7+Jy+sTYj/+cbfMOSfmXT2Qa3OqKcf9AvntD2JR52jxCCs+wbvbEqHIZfkrC2m0H7ENsyAGrVvcQn2TrqDqHBkTkvouwCb8TOy2n8H10yKmsl/rnRzEmJ3pO/RdgAImpc6oRs8i7AAAAAElFTkSuQmCC)
+    no-repeat}
+    .next_icon {margin-left: 20px;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDpBNjRBQUZBMzc1QkYxMUU3OEY0NEFDQzI1NzVDODk5QSIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDpBNjRBQUZBNDc1QkYxMUU3OEY0NEFDQzI1NzVDODk5QSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkE2NEFBRkExNzVCRjExRTc4RjQ0QUNDMjU3NUM4OTlBIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkE2NEFBRkEyNzVCRjExRTc4RjQ0QUNDMjU3NUM4OTlBIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+5IgMmAAAAeVJREFUeNqM1E9IFGEYx/HdJQ9idhP2KrkHzRAKNygTBEFFiMpCOhRiIeTaqX8rHQSJ/N9JS0gEdVERLEJQDDpVoKEYEdgfEjp0Kemwp6TD+n3hN/Du286sD3wYdmfmx8wz7/uEi/t+hXzqGtpQ5/z/BtOYMD/SyZKsk4dyBF3ADIrwF0v4igxiqMdZjOMq5uybI07YAJ7jB2pRiHO4g7s4j8M4hS3MHun/PeoX2Id76MUxvZpfvUc1kkjYoV5gk04+Qo9148M8weaN7iu01Q58ie944Nywgxqs+SXyUQY5bGKe0IgJvIwC9cetSTSoZ+sBT9qi442Imr2HTz4Xv0Ij4n6hPKX5iH/MN4ioucuh4FrVcokH9NSsjqNeDz+G8tdrlKun31DinP9if5RM6GCV1rEYYedcxg6sPEDYafzEBqJw92zMC/yA5jxhZ/AOn9XzXHXR7DATOKItVhYQ9hbb6uF/xfqLqqePTWBK/7/Ice0VK6wi4A0WdHzq9fCS+tjtXFilIeAbxtMlNH2usx7/eYGLGNVevm1db/b3iYAn69R9U4RNutPmFsYwrNc8GRB0XDtoTGFtfgO2S4NgRstjFysaHKZKtbej+t1B2LN8EzulKXwT7ZrKdpk9P4QnmuhZtS/AAK1fcwgha25zAAAAAElFTkSuQmCC)
+    no-repeat}
+    .prev_icon:active,
+    .next_icon:active,
+    .weeklyCanlendarBox li a:active {opacity: .8}
+    .weeklyBox,.weeklyCanlendarBox {overflow: hidden;font-size: 14px;}
+    .weeklyBox {padding-top: 10px;padding-bottom: 5px;}
+    .weeklyBox li {line-height: 30px}
+    .weeklyBox li,
+    .weeklyCanlendarBox li {float: left;display: inline;width: 14.28571428%;text-align: center;}
+    .weeklyCanlendarBox li a {display: inline-block;width: 30px;line-height: 30px;border-radius: 100%;color:#0d87ea;text-decoration: none;border:1px solid transparent}
+
+    .weeklyCanlendarBox li.active a {background:#0d87ea;color: #fff;}
+    .weeklyCanlendarBox li.clickActive a {border:1px solid #0d87ea}
+    .weeklyCanlendarBox li a.disabled {color: #ccc;pointer-events: none}
 </style>
 <body>
 
 <div class="layui-row">
     <div class="layui-col-xs12 layui-col-md6 layui-col-md-offset3">
         <div class="layui-row date">
-            <div class="layui-col-xs5">
-                <div class="layui-row grid-demo">
-                    <div class="layui-col-xs4 todate bj">
-                        <span>周四</span>
-                        <h1>5</h1>
-                        <span>2020-03</span>
-                    </div>
-                    <div class="layui-col-xs4 todate">
-                        <span>周五</span>
-                        <h1>6</h1>
-                        <span>2020-03</span>
-                    </div>
-                    <div class="layui-col-xs4 todate">
-                        <span>周六</span>
-                        <h1>7</h1>
-                        <span>2020-03</span>
-                    </div>
+            <div id="j_weeklyCalendar" class="myWeeklyCanlendar">
+                <div class="datetime_header">
+                    <a href="javascript:;" title="上一周" class="prev_icon" role="prev_week"></a>
+                    <span><b role="year_selector"></b>年<b role="month_selector"></b>月</span><span style="margin-left: 20px;display: none">第<b
+                        role="week_selector"></b>周</span>
+                    <a href="javascript:;" title="下一周" class="next_icon" role="next_week"></a>
                 </div>
-            </div>
-            <div class="layui-col-xs5">
-                <div class="layui-row grid-demo">
-                    <div class="layui-col-xs4 todate">
-                        <span>周四</span>
-                        <h1>5</h1>
-                        <span>2020-03</span>
-                    </div>
-                    <div class="layui-col-xs4 todate">
-                        <span>周四</span>
-                        <h1>5</h1>
-                        <span>2020-03</span>
-                    </div>
-                    <div class="layui-col-xs4 todate">
-                        <span>周四</span>
-                        <h1>5</h1>
-                        <span>2020-03</span>
-                    </div>
-                </div>
-            </div>
-            <div class="layui-col-xs2" style="margin-top: 20px;">
-                选择</br>
-                日期
+                <ul role="weeks_ch" class="weeklyBox"></ul>
+                <ul role="weeklyCanlendarView" class="weeklyCanlendarBox"></ul>
             </div>
         </div>
 
@@ -143,6 +132,7 @@
         </div>
     </div>
 </div>
+
 </body>
 <div id="add" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="test">
@@ -254,6 +244,37 @@
 </div>
 
 <script>
+    // 默认周历
+    weeklyCalendar('#j_weeklyCalendar', {
+        //点击日期回调
+        clickDate: function(dateTime) {
+            console.log(dateTime);
+            var year=dateTime.year;
+            var moth=dateTime.month;
+            var day=dateTime.date;
+            var time=year+"-"+moth+"-"+day;//joccupancy
+            //location.href='${ctx}/Order/occupancy.do?time='+time;
+            $.ajax({
+                cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                type: "POST",                                           //上面3行都是必须要的
+                url: '${ctx}/Order/joccupancy.do',       //地址 type 带参数
+                data:time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                async:false,                                          // 是否 异步 提交
+                success: function (result) {                          // 不出现异常 进行立面方
+                   console.log(result);
+                    if(result>=1){
+                        alert("订单号重复！"+' \n '+"Duplicate order number");                     //提示框
+                        document.getElementById("order").value="";     //这个id的文本框的值 将会清空
+                        document.getElementById("order").focus();      // 给这个id的文本框提供焦点
+                        return false;
+                    }else {
+                        return false;
+                    }
+                },
+                error: function(data) {  }
+            })
+        }
+    });
 
 
     function add() {

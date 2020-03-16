@@ -43,6 +43,11 @@ public interface OrderService {
 
     public int updateMoney(int id,Timestamp time);
 
+
+    public Page<OrderTimeVo> selectRoom( Page<OrderTimeVo> vo);
+    public List<OrderTimeVo> selectRoomByTimes(Timestamp time,List<Integer> list);
+    public List<OrderTimeVo> selectRoomByin(List<Integer> idList,List<Integer> list);
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Page<OrderDetailsVo> allContractOrder(String name,String orderNumber,Page<OrderDetailsVo> vo);

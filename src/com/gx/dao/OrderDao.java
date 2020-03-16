@@ -73,6 +73,13 @@ public interface OrderDao {
                                               @Param("start")int start, @Param("size")int size);
     public int countSelectRoomByTime(@Param("time")Timestamp time);
 
+
+    public List<OrderTimeVo> selectRoom( @Param("start")int start, @Param("size")int size);
+    public Integer countSelectRoom();
+    public List<OrderTimeVo> selectRoomByTimes(@Param("time")Timestamp time,@Param("list")List<Integer> list);
+    public List<OrderTimeVo> selectRoomByin(@Param("idList")List<Integer> idList,@Param("allList")List<Integer> allList);
+
+
     public List<IndayVo> checkinDay(@Param("time")String time,
                                     @Param("roomId")int roomId);
 

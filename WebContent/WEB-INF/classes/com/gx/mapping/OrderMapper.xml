@@ -197,16 +197,49 @@
   </select>
    <!-- 入住情况-->
   <select id="selectRoomByTime" resultType="com.gx.vo.OrderTimeVo">
-    SELECT  rt.`number`,r.`roomAmount`,r.`roomAmount`-rt.`number` AS remainingBeds,
-	r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
-	FROM `room` r LEFT JOIN `roomandtime` rt ON rt.`roomId`=r.id
-	INNER JOIN `supplier` s ON s.id=r.`supplierID`
-	WHERE s.`have`=1
-	OR #{time,jdbcType=TIMESTAMP} BETWEEN `intime` AND `outtime`
-	 LIMIT #{start},#{size}
+    SELECT o.id, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
+    r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
+    FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
+    INNER JOIN `supplier` s ON s.id=r.`supplierID`
+    WHERE s.`have`=1  AND o.`status`!=6
+    AND  #{time,jdbcType=TIMESTAMP} BETWEEN `checkinTime` AND `checkoutTime`
+      LIMIT #{start},#{size}
   </select>
 
-
+  <select id="selectRoom" resultType="com.gx.vo.OrderTimeVo">
+     SELECT *,id AS roomId  FROM `room`
+      LIMIT #{start},#{size}
+  </select>
+  <select id="countSelectRoom" resultType="java.lang.Integer">
+     SELECT COUNT(*) FROM `room`
+  </select>
+  <!-- 入住情况-->
+  <select id="selectRoomByTimes" resultType="com.gx.vo.OrderTimeVo">
+    SELECT o.id, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
+    r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
+    FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
+    INNER JOIN `supplier` s ON s.id=r.`supplierID`
+    WHERE s.`have`=1  AND o.`status`!=6
+    AND  #{time,jdbcType=TIMESTAMP} BETWEEN `checkinTime` AND `checkoutTime`
+    AND `roomId` IN
+    <foreach item="roomId" collection="list" open="(" separator=","
+                           close=")">
+                   #{roomId}
+  </foreach>
+  </select>
+  <!-- 入住情况-->
+  <select id="selectRoomByin" resultType="com.gx.vo.OrderTimeVo">
+    SELECT * FROM room WHERE id NOT IN
+    <foreach item="id" collection="idList" open="(" separator=","
+             close=")">
+           #{id}
+    </foreach>
+    and  id IN
+    <foreach item="rid" collection="allList" open="(" separator=","
+             close=")">
+      #{rid}
+    </foreach>
+  </select>
 
 
   <select id="countSelectRoomByTime" resultType="java.lang.Integer">

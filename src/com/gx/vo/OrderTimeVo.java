@@ -9,6 +9,15 @@ public class OrderTimeVo {
     private Integer remainingBeds;
     private Integer number;//入住人数
     private Integer roomAmount;
+    private Integer checkinNumber;
+
+    public Integer getCheckinNumber() {
+        return checkinNumber;
+    }
+
+    public void setCheckinNumber(Integer checkinNumber) {
+        this.checkinNumber = checkinNumber;
+    }
 
     public Integer getNumber() {
         return number;

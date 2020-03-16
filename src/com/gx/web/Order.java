@@ -6,6 +6,7 @@ import com.gx.po.*;
 import com.gx.service.*;
 import com.gx.util.TimeTransformation;
 import com.gx.vo.IndayVo;
+import com.gx.vo.Model;
 import com.gx.vo.OrderDetailsVo;
 import com.gx.vo.OrderTimeVo;
 import org.apache.commons.io.FileUtils;
@@ -223,13 +224,69 @@ public class Order {
         }else {
             timestamp=TimeTransformation.stringTimestamp(time);
         }
+
         Map<Integer,Integer> coun=new HashMap<Integer, Integer>();
         Page<OrderTimeVo> vo=new Page<OrderTimeVo>();
         List<OrderTimeVo> olist=new ArrayList<OrderTimeVo>();
         OrderTimeVo ov=new OrderTimeVo();
         vo.setCurrentPage(currentPage);
-        Page<OrderTimeVo> list=orderService.selectRoomByTime(timestamp,vo);
-        for (OrderTimeVo o :list.getResult() ) {//相同房间的空床
+        List<Integer> id=new ArrayList<Integer>();//入住房间id
+        List<Integer> allid=new ArrayList<Integer>();//全部房间id
+        Map<Integer,Integer> key=new HashMap<Integer,Integer>();
+
+        Page<OrderTimeVo> rlist=orderService.selectRoom(vo);
+        for (OrderTimeVo v:rlist.getResult()){
+            allid.add(v.getRoomId());
+        }
+        List<OrderTimeVo> olist2=orderService.selectRoomByTimes(timestamp,allid);//入住
+        for (OrderTimeVo o:olist2){
+            id.add(o.getRoomId());
+        }
+        List<OrderTimeVo> olist3=orderService.selectRoomByin(id,allid);//全空房
+        for (OrderTimeVo v:olist3){
+            ov=new OrderTimeVo();
+            ov.setRoomId(v.getRoomId());
+            ov.setRoomNumber(v.getRoomNumber());
+            ov.setSupplierName(v.getSupplierName());
+            ov.setRemainingBeds(v.getRoomAmount());
+            olist.add(ov);
+        }
+
+        //判断入住房间全部入住人数
+        for (OrderTimeVo o :olist2) {//相同房间的空床
+                if (coun.get(o.getRoomId())==null){//count还为空
+                    coun.put(o.getRoomId(),o.getCheckinNumber());
+                }else {
+                    coun.put(o.getRoomId(),coun.get(o.getRoomId())+o.getCheckinNumber());
+                }
+        }
+
+        for (OrderTimeVo o :olist2 ) {
+            if (coun.containsKey(o.getRoomId())){
+                ov=new OrderTimeVo();
+                if (!key.containsKey(o.getRoomId())) {//roomId相同
+                  /*  if (coun.get(o.getRoomId())==-1){
+                        ov.setRemainingBeds(o.getRoomAmount());
+                    }else if (coun.get(o.getRoomId())==0){
+                        ov.setRemainingBeds(0);
+                    }else {*/
+                        ov.setRemainingBeds(o.getRoomAmount()-coun.get(o.getRoomId()));
+                   // }
+
+                    ov.setOrderId(o.getOrderId());
+                    ov.setRoomId(o.getRoomId());
+                    ov.setSupplierName(o.getSupplierName());
+                    ov.setRoomNumber(o.getRoomNumber());
+                    ov.setRoomAmount(o.getRoomAmount());
+                    olist.add(ov);
+                    vo.setResult(olist);
+                    key.put(o.getRoomId(),1);
+                }
+            }
+        }
+
+       /* Page<OrderTimeVo> list=orderService.selectRoomByTime(timestamp,vo);*/
+        /*for (OrderTimeVo o :olist2) {//相同房间的空床
             if (o.getNumber()==null){//无人入住房
                 coun.put(o.getRoomId(),-1);
             }else {
@@ -241,9 +298,9 @@ public class Order {
 
             }
 
-        }
-        Map<Integer,Integer> key=new HashMap<Integer,Integer>();
-        for (OrderTimeVo o :list.getResult() ) {
+        }*/
+
+        /*for (OrderTimeVo o :olist2 ) {
             if (coun.containsKey(o.getRoomId())){
                 ov=new OrderTimeVo();
                 if (!key.containsKey(o.getRoomId())) {//roomId相同
@@ -265,7 +322,7 @@ public class Order {
                     key.put(o.getRoomId(),1);
                 }
             }
-        }
+        }*/
 
         List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
         List<AccountPo> alist=accountService.getAccount();//账户
@@ -277,7 +334,143 @@ public class Order {
         return mv;
     }
 
+    //入住情况
+    @ResponseBody
+    @RequestMapping("joccupancy")
+    public Object joccupancy(String time,Integer currentPage) {
+        ModelAndView mv = null;
+        mv = new ModelAndView("/order/accommodationfinance");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Timestamp timestamp=null;
+        if (time==null){
+            timestamp = new Timestamp(System.currentTimeMillis());
+        }else {
+            timestamp=TimeTransformation.stringTimestamp(time);
+        }
 
+        Map<Integer,Integer> coun=new HashMap<Integer, Integer>();
+        Page<OrderTimeVo> vo=new Page<OrderTimeVo>();
+        List<OrderTimeVo> olist=new ArrayList<OrderTimeVo>();
+        OrderTimeVo ov=new OrderTimeVo();
+        vo.setCurrentPage(currentPage);
+        List<Integer> id=new ArrayList<Integer>();//入住房间id
+        List<Integer> allid=new ArrayList<Integer>();//全部房间id
+        Map<Integer,Integer> key=new HashMap<Integer,Integer>();
+
+        Page<OrderTimeVo> rlist=orderService.selectRoom(vo);
+        for (OrderTimeVo v:rlist.getResult()){
+            allid.add(v.getRoomId());
+        }
+        List<OrderTimeVo> olist2=orderService.selectRoomByTimes(timestamp,allid);//入住
+        for (OrderTimeVo o:olist2){
+            id.add(o.getRoomId());
+        }
+        List<OrderTimeVo> olist3=orderService.selectRoomByin(id,allid);//全空房
+        for (OrderTimeVo v:olist3){
+            ov=new OrderTimeVo();
+            ov.setRoomId(v.getRoomId());
+            ov.setRoomNumber(v.getRoomNumber());
+            ov.setSupplierName(v.getSupplierName());
+            ov.setRemainingBeds(v.getRoomAmount());
+            olist.add(ov);
+        }
+
+        //判断入住房间全部入住人数
+        for (OrderTimeVo o :olist2) {//相同房间的空床
+            if (coun.get(o.getRoomId())==null){//count还为空
+                coun.put(o.getRoomId(),o.getCheckinNumber());
+            }else {
+                coun.put(o.getRoomId(),coun.get(o.getRoomId())+o.getCheckinNumber());
+            }
+        }
+
+        for (OrderTimeVo o :olist2 ) {
+            if (coun.containsKey(o.getRoomId())){
+                ov=new OrderTimeVo();
+                if (!key.containsKey(o.getRoomId())) {//roomId相同
+                  /*  if (coun.get(o.getRoomId())==-1){
+                        ov.setRemainingBeds(o.getRoomAmount());
+                    }else if (coun.get(o.getRoomId())==0){
+                        ov.setRemainingBeds(0);
+                    }else {*/
+                    ov.setRemainingBeds(o.getRoomAmount()-coun.get(o.getRoomId()));
+                    // }
+
+                    ov.setOrderId(o.getOrderId());
+                    ov.setRoomId(o.getRoomId());
+                    ov.setSupplierName(o.getSupplierName());
+                    ov.setRoomNumber(o.getRoomNumber());
+                    ov.setRoomAmount(o.getRoomAmount());
+                    olist.add(ov);
+                    vo.setResult(olist);
+                    key.put(o.getRoomId(),1);
+                }
+            }
+        }
+
+        /* Page<OrderTimeVo> list=orderService.selectRoomByTime(timestamp,vo);*/
+        /*for (OrderTimeVo o :olist2) {//相同房间的空床
+            if (o.getNumber()==null){//无人入住房
+                coun.put(o.getRoomId(),-1);
+            }else {
+                if (coun.get(o.getRoomId())==null){//count还为空
+                    coun.put(o.getRoomId(),o.getNumber());
+                }else {
+                    coun.put(o.getRoomId(),coun.get(o.getRoomId())+o.getNumber());
+                }
+
+            }
+
+        }*/
+
+        /*for (OrderTimeVo o :olist2 ) {
+            if (coun.containsKey(o.getRoomId())){
+                ov=new OrderTimeVo();
+                if (!key.containsKey(o.getRoomId())) {//roomId相同
+                    if (coun.get(o.getRoomId())==-1){
+                        ov.setRemainingBeds(o.getRoomAmount());
+                    }else if (coun.get(o.getRoomId())==0){
+                        ov.setRemainingBeds(0);
+                    }else {
+                        ov.setRemainingBeds(o.getRoomAmount()-coun.get(o.getRoomId()));
+                    }
+
+                    ov.setOrderId(o.getOrderId());
+                    ov.setRoomId(o.getRoomId());
+                    ov.setSupplierName(o.getSupplierName());
+                    ov.setRoomNumber(o.getRoomNumber());
+                    ov.setRoomAmount(o.getRoomAmount());
+                    olist.add(ov);
+                    vo.setResult(olist);
+                    key.put(o.getRoomId(),1);
+                }
+            }
+        }*/
+
+        List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
+        List<AccountPo> alist=accountService.getAccount();//账户
+        List<PlatformPo> plist=platformService.listAll();
+
+        String s[]={slist.toString(),vo.getResult().toString(),alist.toString(),plist.toString()};
+
+        Model model=new Model();
+        model.setList(vo.getResult());
+        model.setAlist(alist);
+        model.setPlist(plist);
+        model.setSlist(slist);
+        Gson gson = new Gson();
+        return gson.toJson(model);
+
+      /*  mv.addObject("list",vo);
+        mv.addObject("slist",slist);
+        mv.addObject("alist",alist);
+        mv.addObject("plist",plist);*/
+       // return mv;
+    }
 
     //添加订单
     @ResponseBody
@@ -461,13 +654,15 @@ public class Order {
     }
 
     @RequestMapping("todaily")
-    public ModelAndView todaily(int id){
+    public ModelAndView todaily(){
         ModelAndView mv=null;
-        mv=new ModelAndView("order/addDaily");
-        List<ConsumptiontypePo> clist=consumptiontypeService.list();
-        DailyconsumptionPo po1=dailyconsumptionService.selectById(id);
-        mv.addObject("clist",clist);
-        mv.addObject("po1",po1);
+        mv=new ModelAndView("/order/addDaily");
+        List<ConsumptiontypePo> clist=consumptiontypeService.list();/*
+        DailyconsumptionPo po1=dailyconsumptionService.selectById(id);*/
+        List<DailyconsumptionPo> dlist=dailyconsumptionService.list();
+        mv.addObject("clist",clist);/*
+        mv.addObject("po1",po1);*/
+        mv.addObject("list",dlist);
         return mv;
     }
     //修改日常消费
@@ -486,6 +681,23 @@ public class Order {
     }
 
 
+    //按月显示每天有几个人
+    @RequestMapping("monthRoom")
+    public ModelAndView monthRoom(String time)throws Exception{
+        ModelAndView mv=new ModelAndView();
+        if (time==null){
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            time= year + "-" + ( month<10 ? "0" + month : month);
+        }
+        SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+        Date date2 = sdfs.parse(time);
+        List<String> day=TimeTransformation.getMonthFullDay(date2);
+
+
+        return mv;
+    }
 
 
 

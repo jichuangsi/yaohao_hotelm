@@ -2,7 +2,10 @@ package com.gx.util;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class TimeTransformation {
     /**
@@ -49,4 +52,46 @@ public class TimeTransformation {
     }
 
 
+  private static  SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+    private static  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+
+    public static List<String> getMonthDay(String date)throws Exception {
+        Date date2 = sdfs.parse(date);
+        List<String> list = getMonthFullDay(date2);
+        List<String> listDay = new ArrayList<String>();
+        for (String date1 : list) {
+            listDay.add(date1.substring(8, 10));
+        }
+        return listDay;
+    }
+    public static List<String> getMonthFullDay(Date date) throws Exception{
+        List<String> fullDayList = new ArrayList<String>();
+        String dateStr = sdfs.format(date);//format()方法将Date转换成指定格式的String
+        int year = Integer.parseInt(dateStr.substring(0, 4));//年
+        int month = Integer.parseInt(dateStr.substring(5, 7));//月
+        Calendar cal = Calendar.getInstance();// 获得当前日期对象
+        cal.clear();// 清除信息
+
+        cal.setTime(date);
+        cal.add(Calendar.DATE,0);
+        int count = cal.getActualMaximum(Calendar.DAY_OF_MONTH);//
+        for (int j = 0; j <= (count - 1); ) {
+            System.out.println(cal.getTime());
+            System.out.println(sdf.format(cal.getTime()));
+            if (!sdf.format(cal.getTime()).equals(getLastDay(year, month)))//判断是否同年同月
+                break;
+            cal.add(Calendar.DATE,  j == 0 ? +0 : +1);
+            j++;
+            System.out.println(sdf.format(cal.getTime()));
+            fullDayList.add(sdfs.format(cal.getTime()));
+        }
+        return fullDayList;
+    }
+    public static String getLastDay(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, 0);
+        return sdf.format(cal.getTime());
+    }
 }

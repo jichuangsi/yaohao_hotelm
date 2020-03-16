@@ -152,6 +152,31 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.checkinDay(time, roomId);
     }
 
+
+    @Override
+    public Page<OrderTimeVo> selectRoom(Page<OrderTimeVo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<OrderTimeVo> list=orderDao.selectRoom(start, vo.getPageSize());
+        vo.setResult(list);
+        int count=orderDao.countSelectRoom();
+        vo.setTotal(count);
+        return vo;
+    }
+
+    @Override
+    public List<OrderTimeVo> selectRoomByTimes(Timestamp time,List<Integer> list) {
+        return orderDao.selectRoomByTimes(time,list);
+    }
+
+    @Override
+    public List<OrderTimeVo> selectRoomByin(List<Integer> idList,List<Integer> list) {
+        return orderDao.selectRoomByin(idList,list);
+    }
+
+
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override

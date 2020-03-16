@@ -11,6 +11,25 @@ public class DailyconsumptionPo {
     private String time;//日
     private int cid;
 
+    private String name;
+    private String supplierName;
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public double getMoney() {
         return money;
     }

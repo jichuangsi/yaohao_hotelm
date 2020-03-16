@@ -197,7 +197,7 @@
 							<li>
 								<a id="consumptionId" onclick="consumption()">
 									<i class="icon-double-angle-right"></i>
-									<span>消费记录
+									<span>日常消费
 										<br>Records of consumption
 									</span>
 								</a>
@@ -652,8 +652,9 @@
                 document.getElementById("bigGuide").innerHTML=a+"";
                 var s=document.getElementById("occupancyId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("smallGuide").innerHTML=s+"";
-              document.getElementById('Mainid').src='${ctx}/Order/occupancy.do?time='+time;
-                //document.getElementById('Mainid').src='${ctx}/Order/test.do';
+              //document.getElementById('Mainid').src='${ctx}/Order/occupancy.do?time='+time;
+                document.getElementById('Mainid').src='${ctx}/Order/occupancy.do?time='+time;
+                //document.getElementById('Mainid').src='${ctx}/Order/test.do';joccupancy
             }
             //确认
 			function myorder() {
@@ -725,12 +726,15 @@
             }
 
             function consumption(){
+			    var time=getNowFormatDate();
+			    alert(time)
                 var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("bigGuide").innerHTML=a+"";
                 var s=document.getElementById("consumptionId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("smallGuide").innerHTML=s+"";
                 var user=document.getElementById("user").value;
-                document.getElementById('Mainid').src='${ctx}/Order/addFinance.do?user='+user;
+               document.getElementById('Mainid').src='${ctx}/Order/todaily.do';
+                //document.getElementById('Mainid').src='${ctx}/Order/monthRoom.do?time='+time;
             }
 
             //==============================================================================================================================//
@@ -918,7 +922,18 @@
                 }
                 return tYear + m;
             }
+            //获取当前年月
+            function doHandleDate2() {
+                var myDate = new Date();
+                var tYear = myDate.getFullYear();
+                var tMonth = myDate.getMonth();
 
+                var m = tMonth + 1;
+                if (m.toString().length == 1) {
+                    m = "0" + m;
+                }
+                return tYear +"-"+ m;
+            }
             function getNowFormatDate() {
                 var date = new Date();
                 var seperator1 = "-";

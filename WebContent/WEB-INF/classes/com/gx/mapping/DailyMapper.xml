@@ -54,4 +54,9 @@
      AND `supplierId`=#{supplierId,jdbcType=INTEGER}
   </select>
 
+    <select id="list"  resultType="com.gx.po.DailyconsumptionPo">
+        SELECT d.*,c.`name`,s.`supplierName`
+FROM `dailyconsumption` d INNER JOIN `consumptiontype` c ON d.`cid`=c.`id`
+INNER JOIN `supplier` s ON s.id=d.`supplierId`
+    </select>
 </mapper>

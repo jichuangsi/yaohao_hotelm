@@ -3,6 +3,8 @@ package com.gx.dao;
 import com.gx.po.DailyconsumptionPo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface DailyconsumptionDao {
 
     public DailyconsumptionPo selectByTimeAndRoom(@Param("time") String time,@Param("roomId")  int roomId,@Param("cid")  int cid);
@@ -14,4 +16,6 @@ public interface DailyconsumptionDao {
     public DailyconsumptionPo selectById(int id);
    public double selectSumMoney(@Param("time") String time,@Param("cid")int cid,@Param("roomId")  int roomId,
                                  @Param("supplierId")Integer supplierId);
+
+    public List<DailyconsumptionPo> list();
 }

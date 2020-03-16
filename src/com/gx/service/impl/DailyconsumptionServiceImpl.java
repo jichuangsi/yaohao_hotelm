@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Service("DailyconsumptionService")
 public class DailyconsumptionServiceImpl implements DailyconsumptionService {
@@ -35,5 +37,10 @@ private DailyconsumptionDao dailyconsumptionDao;
     @Override
     public double selectSumMoney(String time, Integer cid, Integer roomId, Integer supplierId) {
         return dailyconsumptionDao.selectSumMoney(time,cid,roomId,supplierId);
+    }
+
+    @Override
+    public List<DailyconsumptionPo> list() {
+        return dailyconsumptionDao.list();
     }
 }
