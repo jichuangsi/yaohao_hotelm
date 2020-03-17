@@ -7,7 +7,7 @@ public class RoomVo {
     private String roomAmount;//床位数
     private double referencePrice;//参考价
     private Integer supplierId;//供应商
-    private int supplierID;//供应商
+    private Integer supplierID;//供应商
     private long createTime;//创建时间
     private int gid;
     private String guestRoomLevelName;
@@ -37,11 +37,11 @@ public class RoomVo {
         this.supplierName = supplierName;
     }
 
-    public int getSupplierID() {
+    public Integer getSupplierID() {
         return supplierID;
     }
 
-    public void setSupplierID(int supplierID) {
+    public void setSupplierID(Integer supplierID) {
         this.supplierID = supplierID;
     }
 

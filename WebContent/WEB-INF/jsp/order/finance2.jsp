@@ -17,17 +17,24 @@
 		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="../lib/js/jquery.min.js"></script>
 		<script src="../lib/layui/layui.all.js"></script>--%>
-		<link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="${ctx}/css/index.css" />
-		<link rel="stylesheet" href="${ctx}/css/administration.css" />
-		<link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css" />
+		<link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all"/>
+		<link rel="stylesheet" href="${ctx}/css/index.css"/>
+		<link rel="stylesheet" href="${ctx}/css/administration.css"/>
+		<link rel="stylesheet" href="${ctx}/css/ht.css"/>
+		<link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css"/>
 		<script src="${ctx}/js/jquery.min.js"></script>
 		<script src="${ctx}/js/layui/layui.all.js"></script>
-		<script src="${ctx}/bootstrap/js/jquery-3.1.1.min.js"></script>
+		<script src="${ctx}/js/weeklyCalendar.js"></script>
+
+
 	</head>
 	<style>
 		.x-body{
 			padding: 10px;
+		}
+		#add_apar{
+			display: none;
+			margin-top: 10px;
 		}
 	</style>
 	<body>
@@ -74,7 +81,7 @@
 				<th>${item.otherExpenses}</th>
 				<th>${item.count}</th>
 				<th>
-					<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="addf(${item.id})">添加消费</span>
+					<span class=" layui-btn layui-btn-normal layui-btn-sm " onclick="add()">添加消费</span>
 				</th>
 				<%--<th width="200px">备注</th>--%>
 			</tr>
@@ -157,63 +164,14 @@
 			</c:forEach>
 		</table>--%>
 	</div>
-	<%--<!-- 添加 -->
-	<div id="add_apar" class="layui-fluid">
-		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
-			<div class="layui-form-item">
-				<input id="id"  value="">
-				<input id="yearM" type="hidden" value="${time}">
-				<label class="layui-form-label">房租：</label>
-				<div class="layui-input-block widths">
-					<input type="text" name="rent" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">水费：</label>
-				<div class="layui-input-block widths">
-					<input type="text" name="water" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">电费：</label>
-				<div class="layui-input-block widths">
-					<input type="password" name="electricity" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">维修费：</label>
-				<div class="layui-input-block widths">
-					<input type="text" name="maintenanceCost" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">网费：</label>
-				<div class="layui-input-block widths">
-					<input type="text" name="network" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">大厦管理费：</label>
-				<div class="layui-input-block widths">
-					<input type="text" name="buildingManagementFee" class="layui-input " lay-verify="required">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<div class="layui-input-block">
-					<div class="layui-btn" lay-submit lay-filter="update_add">提交</div>
-				</div>
-			</div>
-
-		</form>
-
-	</div>--%>
+	<!-- 添加 -->
 
 	<script type="text/javascript">
 
-    function addf(value) {
+    /*function addf(value) {
         var time=document.getElementById("excel").value;
-        location.href='${ctx}/Order/toaddfinance.do?id='+value+"&time="+time;
-       /* index = layer.open({
+    /!*  location.href='${ctx}/Order/toaddfinance.do?id='+value+"&time="+time;*!/
+        index = layer.open({
             type: 1,
             area: ['40%', '45%'],
             anim: 2,
@@ -221,10 +179,19 @@
             maxmin: true,
             shadeClose: true,
             content: $("#add_apar")
-        });*/
+        });
+    }*/
+    function add() {
+        index = layer.open({
+            type: 1,
+            area: ['40%', '60%'],
+            anim: 2,
+            title: '添加',
+            maxmin: true,
+            shadeClose: true,
+            content: $("#add_apar")
+        });
     }
-
-
             $(document).ready(function () {
               /*  $("#span").val(getNowFormatDate());*/
 				var time=getNowFormatDate();
@@ -281,15 +248,17 @@
 
             element.init();
             form.render()
-
-            $(document).on('click','.toadd',function(){
-                getData($(this))
-            });
+            //
+            // $(document).on('click','.toadd',function(){
+            //     getData($(this))
+            // });
 
             function getData(obj) {
-                add();
+                // add();
                 var id = $(obj).find('th[name=id]').val();
                 alert(id);
+                // var value=form.val('test');
+                // console.log(value);
                 form.val('test', {
                     "id": id
                 });
@@ -346,10 +315,57 @@
                     }
                 },
                 error: function(data) {  }
-
             })
             return falg;
         }
 	</script>
 	</body>
+	<div id="add_apar" class="layui-fluid">
+		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
+			<div class="layui-form-item">
+				<input name="id"  type="hidden" value="">
+				<input name="yearM" type="hidden" value="${time}">
+				<label class="layui-form-label">房租：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="rent" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">水费：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="water" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">电费：</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="electricity" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">维修费：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="maintenanceCost" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">网费：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="network" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">大厦管理费：</label>
+				<div class="layui-input-block widths">
+					<input type="text" name="buildingManagementFee" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<div class="layui-btn" lay-submit lay-filter="update_add">提交</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
 </html>

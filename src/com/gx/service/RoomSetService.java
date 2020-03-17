@@ -31,7 +31,7 @@ public interface RoomSetService {
 
     public RoomVo selectDetailByIds(int id);
 
-
+    public List<RoomSetPo> selectHave();
 
 
 

@@ -74,12 +74,12 @@ public class TimeTransformation {
 
         cal.setTime(date);
         cal.add(Calendar.DATE,0);
-        int count = cal.getActualMaximum(Calendar.DAY_OF_MONTH);//
+        int count = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         for (int j = 0; j <= (count - 1); ) {
             System.out.println(cal.getTime());
             System.out.println(sdf.format(cal.getTime()));
-            if (!sdf.format(cal.getTime()).equals(getLastDay(year, month)))//判断是否同年同月
-                break;
+           /* if (!sdf.format(cal.getTime()).equals(getLastDay(year, month)))//判断是否同年同月
+                break;*/
             cal.add(Calendar.DATE,  j == 0 ? +0 : +1);
             j++;
             System.out.println(sdf.format(cal.getTime()));

@@ -2,6 +2,7 @@ package com.gx.dao;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.vo.DayRoomNumberVo;
 import com.gx.vo.IndayVo;
 import com.gx.vo.OrderDetailsVo;
 import com.gx.vo.OrderTimeVo;
@@ -82,6 +83,9 @@ public interface OrderDao {
 
     public List<IndayVo> checkinDay(@Param("time")String time,
                                     @Param("roomId")int roomId);
+
+    public List<DayRoomNumberVo> selectDayRoom(@Param("time")String time,
+                                               @Param("roomId")int roomId);
 
     /////////////////////////////////////////////////////////////////////////////////////
     public List<OrderDetailsVo> allContractOrder(@Param("name")String name,@Param("orderNumber")String orderNumber,

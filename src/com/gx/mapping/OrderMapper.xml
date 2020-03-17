@@ -197,7 +197,7 @@
   </select>
    <!-- 入住情况-->
   <select id="selectRoomByTime" resultType="com.gx.vo.OrderTimeVo">
-    SELECT o.id, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
+    SELECT o.id AS orderId, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
     r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
     FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
     INNER JOIN `supplier` s ON s.id=r.`supplierID`
@@ -215,7 +215,7 @@
   </select>
   <!-- 入住情况-->
   <select id="selectRoomByTimes" resultType="com.gx.vo.OrderTimeVo">
-    SELECT o.id, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
+    SELECT o.id AS orderId, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
     r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
     FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
     INNER JOIN `supplier` s ON s.id=r.`supplierID`
@@ -229,12 +229,13 @@
   </select>
   <!-- 入住情况-->
   <select id="selectRoomByin" resultType="com.gx.vo.OrderTimeVo">
-    SELECT * FROM room WHERE id NOT IN
+    SELECT r.*,r.id AS roomId,s.`supplierName` FROM room r INNER JOIN `supplier` s ON r.`supplierID`=s.id
+    WHERE r.id NOT IN
     <foreach item="id" collection="idList" open="(" separator=","
              close=")">
            #{id}
     </foreach>
-    and  id IN
+    and  r.id IN
     <foreach item="rid" collection="allList" open="(" separator=","
              close=")">
       #{rid}
@@ -318,6 +319,12 @@
       UPDATE `order` SET `isdao`=2,`daoTime`=#{time,jdbcType=TIMESTAMP} WHERE `id`=#{id,jdbcType=INTEGER}
   </update>
 
+    <select id="selectDayRoom" resultType="com.gx.vo.DayRoomNumberVo">
+        SELECT r.id AS roomId,r.*,s.`supplierName`,o.`checkinTime`,o.`checkoutTime`,s.id AS supplierId,o.`checkinNumber`
+        FROM `order` o INNER JOIN `room` r ON o.`roomId`=r.id INNER JOIN `supplier` s ON s.id=r.`supplierID`
+        WHERE #{time,jdbcType=TIMESTAMP} >`checkinTime` AND #{time,jdbcType=TIMESTAMP}&lt;`checkoutTime`
+        AND `roomId`=#{roomId,jdbcType=INTEGER}
+  </select>
 
 <!--///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
 

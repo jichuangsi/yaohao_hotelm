@@ -65,4 +65,6 @@ public interface RoomSetDao {
 
     //根据有空床位的房间信息
     public OrderTimeVo selectRoomByRoomId(Integer roomId);
+
+    public List<RoomSetPo> selectHave();
 }

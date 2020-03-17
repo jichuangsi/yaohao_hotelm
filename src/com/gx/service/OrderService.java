@@ -2,6 +2,7 @@ package com.gx.service;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.vo.DayRoomNumberVo;
 import com.gx.vo.IndayVo;
 import com.gx.vo.OrderDetailsVo;
 import com.gx.vo.OrderTimeVo;
@@ -47,6 +48,8 @@ public interface OrderService {
     public Page<OrderTimeVo> selectRoom( Page<OrderTimeVo> vo);
     public List<OrderTimeVo> selectRoomByTimes(Timestamp time,List<Integer> list);
     public List<OrderTimeVo> selectRoomByin(List<Integer> idList,List<Integer> list);
+
+    public List<DayRoomNumberVo> selectDayRoom(String time, int roomId);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 

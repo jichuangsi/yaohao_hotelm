@@ -3,13 +3,13 @@ package com.gx.po;
 import java.sql.Timestamp;
 
 public class DailyconsumptionPo {
-    private int id;
-    private int supplierId;
-    private int roomId;
+    private Integer id;
+    private Integer supplierId;
+    private Integer roomId;
     private String roomNumber;
     private double money;
     private String time;//日
-    private int cid;
+    private Integer cid;
 
     private String name;
     private String supplierName;
@@ -38,27 +38,27 @@ public class DailyconsumptionPo {
         this.money = money;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getSupplierId() {
+    public Integer getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(Integer supplierId) {
         this.supplierId = supplierId;
     }
 
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
     }
 
@@ -78,11 +78,11 @@ public class DailyconsumptionPo {
         this.time = time;
     }
 
-    public int getCid() {
+    public Integer getCid() {
         return cid;
     }
 
-    public void setCid(int cid) {
+    public void setCid(Integer cid) {
         this.cid = cid;
     }
 }

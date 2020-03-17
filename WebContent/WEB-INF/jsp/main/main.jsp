@@ -727,14 +727,13 @@
 
             function consumption(){
 			    var time=getNowFormatDate();
-			    alert(time)
                 var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("bigGuide").innerHTML=a+"";
                 var s=document.getElementById("consumptionId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("smallGuide").innerHTML=s+"";
                 var user=document.getElementById("user").value;
-               document.getElementById('Mainid').src='${ctx}/Order/todaily.do';
-                //document.getElementById('Mainid').src='${ctx}/Order/monthRoom.do?time='+time;
+             document.getElementById('Mainid').src='${ctx}/Order/todaily.do';
+               //document.getElementById('Mainid').src='${ctx}/Order/monthRoom.do?time='+time+"&roomId=48";
             }
 
             //==============================================================================================================================//

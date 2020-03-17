@@ -120,11 +120,14 @@
     su.`supplierName` AS supplierName
     FROM room r INNER JOIN `guestroomlevel` g ON r.guestRoomLevelID=g.id
     INNER JOIN `supplier` su ON r.`supplierID`=su.id
-    WHERE  id =`id`#{id,jdbcType=INTEGER}
+    WHERE  r.id =#{id,jdbcType=INTEGER}
 
 </select>
 
-
+<select id="selectHave" resultType="com.gx.po.RoomSetPo">
+    SELECT * FROM `room` r INNER JOIN `supplier` s ON s.id=r.`supplierID`
+	WHERE s.`have`=1
+</select>
 
 
 

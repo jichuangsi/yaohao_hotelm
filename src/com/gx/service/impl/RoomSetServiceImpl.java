@@ -83,6 +83,8 @@ public class RoomSetServiceImpl implements RoomSetService {
 		return roomSetDao.selectDetailByIds(id);
 	}
 
-
-
+	@Override
+	public List<RoomSetPo> selectHave() {
+		return roomSetDao.selectHave();
+	}
 }

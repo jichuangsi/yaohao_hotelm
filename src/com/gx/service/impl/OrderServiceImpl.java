@@ -4,6 +4,7 @@ import com.gx.dao.OrderDao;
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
 import com.gx.service.OrderService;
+import com.gx.vo.DayRoomNumberVo;
 import com.gx.vo.IndayVo;
 import com.gx.vo.OrderDetailsVo;
 import com.gx.vo.OrderTimeVo;
@@ -176,6 +177,10 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.selectRoomByin(idList,list);
     }
 
+    @Override
+    public List<DayRoomNumberVo> selectDayRoom(String time, int roomId) {
+        return orderDao.selectDayRoom(time, roomId);
+    }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
 
