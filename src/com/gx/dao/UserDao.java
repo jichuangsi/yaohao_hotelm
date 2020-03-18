@@ -27,4 +27,7 @@ public interface UserDao {
 
 	//ajax 验证是否存在 名字
 	public int selectYZ(String name);
+
+	//分页需要
+	public List<UserPo>fuzzyselect(String name);
 }

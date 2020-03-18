@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/User")
@@ -20,23 +21,24 @@ public class User {
 
     @RequestMapping("/tolist")
 
-    public ModelAndView tolist(HttpServletRequest request, Integer currentPage, String txtname){
+    public ModelAndView tolist(HttpServletRequest request, Integer currentPage, String name){
         ModelAndView mv=null;
-        mv=new ModelAndView("/user/list");
+        mv=new ModelAndView("/user/userManagement");
         Page<UserPo> vo=new Page<UserPo>();
         if (currentPage==null) {
             currentPage=1;
         }else if (currentPage==0) {
             currentPage=1;
         }
-        if(txtname==null)
+        if(name==null)
         {
-            txtname="";
+            name="";
         }
         vo.setCurrentPage(currentPage);
-        vo=this.userService.pageFuzzyselect(txtname,vo);
-        mv.addObject("list",vo);
-        mv.addObject("txtname",txtname);
+        List<UserPo> list=userService.fuzzyselect(name);
+        vo=this.userService.pageFuzzyselect(name,vo);
+        mv.addObject("list",list);
+        mv.addObject("name",name);
         return mv;
     }
 
@@ -55,13 +57,15 @@ public class User {
         mv.addObject("list",list);
         return mv;
     }
-
+    @ResponseBody
     @RequestMapping("/add")
-    public ModelAndView add(UserPo userPo){
+    public Object add(UserPo userPo){
         ModelAndView mv=null;
-        userService.insertAll(userPo);
+       int count= userService.insertAll(userPo);
         mv=new ModelAndView("redirect:/User/tolist.do");
-        return mv;
+        //return mv;
+        Gson gson=new Gson();
+       return gson.toJson(count);
     }
 
     @RequestMapping("/update")

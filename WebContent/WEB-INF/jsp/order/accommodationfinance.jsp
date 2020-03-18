@@ -26,6 +26,8 @@
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <script src="${ctx}/js/weeklyCalendar.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
     /* 		body {
@@ -152,7 +154,7 @@
             <div id="j_weeklyCalendar" class="myWeeklyCanlendar">
                 <div class="datetime_header">
                     <a href="javascript:;" title="上一周" class="prev_icon" role="prev_week"></a>
-                    <span><b role="year_selector"></b>年<b role="month_selector"></b>月</span><span
+                    <span><b role="year_selector"></b ><span lang>year</span><b role="month_selector"></b>月</span><span
                         style="margin-left: 20px;display: none">第<b
                         role="week_selector"></b>周</span>
                     <a href="javascript:;" title="下一周" class="next_icon" role="next_week"></a>
@@ -447,7 +449,7 @@
                     cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                     type: "POST",                                           //上面3行都是必须要的
                     url: '${ctx}/Order/joccupancy.do',       //地址 type 带参数
-                    data: time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                    data: "time="+time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {
                         // 不出现异常 进行立面方

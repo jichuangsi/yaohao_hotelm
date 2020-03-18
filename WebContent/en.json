@@ -1,0 +1,26 @@
+{
+	"hotel":"Welcome to hotel management system",
+	"longinStr":"System landing",
+	"name":"enter one user name",
+	"login":"Land",
+	"add":"add",
+	"private":"PrivateApartment",
+	"in":"Occupancy in",
+	"myorder":"my order",
+	"financeial":"Financeial statistics",
+	"room":"Room setup",
+	"platform":"Platform information",
+	"supplier":"Supplier information",
+	"consumption":"Records of consumption",
+	"ticheng":"Royalty",
+	"contract":"Contract apartment",
+	"order":"order",
+	"stay":"Stay in",
+	"orderDetails":"order details",
+	"financeialStatistics":"Financeial statistics",
+	"set":"Set up",
+	"Account":"Account Settings",
+	"out":"Sign out",
+	"year":"year"
+
+}

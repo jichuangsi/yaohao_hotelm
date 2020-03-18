@@ -107,8 +107,8 @@
 									</div>
 									<div class="rmb-title layui-row">
 										<div class="layui-col-xs2 layui-col-xs-offset8">
-							<span class="layui-btn layui-btn-normal layui-btn-sm"
-								  onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=5')">
+				<%--	onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=5')"--%>
+							<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.orderNumber})" >
 								入住</span></div>
 									</div>
 								</div>
@@ -153,8 +153,10 @@
 									</div>
 									<div class="rmb-title layui-row">
 										<div class="layui-col-xs2 layui-col-xs-offset8">
-							<span class="layui-btn layui-btn-normal layui-btn-sm"
-								  onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=6')">退房</span></div>
+
+											<%--onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=6')"--%>
+							<span class="layui-btn layui-btn-normal layui-btn-sm"onclick="checkout(${item.orderNumber})"
+								 >退房</span></div>
 											<%--<div class="layui-col-xs2 "><span class="layui-btn layui-btn-normal layui-btn-sm">撤销</span></div>--%>
 									</div>
 
@@ -264,6 +266,49 @@
 	    var element=layui.element;
 
 	    element.render();
+
+
+	    window.checkin=function (value) {
+            $.ajax({
+                cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                type: "POST",                                           //上面3行都是必须要的
+                url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
+                data: "orderNumber="+value+"&status=5",                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                async: false,                                          // 是否 异步 提交
+                success: function (result) {                          // 不出现异常 进行立面方
+                    if (result != 1) {
+                        /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                        document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
+                        document.getElementById("room").focus();      // 给这个id的文本框提供焦点
+                        return false;
+                    } else {
+                        location.href = '${ctx}/Order/myorder.do';
+                        return true;
+                    }
+                }
+            })
+        }
+
+        window.checkout=function (value) {
+            $.ajax({
+                cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                type: "POST",                                           //上面3行都是必须要的
+                url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
+                data: "orderNumber="+value+"&status=6",                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                async: false,                                          // 是否 异步 提交
+                success: function (result) {                          // 不出现异常 进行立面方
+                    if (result != 1) {
+                        /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                        document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
+                        document.getElementById("room").focus();      // 给这个id的文本框提供焦点
+                        return false;
+                    } else {
+                        location.href = '${ctx}/Order/myorder.do';
+                        return true;
+                    }
+                }
+            })
+        }
 	});
 
 	</script>

@@ -56,11 +56,11 @@ public class Platform {
     @RequestMapping("/add")
     public Object add(PlatformPo platformPo){
         ModelAndView mv=null;
-        platformService.insertAll(platformPo);
+        Integer count= platformService.insertAll(platformPo);
         /*mv=new ModelAndView("redirect:/Platform/tolist.do");
         return mv;*/
         Gson gson =new Gson();
-        return gson.toJson(1);
+        return gson.toJson(count);
     }
 
     @RequestMapping("/toupdate")

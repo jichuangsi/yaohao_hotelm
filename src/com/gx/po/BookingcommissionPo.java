@@ -1,27 +1,50 @@
 package com.gx.po;
 
 public class BookingcommissionPo {
-    private int id;
+    private Integer id;
     private String name;
+    private String phoneName;
     private double money;
-    private int supplierId;
-    private int roomId;
+    private Integer supplierId;
+    private Integer roomId;
+    private String time;
 
-    private double booking;
+    //////
 
-    public double getBooking() {
+    private Double booking;
+    private String supplierName;
+    private String roomNumber;
+
+
+    public Double getBooking() {
         return booking;
     }
 
-    public void setBooking(double booking) {
+    public void setBooking(Double booking) {
         this.booking = booking;
     }
 
-    public int getId() {
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -33,6 +56,14 @@ public class BookingcommissionPo {
         this.name = name;
     }
 
+    public String getPhoneName() {
+        return phoneName;
+    }
+
+    public void setPhoneName(String phoneName) {
+        this.phoneName = phoneName;
+    }
+
     public double getMoney() {
         return money;
     }
@@ -41,19 +72,27 @@ public class BookingcommissionPo {
         this.money = money;
     }
 
-    public int getSupplierId() {
+    public Integer getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(Integer supplierId) {
         this.supplierId = supplierId;
     }
 
-    public int getRoomId() {
+    public Integer getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Integer roomId) {
         this.roomId = roomId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

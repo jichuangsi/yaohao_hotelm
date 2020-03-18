@@ -3,6 +3,8 @@ package com.gx.service;
 import com.gx.page.Page;
 import com.gx.po.UserPo;
 
+import java.util.List;
+
 public interface UserService {
 
 	public UserPo selectLogin(UserPo user);
@@ -21,4 +23,8 @@ public interface UserService {
 
 	//ajax 验证是否存在 名字
 	public int selectYZ(String name);
+
+
+	//分页需要
+	public List<UserPo>fuzzyselect(String name);
 }

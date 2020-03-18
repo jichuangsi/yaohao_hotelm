@@ -202,7 +202,8 @@
     FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
     INNER JOIN `supplier` s ON s.id=r.`supplierID`
     WHERE s.`have`=1  AND o.`status`!=6
-    AND  #{time,jdbcType=TIMESTAMP} BETWEEN `checkinTime` AND `checkoutTime`
+   AND  DATE_FORMAT(#{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') >= DATE_FORMAT(`checkinTime`, '%Y-%m-%d')
+    AND DATE_FORMAT(#{time,jdbcType=TIMESTAMP}, '%Y-%m-%d')&lt; DATE_FORMAT(`checkoutTime`, '%Y-%m-%d')
       LIMIT #{start},#{size}
   </select>
 
@@ -220,13 +221,22 @@
     FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
     INNER JOIN `supplier` s ON s.id=r.`supplierID`
     WHERE s.`have`=1  AND o.`status`!=6
-    AND  #{time,jdbcType=TIMESTAMP} BETWEEN `checkinTime` AND `checkoutTime`
+    AND  DATE_FORMAT(#{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') >= DATE_FORMAT(`checkinTime`, '%Y-%m-%d')
+    AND DATE_FORMAT(#{time,jdbcType=TIMESTAMP}, '%Y-%m-%d')&lt; DATE_FORMAT(`checkoutTime`, '%Y-%m-%d')
     AND `roomId` IN
     <foreach item="roomId" collection="list" open="(" separator=","
                            close=")">
                    #{roomId}
   </foreach>
   </select>
+  <select id="selectRooms" resultType="com.gx.vo.OrderTimeVo">
+    SELECT o.id AS orderId, o.`checkinNumber`,r.`roomAmount`,r.`roomAmount`-o.`checkinNumber` AS remainingBeds,
+    r.`roomNumber`,s.`supplierName`,r.`id` AS roomId
+    FROM `room` r LEFT JOIN `order` o ON o.`roomId`=r.id
+    INNER JOIN `supplier` s ON s.id=r.`supplierID`
+    WHERE s.`have`=1  AND o.`status`!=6
+  </select>
+
   <!-- 入住情况-->
   <select id="selectRoomByin" resultType="com.gx.vo.OrderTimeVo">
     SELECT r.*,r.id AS roomId,s.`supplierName` FROM room r INNER JOIN `supplier` s ON r.`supplierID`=s.id
@@ -235,13 +245,21 @@
              close=")">
            #{id}
     </foreach>
-    and  r.id IN
+    AND  r.id IN
     <foreach item="rid" collection="allList" open="(" separator=","
              close=")">
       #{rid}
     </foreach>
   </select>
-
+  <!-- 入住情况-->
+  <select id="selectRoomByins" resultType="com.gx.vo.OrderTimeVo">
+    SELECT r.*,r.id AS roomId,s.`supplierName` FROM room r INNER JOIN `supplier` s ON r.`supplierID`=s.id
+    WHERE r.id IN
+    <foreach item="rid" collection="allList" open="(" separator=","
+             close=")">
+      #{rid}
+    </foreach>
+  </select>
 
   <select id="countSelectRoomByTime" resultType="java.lang.Integer">
       SELECT COUNT(*)
@@ -322,7 +340,8 @@
     <select id="selectDayRoom" resultType="com.gx.vo.DayRoomNumberVo">
         SELECT r.id AS roomId,r.*,s.`supplierName`,o.`checkinTime`,o.`checkoutTime`,s.id AS supplierId,o.`checkinNumber`
         FROM `order` o INNER JOIN `room` r ON o.`roomId`=r.id INNER JOIN `supplier` s ON s.id=r.`supplierID`
-        WHERE #{time,jdbcType=TIMESTAMP} >`checkinTime` AND #{time,jdbcType=TIMESTAMP}&lt;`checkoutTime`
+        WHERE DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') >DATE_FORMAT(`checkinTime`, '%Y-%m-%d')
+      AND DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') &lt;=DATE_FORMAT(`checkoutTime`, '%Y-%m-%d')
         AND `roomId`=#{roomId,jdbcType=INTEGER}
   </select>
 

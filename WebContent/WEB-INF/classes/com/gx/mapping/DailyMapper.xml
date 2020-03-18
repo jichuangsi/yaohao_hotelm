@@ -42,14 +42,14 @@
 <update id="updateTimeRoom" parameterType="com.gx.po.DailyconsumptionPo">
         UPDATE `dailyconsumption`
         SET
-          `money` =#{cid,jdbcType=DOUBLE},
+          `money` =#{cid,jdbcType=DOUBLE}
         WHERE `id` =#{cid,jdbcType=INTEGER};
 </update>
     <!--根据类型，酒店、房号、查询、月份消费-->
     <select id="selectSumMoney" resultType="java.lang.Double">
     SELECT SUM(`money`)
     FROM `dailyconsumption`
-    WHERE  DATE_FORMAT(`time`, '%Y-%m')=#{time,jdbcType=VARCHAR}
+    WHERE  DATE_FORMAT(`time`, '%Y-%m')=DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')
     AND `cid`=#{cid,jdbcType=INTEGER}  AND `roomId`=#{roomId,jdbcType=INTEGER}
      AND `supplierId`=#{supplierId,jdbcType=INTEGER}
   </select>
@@ -59,4 +59,6 @@
 FROM `dailyconsumption` d INNER JOIN `consumptiontype` c ON d.`cid`=c.`id`
 INNER JOIN `supplier` s ON s.id=d.`supplierId`
     </select>
+
+
 </mapper>

@@ -56,11 +56,11 @@ public class Supplier {
     public Object add(SupplierPo supplierPo){
         ModelAndView mv=null;
         supplierPo.setHave(1);
-        supplierService.insertAll(supplierPo);
+      Integer count=supplierService.insertAll(supplierPo);
        /* mv=new ModelAndView("redirect:/Supplier/tolist.do");
         return mv;*/
     Gson gson =new Gson();
-    return gson.toJson(1);
+    return gson.toJson(count);
     }
 
     @RequestMapping("/toupdate")

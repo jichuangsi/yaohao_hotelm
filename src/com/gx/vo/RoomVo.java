@@ -9,15 +9,15 @@ public class RoomVo {
     private Integer supplierId;//供应商
     private Integer supplierID;//供应商
     private long createTime;//创建时间
-    private int gid;
+    private Integer gid;
     private String guestRoomLevelName;
     private String supplierName;
 
-    public int getGid() {
+    public Integer getGid() {
         return gid;
     }
 
-    public void setGid(int gid) {
+    public void setGid(Integer gid) {
         this.gid = gid;
     }
 

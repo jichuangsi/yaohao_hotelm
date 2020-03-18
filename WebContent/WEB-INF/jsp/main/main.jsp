@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set  value="${pageContext.request.contextPath}" scope="page" var="ctx"></c:set>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
+<html >
 	<head>
 		<title>欢迎使用酒店管理系统</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -19,6 +19,7 @@
 		<link rel="stylesheet" href="${ctx}/assets/css/font-awesome.min.css" />
 
 		<!--[if IE 7]>
+
 		  <link rel="stylesheet" href="${ctx}/assets/css/font-awesome-ie7.min.css" />
 		<![endif]-->
 
@@ -38,6 +39,10 @@
 
 		<!--inline styles related to this page-->
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<script src="${ctx}/assets/js/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
+
 	<style type="text/css">
 		.nav-list>li>a{
 			height: 50px;
@@ -52,20 +57,10 @@
 		<div class="navbar">
 			<div class="navbar-inner">
 				<div class="container-fluid">
-					<a href="#" class="brand">
-						<br>
-							<i class="icon-leaf"></i>
-							欢迎使用酒店管理系统<br>Welcome to hotel management system
-						</small>
-					</a><!--/.brand-->
-
+					<a href="#" class="brand" lang>hotel</a>
 				</div><!--/.container-fluid-->
 			</div><!--/.navbar-inner-->
 		</div>
-
-
-
-
 		<div class="main-container container-fluid">
 			<a class="menu-toggler" id="menu-toggler" href="#">
 				<span class="menu-text"></span>
@@ -75,30 +70,11 @@
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
 						<button class="btn btn-small btn-success">
-							<i class="icon-signal"></i>
+							<span id="enBtn">English</span>
 						</button>
-
-						<button class="btn btn-small btn-info">
-							<i class="icon-pencil"></i>
+						<button class="btn btn-small btn-success">
+							<span  id="zhBtn">简体中文</span>
 						</button>
-
-						<button class="btn btn-small btn-warning">
-							<i class="icon-group"></i>
-						</button>
-
-						<button class="btn btn-small btn-danger">
-							<i class="icon-cogs"></i>
-						</button>
-					</div>
-
-					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
-						<span class="btn btn-success"></span>
-
-						<span class="btn btn-info"></span>
-
-						<span class="btn btn-warning"></span>
-
-						<span class="btn btn-danger"></span>
 					</div>
 				</div><!--#sidebar-shortcuts-->
 
@@ -106,10 +82,7 @@
 					<li>
 						<a id="privateId" onclick="privateapartment()" class="dropdown-toggle">
 							<i class="icon-home"></i>
-							<span class="menu-text">自有公寓
-								<br>&nbsp;PrivateApartment
-							</span>
-
+							<span class="menu-text" lang>private</span>
 							<b class="arrow icon-angle-down"></b>
 						</a>
 
@@ -117,157 +90,82 @@
 							<li>
 								<a id="occupancyId" onclick="occupancy()">
 									<i class="icon-double-angle-right"></i>
-									<span>入住情况
-										<br>Occupancy in
-									</span>
+									<span lang>in</span>
 								</a>
 							</li>
 							<li>
 								<a id="myorderId" onclick="myorder()">
 									<i class="icon-double-angle-right"></i>
-									<span>订单
-										<br>Room setup
-									</span>
+									<span lang>myorder</span>
 								</a>
 							</li>
-							<%--<li>
-								<a id="checkinorderId" onclick="checkinorder()">
-									<i class="icon-double-angle-right"></i>
-									<span>已入住
-										<br>Stay in
-									</span>
-								</a>
-							</li>
-							<li>
-								<a id="checkoutorderId" onclick="checkoutorder()">
-									<i class="icon-double-angle-right"></i>
-									<span>已退房
-										<br>Check out
-									</span>
-								</a>
-							</li>
-							<li>
-								<a id="myaccountId" onclick="myaccount()">
-									<i class="icon-double-angle-right"></i>
-									<span>已到账
-										<br>Arrival account
-									</span>
-								</a>
-							</li>--%>
-							<%--<li>
-								<a id="myorderStatisticsId" onclick="myorderStatistics()">
-									<i class="icon-double-angle-right"></i>
-									<span>订单明细
-										<br>order details
-									</span>
-								</a>
-							</li>--%>
 							<li>
 								<a id="myfinanceId" onclick="myfinance()">
 									<i class="icon-double-angle-right"></i>
-									<span>财务报表
-										<br>Financeial statistics
-									</span>
+									<span lang>financeial</span>
 								</a>
 							</li>
 							<li>
 								<a id="roomSetId" onclick="roomSet()">
 									<i class="icon-double-angle-right"></i>
-									<span>房间管理
-										<br>Room setup
-									</span>
+									<span lang>room</span>
 								</a>
 							</li>
 							<li>
 								<a id="platformmanagerId" onclick="platformmanager()">
 									<i class="icon-double-angle-right"></i>
-									<span>平台信息
-										<br>Platform information
-									</span>
+									<span lang>platform</span>
 								</a>
 							</li>
 							<li>
 								<a id="suppliermanager" onclick="suppliermanager()">
 									<i class="icon-double-angle-right"></i>
-									<span>酒店信息
-										<br>Supplier information
-									</span>
+									<span lang>supplier</span>
 								</a>
 							</li>
 							<li>
 								<a id="consumptionId" onclick="consumption()">
 									<i class="icon-double-angle-right"></i>
-									<span>日常消费
-										<br>Records of consumption
-									</span>
+									<span  lang>consumption</span>
 								</a>
 							</li>
-
+							<li>
+								<a id="bookingId" onclick="booking()">
+									<i class="icon-double-angle-right"></i>
+									<span lang>ticheng</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 					<li>
 						<a id="contractApartmentId" onclick="contractApartment()" class="dropdown-toggle">
 							<i class="icon-dashboard"></i>
-							<span class="menu-text">合约公寓
-								<br>&nbsp;&nbsp;Order
-								</span>
+							<span class="menu-text" lang>contract</span>
 							<b class="arrow icon-angle-down"></b>
 						</a>
 						<ul class="submenu">
-							<%--<li>
-								<a id="poccupancyId" onclick="poccupancy()">
-									<i class="icon-double-angle-right"></i>
-									<span>入住情况
-										<br>Occupancy in
-									</span>
-								</a>
-							</li>--%>
 							<li>
 								<a id="pmyorderId" onclick="pmyorder()">
 									<i class="icon-double-angle-right"></i>
-									<span>订单
-										<br>Room setup
-									</span>
+									<span lang>order</span>
 								</a>
 							</li>
 							<li>
 								<a id="pcheckinorderId" onclick="pcheckinorder()">
 									<i class="icon-double-angle-right"></i>
-									<span>入住订单
-										<br>Stay in
-									</span>
+									<span lang>stay</span>
 								</a>
 							</li>
-								<%--<li>
-                                    <a id="pcheckoutorderId" onclick="pcheckoutorder()">
-                                        <i class="icon-double-angle-right"></i>
-                                        <span>已退房
-                                            <br>Check out
-                                        </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a id="pmyaccountId" onclick="pmyaccount()">
-                                        <i class="icon-double-angle-right"></i>
-                                        <span>已到账
-                                            <br>Arrival account
-                                        </span>
-                                    </a>
-                                </li>--%>
 							<li>
 								<a id="pmyorderStatisticsId" onclick="pmyorderStatistics()">
 									<i class="icon-double-angle-right"></i>
-									<span>订单明细
-										<br>order details
-									</span>
+									<span lang>orderDetails</span>
 								</a>
 							</li>
 							<li>
 								<a id="pmyfinanceId" onclick="pmyfinance()">
 									<i class="icon-double-angle-right"></i>
-									<span>财务报表
-										<br>Financeial statistics
-									</span>
+									<span lang>financeialStatistics</span>
 								</a>
 							</li>
 
@@ -300,10 +198,7 @@
 					<li>
 						<a id="setup" onclick="passengerManage()" class="dropdown-toggle">
 							<i class=" icon-wrench"></i>
-							<span class="menu-text">设置
-								<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set up
-							</span>
-
+							<span class="menu-text" lang>set</span>
 							<b class="arrow icon-angle-down"></b>
 						</a>
 						<ul class="submenu">
@@ -311,17 +206,13 @@
 							<li>
 								<a id="operator" onclick="operator()" href="#">
 									<i class="icon-double-angle-right"></i>
-									<span> 账号设置
-										<br>Account Settings
-									</span>
+									<span lang>Account</span>
 								</a>
 							</li>
 							<li>
 								<a id="exit" onclick="exit()" href="#">
 									<i class="icon-double-angle-right"></i>
-									<span> 退出
-										<br>Sign out
-									</span>
+									<span lang>out</span>
 								</a>
 							</li>
 
@@ -362,7 +253,7 @@
 						<i class="icon-cog bigger-150"></i>
 					</div>
 
-					<div class="ace-settings-box" id="ace-settings-box">
+					<%--<div class="ace-settings-box" id="ace-settings-box">
 						<div>
 							<div class="pull-left">
 								<select id="skin-colorpicker" class="hide">
@@ -394,7 +285,7 @@
 							<input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
 							<label class="lbl" for="ace-settings-rtl">左右互换</label>
 						</div>
-					</div>
+					</div>--%>
 				</div><!--/#ace-settings-container-->
 			</div><!--/.main-content-->
 		</div><!--/.main-container-->
@@ -735,7 +626,15 @@
              document.getElementById('Mainid').src='${ctx}/Order/todaily.do';
                //document.getElementById('Mainid').src='${ctx}/Order/monthRoom.do?time='+time+"&roomId=48";
             }
-
+			function booking() {
+                var time=getNowFormatDate();
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("bookingId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/Order/bookinglist.do';
+			}
             //==============================================================================================================================//
 
             function platformmanager() {

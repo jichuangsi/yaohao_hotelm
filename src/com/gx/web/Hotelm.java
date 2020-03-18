@@ -167,9 +167,9 @@ public class Hotelm {
     public Object updateStatus(int id,int status){
         ModelAndView mv = null;
         mv = new ModelAndView("redirect:/Hotelm/allorder.do");
-        publicOrderService.updateStatus(id, status);
+          Integer count= publicOrderService.updateStatus(id, status);
         Gson gson = new Gson();
-        return gson.toJson(1);
+        return gson.toJson(count);
     }
 
 
@@ -199,9 +199,9 @@ public class Hotelm {
             orderPo.setDaotime(d);
         }
         orderPo.setTime(d);
-        publicOrderService.insertAll(orderPo);
+        Integer count=publicOrderService.insertAll(orderPo);
         Gson gson = new Gson();
-        return gson.toJson(1);
+        return gson.toJson(count);
     }
 
 
@@ -231,9 +231,9 @@ public class Hotelm {
     @RequestMapping("isdao")
     public Object isdao(int id){
         Timestamp d = new Timestamp(System.currentTimeMillis());
-        publicOrderService.updateDao(id,d);
+        Integer count= publicOrderService.updateDao(id,d);
         Gson gson = new Gson();
-        return gson.toJson(1);
+        return gson.toJson(count);
     }
 
 

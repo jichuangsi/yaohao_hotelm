@@ -240,7 +240,12 @@ public class Order {
         for (OrderTimeVo o:olist2){
             id.add(o.getRoomId());
         }
-        List<OrderTimeVo> olist3=orderService.selectRoomByin(id,allid);//全空房
+        List<OrderTimeVo> olist3=null;
+        if (id.size()==0){
+            olist3=orderService.selectRoomByins(allid);//全空房
+        }else {
+            olist3=orderService.selectRoomByin(id,allid);//全空房
+        }
         for (OrderTimeVo v:olist3){
             ov=new OrderTimeVo();
             ov.setRoomId(v.getRoomId());
@@ -270,12 +275,11 @@ public class Order {
                     ov.setRoomNumber(o.getRoomNumber());
                     ov.setRoomAmount(o.getRoomAmount());
                     olist.add(ov);
-                    vo.setResult(olist);
                     key.put(o.getRoomId(),1);
                 }
             }
         }
-
+        vo.setResult(olist);
         List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
         List<AccountPo> alist=accountService.getAccount();//账户
         List<PlatformPo> plist=platformService.listAll();
@@ -321,7 +325,13 @@ public class Order {
         for (OrderTimeVo o:olist2){
             id.add(o.getRoomId());
         }
-        List<OrderTimeVo> olist3=orderService.selectRoomByin(id,allid);//全空房
+        List<OrderTimeVo> olist3=null;
+        if (id.size()==0){
+            olist3=orderService.selectRoomByins(allid);//全空房
+        }else {
+            olist3=orderService.selectRoomByin(id,allid);//全空房
+        }
+
         for (OrderTimeVo v:olist3){
             ov=new OrderTimeVo();
             ov.setRoomId(v.getRoomId());
@@ -343,21 +353,19 @@ public class Order {
         for (OrderTimeVo o :olist2 ) {
             if (coun.containsKey(o.getRoomId())){
                 ov=new OrderTimeVo();
-                if (!key.containsKey(o.getRoomId())) {
+                if (!key.containsKey(o.getRoomId())) {//去重
                     ov.setRemainingBeds(o.getRoomAmount()-coun.get(o.getRoomId()));
-
                     ov.setOrderId(o.getOrderId());
                     ov.setRoomId(o.getRoomId());
                     ov.setSupplierName(o.getSupplierName());
                     ov.setRoomNumber(o.getRoomNumber());
                     ov.setRoomAmount(o.getRoomAmount());
                     olist.add(ov);
-                    vo.setResult(olist);
                     key.put(o.getRoomId(),1);
                 }
             }
         }
-
+        vo.setResult(olist);
         List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
         List<AccountPo> alist=accountService.getAccount();//账户
         List<PlatformPo> plist=platformService.listAll();
@@ -428,36 +436,32 @@ public class Order {
         roomAndTime.setIntime(orderPo.getCheckinTime());
         roomAndTime.setOuttime(orderPo.getCheckoutTime());
         roomAndTime.setIsout(1);//未退房
-        roomAndTimeService.inserAll(roomAndTime);
+        Integer counts=  roomAndTimeService.inserAll(roomAndTime);
         //return mv;
         Gson gson = new Gson();
-        return gson.toJson(1);
+        return gson.toJson(counts);
     }
 
     //修改订单状态
+    @ResponseBody
     @RequestMapping("updateStatus")
-    public ModelAndView updateStatus(String orderNumber,Integer status){
+    public Object updateStatus(String orderNumber,Integer status){
         ModelAndView mv=null;
+        Integer counts=0;
         if (status==5){//入住
             mv=new ModelAndView("redirect:/Order/myorder.do");
         }else if (status==6){//退房
             mv=new ModelAndView("redirect:/Order/checkinorder.do");
         }
-        orderService.updateStatus(orderNumber, status);
+        counts= orderService.updateStatus(orderNumber, status);
         OrderPo orderPo=orderService.selectByOrderNumber(orderNumber);//根据订单号查询订单
         RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
         if (status==6){//退房
             //退房就到账
             Timestamp d = new Timestamp(System.currentTimeMillis());
-            orderService.updateMoney(orderPo.getId(),d);
+            counts=orderService.updateMoney(orderPo.getId(),d);
 
           roomAndTimeService.deleteOrder(orderPo.getId());
-          /*  String[] strNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
-            Integer year = Integer.parseInt(strNow[0]);
-            Integer month = Integer.parseInt(strNow[1]);
-           *//* Integer day = Integer.parseInt(strNow[2]);*//*
-            String time=year+"-"+month;//2020-01
-              String time2=time.trim();*/
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
             String time2 = new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
             int count=financeService.countFinanceM(time2,orderPo.getRoomId());
@@ -467,11 +471,11 @@ public class Order {
               if (orderPo.getCurrency()==1){//RMB
                   po.setRMB(financePo.getRMB()+orderPo.getMoney());
                 po.setId(financePo.getId());
-                financeService.updateRMB(po);
+                  counts=financeService.updateRMB(po);
               }else if (orderPo.getCurrency()==2){//PHP
                   po.setPHP(financePo.getPHP()+orderPo.getMoney());
                   po.setId(financePo.getId());
-                  financeService.updatePHP(po);
+                  counts=financeService.updatePHP(po);
               }
             }else {//新增
             FinancePo financePo=new FinancePo();
@@ -481,15 +485,17 @@ public class Order {
                 if (orderPo.getCurrency()==1){//RMB
                     financePo.setRMB(orderPo.getMoney());
                     financePo.setYearM(time2);
-                    financeService.insertAll(financePo);
+                    financePo.setTime(timestamp);
+                    counts=financeService.insertAll(financePo);
                 }else if (orderPo.getCurrency()==2){//PHP
                     financePo.setPHP(orderPo.getMoney());
                     financePo.setYearM(time2);
-                    financeService.insertAll(financePo);
+                    counts=financeService.insertAll(financePo);
                 }
             }
         }
-        return mv;
+      Gson gson=new Gson();
+        return gson.toJson(counts);
     }
 
     //新增消费订单
@@ -509,10 +515,10 @@ public class Order {
         ModelAndView mv=null;
         mv=new ModelAndView();/*
         FinancePo po=financeService.selectByyearM(fin)*/
-        financeService.updateRentById(financePo);
+        Integer count= financeService.updateRentById(financePo);
       /*  return mv;*/
         Gson gson = new Gson();
-            return gson.toJson(1);
+            return gson.toJson(count);
     }
     //新增日常消费
     @ResponseBody
@@ -520,26 +526,20 @@ public class Order {
     public Object dailyconsumption(DailyconsumptionPo po){
         ModelAndView mv=null;
         mv=new ModelAndView();
-       /* String[] strNow = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
-        Integer year = Integer.parseInt(strNow[0]);
-        Integer month = Integer.parseInt(strNow[1]);
-         Integer day = Integer.parseInt(strNow[2]);
-        String time=year+"-"+month+"-"+day;//2020-01
-        String time2=time.trim();
-        String time3=(year+"-"+month).trim();*/
-        //po.setTime(time2);
         String y=po.getTime().substring(0,po.getTime().lastIndexOf('-'));
         RoomVo r=roomSetService.selectDetailByIds(po.getRoomId());
         if (r!=null){
-            po.setSupplierId(r.getSupplierID());
+            po.setSupplierId(r.getSupplierId());
             po.setSupplierName(r.getSupplierName());
             po.setRoomNumber(r.getRoomNumber());
         }
         DailyconsumptionPo po1=dailyconsumptionService.selectByTimeAndRoom(po.getTime(),po.getRoomId(),po.getCid());
+        Integer counst=0;
         if (po1==null){
-            dailyconsumptionService.insertAll(po);
+            counst=dailyconsumptionService.insertAll(po);
         }else {
-            dailyconsumptionService.updateTimeRoom(po);
+            po.setId(po1.getId());
+            counst= dailyconsumptionService.updateTimeRoom(po);
         }
         //int id=po.getId();
         double sum=dailyconsumptionService.selectSumMoney(po.getTime(),po.getCid(),po.getRoomId(),po.getSupplierId());
@@ -555,11 +555,53 @@ public class Order {
         }else if (po.getCid()==3){//其他
             po2.setOtherExpenses(money);
         }
-        financeService.updateOtherById(po2);
+        counst=financeService.updateOtherById(po2);
       /*  return mv;*/
         Gson gson=new Gson();
-        return gson.toJson(1);
+        return gson.toJson(counst);
     }
+
+
+    //新增提成
+    @ResponseBody
+    @RequestMapping("booking")
+    public Object booking(BookingcommissionPo po){
+        ModelAndView mv=null;
+        mv=new ModelAndView();
+        Integer count=0;
+        RoomVo r=roomSetService.selectDetailByIds(po.getRoomId());
+        if (r!=null){
+            po.setSupplierId(r.getSupplierId());
+        }
+        BookingcommissionPo po1=bookingcommissionService.select(po);
+        if (po1==null){
+            count=bookingcommissionService.inserAll(po);
+        }else {
+            po.setId(po1.getId());
+            count= bookingcommissionService.updateTimeRoom(po);
+        }
+        /*  return mv;*/
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+    @RequestMapping("bookinglist")
+    public ModelAndView bookinglist(String name,Integer currentPage){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/order/booking");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<BookingcommissionPo> vo=new Page<BookingcommissionPo>();
+        vo.setCurrentPage(currentPage);
+        Page<BookingcommissionPo> list=bookingcommissionService.listall(name,vo);
+        mv.addObject("list",list);
+        List<RoomSetPo> rlist=roomSetService.selectHave();
+        mv.addObject("rlist",rlist);
+        return mv;
+    }
+
 
     @RequestMapping("todaily")
     public ModelAndView todaily(String time){

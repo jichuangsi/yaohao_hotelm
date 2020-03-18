@@ -33,5 +33,44 @@
   <select id="selectMoney" resultType="com.gx.po.BookingcommissionPo">
 SELECT *,SUM(`money`)AS booking FROM `bookingcommission` WHERE DATE_FORMAT(`time`, '%Y-%m')= #{time,jdbcType=VARCHAR}
   </select>
-          
+  <select id="select" resultType="com.gx.po.BookingcommissionPo" parameterType="com.gx.po.BookingcommissionPo">
+    SELECT *
+     FROM `bookingcommission` WHERE `name`=#{name,jdbcType=VARCHAR}
+     AND `phoneName`= #{phoneName,jdbcType=VARCHAR} AND  `roomId`=#{roomId,jdbcType=INTEGER}
+     AND`supplierId`=#{supplierId,jdbcType=INTEGER}
+      AND  DATE_FORMAT(`time`, 'yyyy-MM-dd')=DATE_FORMAT( #{time,jdbcType=VARCHAR}, 'yyyy-MM-dd')
+    </select>
+
+  <update id="updateTimeRoom" parameterType="com.gx.po.BookingcommissionPo">
+    UPDATE `bookingcommission`
+    SET
+      `name` =#{name,jdbcType=VARCHAR},
+      `phoneName` = #{phoneName,jdbcType=VARCHAR},
+      `money` = #{money,jdbcType=DOUBLE},
+      `supplierId` =#{supplierId,jdbcType=INTEGER},
+      `roomId` =`roomId`=#{roomId,jdbcType=INTEGER},
+      `time` =#{time,jdbcType=VARCHAR}
+    WHERE `id` =#{id,jdbcType=INTEGER};
+  </update>
+
+  <select id="selectAll"  resultType="com.gx.po.BookingcommissionPo">
+    SELECT b.*,s.`supplierName`,r.`id` AS roomId,r.`roomNumber`
+	FROM `bookingcommission` b INNER JOIN `room` r ON b.`roomId`=r.`id`
+	INNER JOIN `supplier` s ON b.`supplierId`=s.id
+	where 1=1
+	<if test="name!=null and name!=''">
+      AND b.name=#{name,jdbcType=VARCHAR}
+    </if>
+    LIMIT #{sart},#{pageSize}
+  </select>
+
+  <select id="countselectAll"  resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM `bookingcommission` b INNER JOIN `room` r ON b.`roomId`=r.`id`
+    INNER JOIN `supplier` s ON b.`supplierId`=s.id
+    where 1=1
+    <if test="name!=null and name!=''">
+      AND b.name=#{name,jdbcType=VARCHAR}
+    </if>
+  </select>
 </mapper>

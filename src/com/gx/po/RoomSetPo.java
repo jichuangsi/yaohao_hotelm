@@ -10,23 +10,23 @@ public class RoomSetPo {
 	private String roomAmount;//床位数
 	private double referencePrice;//参考价
 	private Integer supplierId;//供应商
-	private int supplierID;//供应商
-	private long createTime;//创建时间
-	private int surplus;//剩余床位数
+	private Integer supplierID;//供应商
+	private long time;//创建时间
+	private Integer surplus;//剩余床位数
 
-	public int getSupplierID() {
+	public Integer getSupplierID() {
 		return supplierID;
 	}
 
-	public void setSupplierID(int supplierID) {
+	public void setSupplierID(Integer supplierID) {
 		this.supplierID = supplierID;
 	}
 
-	public int getSurplus() {
+	public Integer getSurplus() {
 		return surplus;
 	}
 
-	public void setSurplus(int surplus) {
+	public void setSurplus(Integer surplus) {
 		this.surplus = surplus;
 	}
 
@@ -78,11 +78,11 @@ public class RoomSetPo {
 		this.supplierId = supplierId;
 	}
 
-	public long getCreateTime() {
-		return createTime;
+	public long getTime() {
+		return time;
 	}
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
+	public void setTime(long time) {
+		this.time = time;
 	}
 }

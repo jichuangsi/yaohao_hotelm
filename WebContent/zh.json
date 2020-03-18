@@ -1,0 +1,27 @@
+{
+	"hotel":"欢迎使用酒店管理系统",
+	"longinStr":"系统登陆",
+	"name":"请输入用户名",
+	"login":"登陆",
+	"add":"新增",
+	"private":"自有公寓",
+	"in":"入住情况",
+	"myorder":"我的订单",
+	"financeial":"财务报表",
+	"room":"房间管理",
+	"platform":"平台信息",
+	"supplier":"酒店信息",
+	"consumption":"日常消费",
+	"ticheng":"提成",
+	"contract":"合约公寓",
+	"order":"订单",
+	"stay":"入住订单",
+	"orderDetails":"订单明细",
+	"financeialStatistics":"财务报表",
+	"set":"设置",
+	"Account":"账号设置",
+	"out":"退出",
+	"year":"年"
+
+
+}

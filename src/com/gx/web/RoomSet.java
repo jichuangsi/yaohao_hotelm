@@ -78,15 +78,16 @@ public class RoomSet {
 	public Object add(RoomSetPo roomSetPo){
 		ModelAndView mv=null;
 		Timestamp d = new Timestamp(System.currentTimeMillis());
-		roomSetPo.setCreateTime(System.currentTimeMillis());
+		roomSetPo.setTime(System.currentTimeMillis());
 		RoomSetPo roomID=roomSetService.selectIDSupplierid(roomSetPo.getRoomNumber(),roomSetPo.getSupplierID());
+		int count=0;
 		if (roomID==null){
-			roomSetService.insertAll(roomSetPo);
+			count=roomSetService.insertAll(roomSetPo);
 		}
 		/*mv=new ModelAndView("redirect:/RoomSet/tolist.do");
 		return mv;*/
 		Gson gson =new Gson();
-		return gson.toJson(1);
+		return gson.toJson(count);
 	}
 	
 	@RequestMapping("/toupdate")
@@ -101,17 +102,19 @@ public class RoomSet {
 		mv.addObject("listPo",listPo);
 		return mv;
 	}
-	
+	@ResponseBody
 	@RequestMapping("/update")
-	public ModelAndView update(RoomSetPo roomSetPo){
+	public Object update(RoomSetPo roomSetPo){
 		ModelAndView mv=null;
 		/*RoomSetPo roomID=roomSetService.selectIDSupplierid(roomSetPo.getRoomNumber(),roomSetPo.getSupplierID());
 		if (roomID==null) {
 
 		}*/
-		roomSetService.updateById(roomSetPo);
-		mv=new ModelAndView("redirect:/RoomSet/tolist.do");
-		return mv;
+		Integer count=roomSetService.updateById(roomSetPo);
+		/*mv=new ModelAndView("redirect:/RoomSet/tolist.do");
+		return mv;*/
+		Gson gson=new Gson();
+		return gson.toJson(count);
 	}
 	
 	@RequestMapping("/delete")

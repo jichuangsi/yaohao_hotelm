@@ -113,7 +113,7 @@
 
 
 <select id="selectIDSupplierid" resultType="com.gx.po.RoomSetPo">
-      SELECT * FROM `room` WHERE `supplierID`#{supplierID,jdbcType=INTEGER} AND `roomNumber`#{roomNumber,jdbcType=VARCHAR}
+      SELECT * FROM `room` WHERE `supplierID`=#{supplierID,jdbcType=INTEGER} AND `roomNumber`=#{roomNumber,jdbcType=VARCHAR}
 </select>
 <select id="selectDetailByIds" resultType="com.gx.vo.RoomVo">
     SELECT r.*,g.`guestroomlevel` AS guestRoomLevelName,g.`id` AS gid,

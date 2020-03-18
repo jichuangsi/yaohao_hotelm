@@ -69,5 +69,7 @@
       SELECT * FROM users Where id=#{id,jdbcType=INTEGER}
   </select>
 
-
+<select id="fuzzyselect" resultType="com.gx.po.UserPo">
+      SELECT * FROM users Where userName like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+</select>
 </mapper>

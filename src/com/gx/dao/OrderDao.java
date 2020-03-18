@@ -2,18 +2,17 @@ package com.gx.dao;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
-import com.gx.vo.DayRoomNumberVo;
-import com.gx.vo.IndayVo;
-import com.gx.vo.OrderDetailsVo;
-import com.gx.vo.OrderTimeVo;
+import com.gx.vo.*;
 import org.apache.ibatis.annotations.Param;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
 
 public interface OrderDao {
 
+    @Transactional
     public Integer inserAll(OrderPo orderPo);
     //条件查询
     public List<OrderDetailsVo> list( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId,
@@ -42,6 +41,7 @@ public interface OrderDao {
 
 
     //修改订单状态
+    @Transactional
     public Integer updateStatus(@Param("orderNumber")String orderNumber, @Param("status")Integer status);
     //根据订单号查询订单
     public OrderPo selectByOrderNumber(@Param("orderNumber")String orderNumber);
@@ -87,11 +87,16 @@ public interface OrderDao {
     public List<DayRoomNumberVo> selectDayRoom(@Param("time")String time,
                                                @Param("roomId")int roomId);
 
+    public List<OrderTimeVo> selectRooms();
+
+    public List<OrderTimeVo> selectRoomByins(@Param("allList")List<Integer> allList);
+
     /////////////////////////////////////////////////////////////////////////////////////
     public List<OrderDetailsVo> allContractOrder(@Param("name")String name,@Param("orderNumber")String orderNumber,
                                                  @Param("start")int start, @Param("size")int size);
 
    public int countallContractOrder(@Param("name")String name,@Param("orderNumber")String orderNumber);
+    @Transactional
     public int updateMoney(@Param("id")int id,@Param("time")Timestamp time);
 
 }

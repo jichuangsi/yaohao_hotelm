@@ -60,4 +60,9 @@ public class UserServiceImpl implements UserService {
 	public UserPo selectById(Integer id) {
 		return userDao.selectById(id);
 	}
+
+	@Override
+	public List<UserPo> fuzzyselect(String name) {
+		return userDao.fuzzyselect(name);
+	}
 }

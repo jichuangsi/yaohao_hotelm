@@ -2,10 +2,8 @@ package com.gx.service;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
-import com.gx.vo.DayRoomNumberVo;
-import com.gx.vo.IndayVo;
-import com.gx.vo.OrderDetailsVo;
-import com.gx.vo.OrderTimeVo;
+import com.gx.vo.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -13,6 +11,7 @@ import java.util.List;
 public interface OrderService {
 
     //添加订单
+    @Transactional
     public Integer inserAll(OrderPo orderPo);
         //已确认
     public Page<OrderDetailsVo> list(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
@@ -24,6 +23,7 @@ public interface OrderService {
     public Page<OrderDetailsVo> myaccount(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
 
     //修改订单状态
+    @Transactional
     public Integer updateStatus(String orderNumber, Integer status);
    //根据订单号查询订单
     public OrderPo selectByOrderNumber(String orderNumber);
@@ -41,7 +41,7 @@ public interface OrderService {
     public Page<OrderTimeVo> selectRoomByTime(Timestamp time, Page<OrderTimeVo> vo);
 
     public List<IndayVo> checkinDay(String time, int roomId);
-
+    @Transactional
     public int updateMoney(int id,Timestamp time);
 
 
@@ -50,6 +50,10 @@ public interface OrderService {
     public List<OrderTimeVo> selectRoomByin(List<Integer> idList,List<Integer> list);
 
     public List<DayRoomNumberVo> selectDayRoom(String time, int roomId);
+
+    public List<OrderTimeVo> selectRooms();
+
+    List<OrderTimeVo> selectRoomByins(List<Integer> allList);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 

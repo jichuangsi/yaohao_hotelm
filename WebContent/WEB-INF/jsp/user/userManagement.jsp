@@ -49,7 +49,7 @@
 			<div class="layui-row">
 				<form class="layui-form layui-col-md12">
 					<div class="layui-input-inline">
-						<input type="text" name="orderNumber" placeholder="平台关键字" autocomplete="off" class="layui-input" style="width: 200px;">
+						<input type="text" name="name" placeholder="操作员关键字" autocomplete="off" class="layui-input" style="width: 200px;">
 					</div>
 			
 					<div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
@@ -66,15 +66,26 @@
 	<div id="add_apar" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
 			<div class="layui-form-item">
-				<input id="id" type="hidden" value="">
-				<label class="layui-form-label">平台名称：</label>
+				<label class="layui-form-label">名字：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="name" class="layui-input " lay-verify="required">
+					<input type="text" name="UserName" id="userName" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码：</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="password" id="password" class="layui-input " lay-verify="required">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">确认密码：</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="rpassword" id="rpassword" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<div class="layui-btn" lay-submit lay-filter="update_add">添加</div>
+					<div class="layui-btn" lay-submit lay-filter="add_Pwd">提交</div>
 				</div>
 			</div>
 
@@ -84,12 +95,26 @@
 	<!-- 修改 -->
 	<div id="modify_apar" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
+			<input type="text" name="id" id="id" value="">
 			<div class="layui-form-item">
-				<label class="layui-form-label">平台名称：</label>
+			<label class="layui-form-label">平台名称：</label>
+			<div class="layui-input-block widths">
+
+				<input type="text" name="userName" id="name" class="layui-input " lay-verify="required">
+			</div>
+		</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">密码：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="name" id="name" class="layui-input " lay-verify="required">
+					<input type="password" name="password" id="passwords" class="layui-input " lay-verify="required">
 				</div>
 			</div>
+			<%--<div class="layui-form-item">
+				<label class="layui-form-label">确认密码：</label>
+				<div class="layui-input-block widths">
+					<input type="password" name="repassword" id="rpassword" class="layui-input " lay-verify="required">
+				</div>
+			</div>--%>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
 					<div class="layui-btn" lay-submit lay-filter="update_Pwd">修改</div>
@@ -104,15 +129,18 @@
 			<thead>
 			<tr>
 				<th>序号</th>
-				<th>平台名称</th>
-				<%--<th>是否启用</th>--%>
+				<th>名字</th>
+				<th>操作</th>
 				<%--<th width="200px">备注</th>--%>
 			</tr>
-			<c:forEach items="${list.result}" var="item">
+			<c:forEach items="${list}" var="item">
 				<tr>
 					<th>${item.id}</th>
-					<th>${item.name}</th>
-					<%--<th>${item.count}</th>--%>
+					<th>${item.userName}</th>
+					<th>
+						<span class=" layui-btn layui-btn-normal layui-btn-sm tomodify" onclick="modify()">修改</span>
+					</th>
+					</th>
 						<%--<th width="200px">备注</th>--%>
 				</tr>
 			</c:forEach>
@@ -157,26 +185,35 @@
                 add();
             });
 
+
             var falg;
-            form.on('submit(update_add)',function (obj) {
+            form.on('submit(add_Pwd)',function (obj) {
                 var param =obj.field;
                 console.log(falg=name())
+                var password=document.getElementById("password").value;
+                var rpassword=document.getElementById("rpassword").value;
+                if (password==rpassword){
+                    falg==true;
+				}else {
+                    alert("两输入密码不同");
+                    falg=false;
+				}
 			if (falg==true) {
                     $.ajax({
                         cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                         type: "POST",                                           //上面3行都是必须要的
-                        url: '${ctx}/Platform/add.do',       //地址 type 带参数
+                        url: '${ctx}/User/add.do',       //地址 type 带参数
                         data:param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                         async:false,                                          // 是否 异步 提交
                         success: function (result) {                          // 不出现异常 进行立面方
                             if(result!=1){
-                                /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
-                                document.getElementById("name").value="";     //这个id的文本框的值 将会清空
-                                document.getElementById("name").focus();      // 给这个id的文本框提供焦点
+                                alert("新增失败"+' \n '+"Failed to add");                     //提示框
+                                document.getElementById("userName").value="";     //这个id的文本框的值 将会清空
+                                document.getElementById("userName").focus();      // 给这个id的文本框提供焦点
                                 return false;
                             }else {
                                 alert("新增成功！"+' \n '+"succeeded");
-                                location.href='${ctx}/Platform/tolist.do';
+                                location.href='${ctx}/User/tolist.do';
                                 return true;
                             }
                         },
@@ -185,22 +222,46 @@
             }
             });
 
-
+            form.on('submit(update_Pwd)',function (obj) {
+                var param =obj.field;
+                if (falg==true) {
+                    $.ajax({
+                        cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                        type: "POST",                                           //上面3行都是必须要的
+                        url: '${ctx}/User/update.do',       //地址 type 带参数
+                        data:param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                        async:false,                                          // 是否 异步 提交
+                        success: function (result) {                          // 不出现异常 进行立面方
+                            if(result!=1){
+                              /*  alert("修改失败"+' \n '+"Failed to add");                     //提示框*/
+                                document.getElementById("userName").value="";     //这个id的文本框的值 将会清空
+                                document.getElementById("userName").focus();      // 给这个id的文本框提供焦点
+                                return false;
+                            }else {
+                              /*  alert("修改成功！"+' \n '+"succeeded");*/
+                                location.href='${ctx}/User/tolist.do';
+                                return true;
+                            }
+                        },
+                        error: function(data) {  }
+                    })
+                }
+            });
 
 		})
         function name(){
-            var order=document.getElementById("name").value;
+            var order=document.getElementById("userName").value;
             $.ajax({
                 cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
-                url: '${ctx}/Platform/YZ.do',       //地址 type 带参数
-                data:"name="+order,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                url: '${ctx}/User/YZ.do',       //地址 type 带参数
+                data:"userName="+order,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async:false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     if(result>=1){
                         alert("名字重复！"+' \n '+"Duplicate name");                     //提示框
-                        document.getElementById("name").value="";     //这个id的文本框的值 将会清空
-                        document.getElementById("name").focus();      // 给这个id的文本框提供焦点
+                        document.getElementById("userName").value="";     //这个id的文本框的值 将会清空
+                        document.getElementById("userName").focus();      // 给这个id的文本框提供焦点
                         falg=false;
                         return falg;
                     }else {
@@ -213,5 +274,7 @@
             })
             return falg;
         }
+
+
 	</script>
 </html>

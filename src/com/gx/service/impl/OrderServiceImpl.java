@@ -182,6 +182,16 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.selectDayRoom(time, roomId);
     }
 
+    @Override
+    public List<OrderTimeVo> selectRooms() {
+        return orderDao.selectRooms();
+    }
+
+    @Override
+    public List<OrderTimeVo> selectRoomByins(List<Integer> allList) {
+        return orderDao.selectRoomByins(allList);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
