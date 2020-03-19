@@ -84,6 +84,7 @@
 	"checkedout":"Checked-out",
 	"userName":"Admin",
 	"password":"password",
-	"rpassword":"Confirm password"
+	"rpassword":"Confirm password",
+	"anser":"Answer"
 
 }

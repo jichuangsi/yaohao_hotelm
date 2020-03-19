@@ -794,6 +794,14 @@ public class Order {
         return mv;
     }
 
+    //查询问题
+    @RequestMapping("financial")
+    public ModelAndView question(String name,Integer currentPage){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/order/finance2");
+
+        return mv;
+    }
 
 
 
@@ -874,7 +882,7 @@ public class Order {
             }
         }else {
             if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位
-                if (orderPo.getCheckinNumber()<=t){//床位大于等于入住人数
+                if (orderPo.getCheckinNumber()<t){//床位大于等于入住人数
                     ok=1;
                 }
             }
