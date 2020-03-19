@@ -79,7 +79,7 @@
    </update>
 
     <delete id="deleteById" parameterType="java.lang.Integer">
-    DELETE FROM `finance` WHERE id = #{id,jdbcType=INTEGER}
+    DELETE  `finance` WHERE id = #{id,jdbcType=INTEGER}
   </delete>
 
 
@@ -110,11 +110,11 @@
    </select>
 
     <update id="updatePHP"  parameterType="com.gx.po.FinancePo">
-        UPDATE FROM `finance` SET `PHP`=#{PHP,jdbcType=DOUBLE}  WHERE `id`=#{id,jdbcType=INTEGER}
+        UPDATE  `finance` SET `PHP`=#{PHP,jdbcType=DOUBLE}  WHERE `id`=#{id,jdbcType=INTEGER}
     </update>
 
     <update id="updateRMB"  parameterType="com.gx.po.FinancePo">
-      UPDATE FROM `finance` SET `RMB`=#{RMB,jdbcType=DOUBLE}  WHERE `id`=#{id,jdbcType=INTEGER}
+      UPDATE  `finance` SET `RMB`=#{RMB,jdbcType=DOUBLE}  WHERE `id`=#{id,jdbcType=INTEGER}
     </update>
 
     <select id="slectCountRoom" resultType="java.lang.Integer">
