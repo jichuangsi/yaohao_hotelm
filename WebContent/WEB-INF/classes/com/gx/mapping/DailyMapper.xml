@@ -60,5 +60,8 @@ FROM `dailyconsumption` d INNER JOIN `consumptiontype` c ON d.`cid`=c.`id`
 INNER JOIN `supplier` s ON s.id=d.`supplierId`
     </select>
 
+    <select id="updateNumberByRoomId" resultType="java.lang.Integer">
+      UPDATE `dailyconsumption` SET `roomNumber`=#{roomNumber,jdbcType=VARCHAR} WHERE `roomId`#{roomId,jdbcType=INTEGER}
+    </select>
 
 </mapper>

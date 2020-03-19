@@ -22,7 +22,7 @@ public interface FinanceDao {
 
     public FinancePo selectById(int id);
 
-    public FinancePo selectByyearM(@Param("yearM")String yearM,@Param("roomId")int roomId);
+    public FinancePo selectByyearM(@Param("yearM")String yearM,@Param("roomId")Integer roomId);
 
     public int updatePHP(FinancePo po);
 
@@ -33,5 +33,8 @@ public interface FinanceDao {
     public int slectCountRoom();
 
     public List<FinancePo> listtime(String time);
+
+    //根据房间id 修改房间号
+    public Integer updateRoomNuberByRoomId(@Param("roomId")Integer roomId,@Param("roomNumber")String roomNumber);
 
 }

@@ -19,4 +19,6 @@ public interface DailyconsumptionService {
                                  Integer roomId,Integer supplierId);
 
     public List<DailyconsumptionPo> list();
+
+    public Integer updateNumberByRoomId(Integer roomId,String roomNumber);
 }

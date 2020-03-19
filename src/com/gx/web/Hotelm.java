@@ -309,7 +309,7 @@ public class Hotelm {
         //定义一个单元格,相当于在第一行插入了三个单元格值分别是
 
         HSSFCell cell = null;
-        row.setHeightInPoints(20);//目的是想把行高设置成20px
+        row.setHeightInPoints(30);//目的是想把行高设置成20px
 
         //插入第一行数据
         for (int i = 0; i < headers.length; i++) {

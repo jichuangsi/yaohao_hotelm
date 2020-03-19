@@ -2,8 +2,8 @@ var dict = {};
 
 $(function () {
     registerWords();
-    setLanguage("zh");
-
+    // setCookie("lang=" + lang + "; path=/;");
+    setLanguage(getCookieVal("lang"));
     $("#enBtn").bind("click", function () {
         setLanguage("en");
     });
@@ -36,6 +36,7 @@ function getCookieVal(name) {
 }
 
 function setCookie(cookie) {
+    console.log(cookie)
     document.cookie = cookie;
 }
 

@@ -29,6 +29,10 @@ public class RoomSet {
 	private SupplierService supplierService;
 	@Autowired
 	private GuestRoomLevelService guestRoomLevelService;
+	@Autowired
+	private DailyconsumptionService dailyconsumptionService;
+	@Autowired
+	private FinanceService financeService;
 
 ///////////////////////////////////自有///////////////////////////////////////////////////
 	
@@ -106,13 +110,10 @@ public class RoomSet {
 	@RequestMapping("/update")
 	public Object update(RoomSetPo roomSetPo){
 		ModelAndView mv=null;
-		/*RoomSetPo roomID=roomSetService.selectIDSupplierid(roomSetPo.getRoomNumber(),roomSetPo.getSupplierID());
-		if (roomID==null) {
-
-		}*/
-		Integer count=roomSetService.updateById(roomSetPo);
-		/*mv=new ModelAndView("redirect:/RoomSet/tolist.do");
-		return mv;*/
+		Integer count=0;
+		count=roomSetService.updateById(roomSetPo);
+		count=financeService.updateRoomNuberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
+		count=dailyconsumptionService.updateNumberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
 		Gson gson=new Gson();
 		return gson.toJson(count);
 	}

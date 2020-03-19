@@ -861,18 +861,25 @@ public class Order {
     @RequestMapping("checkinDay")
     public Object checkinDay(OrderPo orderPo){
         String strn = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckinTime());
-        List<IndayVo> count=orderService.checkinDay(strn, orderPo.getRoomId());
+        List<IndayVo> count=orderService.checkinDay(strn, orderPo.getRoomId());//查询是否有人住
         RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
         int t=0;
         int ok=0;
         for (IndayVo i:count ) {
             t=t+i.getNumber();//现有住宿人
         }
-        if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位
-            if (orderPo.getCheckinNumber()<=t){//床位大于等于入住人数
+        if (t==0){
+            if (orderPo.getCheckinNumber()<=Integer.parseInt(roomSetPo.getRoomAmount())){//床位大于等于入住人数
                 ok=1;
             }
+        }else {
+            if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位
+                if (orderPo.getCheckinNumber()<=t){//床位大于等于入住人数
+                    ok=1;
+                }
+            }
         }
+
         Gson gson = new Gson();
         return gson.toJson(ok);
     }
@@ -958,7 +965,7 @@ public class Order {
         //定义一个单元格,相当于在第一行插入了三个单元格值分别是
 
         HSSFCell cell = null;
-        row.setHeightInPoints(20);//目的是想把行高设置成20px
+        row.setHeightInPoints(40);//目的是想把行高设置成20px
 
         //插入第一行数据
         for (int i = 0; i < headers.length; i++) {
@@ -972,6 +979,8 @@ public class Order {
         for (int i = 1; i <= list.size(); i++) {
             cou++;
             nextrow = sheet.createRow(i);
+            nextrow.setHeightInPoints(20);
+       /*     nextrow.setHeight((short) 20);  */            //设置行高
             HSSFCell cell2 = nextrow.createCell(0);
             // 3.单元格应用样式
             cell2.setCellStyle(style);
@@ -1018,6 +1027,7 @@ public class Order {
             sheet.setColumnWidth(i, 25 * 256);
             if (cou == list.size()) {
                 nextrow = sheet.createRow(list.size()+1);
+             /*   nextrow.setHeightInPoints(50);*/
                 cell2 = nextrow.createCell(12);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("接单提成walk in guest dapfasom");
@@ -1026,6 +1036,7 @@ public class Order {
                 cell2.setCellValue(booking);
 
                 nextrow = sheet.createRow(list.size()+2);
+                nextrow.setHeightInPoints(20);
                 cell2 = nextrow.createCell(1);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("合计");
@@ -1037,6 +1048,7 @@ public class Order {
                 cell2.setCellValue(sumPHP);
 
                 nextrow = sheet.createRow(list.size()+3);
+                nextrow.setHeightInPoints(20);
                 cell2 = nextrow.createCell(12);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("合计Total（CNY）" );
@@ -1111,5 +1123,15 @@ public class Order {
             }
         }
     }
+
+
+   /* @RequestMapping("date")
+    public ModelAndView hhh(){
+
+        Date date=new Date("2020-3-19");
+     Date s=TimeTransformation.getDate(date,19);
+        return null;
+    }*/
+
 
 }

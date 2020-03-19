@@ -83,4 +83,9 @@ public class FinanceServiceImpl implements FinanceService {
     public List<FinancePo> list(String time) {
         return financeDao.listtime(time);
     }
+
+    @Override
+    public Integer updateRoomNuberByRoomId(Integer roomId, String roomNumber) {
+        return financeDao.updateRoomNuberByRoomId(roomId, roomNumber);
+    }
 }

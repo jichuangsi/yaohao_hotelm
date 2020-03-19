@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set  value="${pageContext.request.contextPath}" scope="page" var="ctx"></c:set>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -24,6 +24,7 @@
 		<link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css" />
 		<script src="${ctx}/js/jquery.min.js"></script>
 		<script src="${ctx}/js/layui/layui.all.js"></script>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
 	<style>
 		.x-body {
@@ -45,6 +46,14 @@
 		}
 	</style>
 	<body>
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+		<button class="btn btn-small btn-success"id="enBtn">
+			English
+		</button>
+		<button class="btn btn-small btn-success"id="zhBtn">
+			简体中文
+		</button>
+	</div>
 		<div class="x-body">
 			<div class="layui-row">
 				<form class="layui-form layui-col-md12">
@@ -56,9 +65,7 @@
 				</form>
 			</div>
 			<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-				<div class="layui-btn layui-btn-sm layui-btn-normal toadd">
-					新增
-				</div>
+				<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
 			</div>
 		</div>
 	</body>
@@ -66,26 +73,26 @@
 	<div id="add_apar" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
 			<div class="layui-form-item">
-				<label class="layui-form-label">名字：</label>
+				<label class="layui-form-label"><span lang>userName</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="text" name="UserName" id="userName" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">密码：</label>
+				<label class="layui-form-label"><span lang>password</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="password" id="password" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">确认密码：</label>
+				<label class="layui-form-label"><span lang>rpassword</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="rpassword" id="rpassword" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<div class="layui-btn" lay-submit lay-filter="add_Pwd">提交</div>
+					<div class="layui-btn" lay-submit lay-filter="add_Pwd" lang>Submission</div>
 				</div>
 			</div>
 
@@ -97,14 +104,14 @@
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
 			<input type="text" name="id" id="id" value="">
 			<div class="layui-form-item">
-			<label class="layui-form-label">平台名称：</label>
+			<label class="layui-form-label"><span lang>userName</span>：</label>
 			<div class="layui-input-block widths">
 
 				<input type="text" name="userName" id="name" class="layui-input " lay-verify="required">
 			</div>
 		</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">密码：</label>
+				<label class="layui-form-label"><span lang>password</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="password" id="passwords" class="layui-input " lay-verify="required">
 				</div>
@@ -117,7 +124,7 @@
 			</div>--%>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<div class="layui-btn" lay-submit lay-filter="update_Pwd">修改</div>
+					<div class="layui-btn" lay-submit lay-filter="update_Pwd" lang>Submission</div>
 				</div>
 			</div>
 
@@ -128,9 +135,9 @@
 		<table class="layui-table">
 			<thead>
 			<tr>
-				<th>序号</th>
-				<th>名字</th>
-				<th>操作</th>
+				<th lang>serial</th>
+				<th lang>userName</th>
+				<th lang>operation</th>
 				<%--<th width="200px">备注</th>--%>
 			</tr>
 			<c:forEach items="${list}" var="item">
@@ -138,7 +145,7 @@
 					<th>${item.id}</th>
 					<th>${item.userName}</th>
 					<th>
-						<span class=" layui-btn layui-btn-normal layui-btn-sm tomodify" onclick="modify()">修改</span>
+						<span class=" layui-btn layui-btn-normal layui-btn-sm tomodify" onclick="modify()" lang>amended</span>
 					</th>
 					</th>
 						<%--<th width="200px">备注</th>--%>

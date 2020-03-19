@@ -53,6 +53,7 @@
 	</head>
 
 	<body>
+
 	<input  value="${user}" type="hidden" id="user"/>
 		<div class="navbar">
 			<div class="navbar-inner">
@@ -69,11 +70,11 @@
 			<div class="sidebar" id="sidebar">
 				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
 					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
-						<button class="btn btn-small btn-success">
-							<span id="enBtn">English</span>
+						<button class="btn btn-small btn-success"id="enBtn" onclick="checkEn()">
+							English
 						</button>
-						<button class="btn btn-small btn-success">
-							<span  id="zhBtn">简体中文</span>
+						<button class="btn btn-small btn-success"id="zhBtn"onclick="checkZh()">
+						简体中文
 						</button>
 					</div>
 				</div><!--#sidebar-shortcuts-->
@@ -245,7 +246,7 @@
 				</div>
 
 				<div style="width:100%;height:100%;">
-				  <iframe id="Mainid" src="${ctx}/Main/todata.do" style="width:100%;height:100%;"  frameBorder="0" scrolling="no"></iframe>
+				  <iframe id="Mainid" src="${ctx}/Main/todata.do" name="main"style="width:100%;height:100%;"  frameBorder="0" scrolling="no"></iframe>
 				</div>
 
 				<div class="ace-settings-container" id="ace-settings-container">
@@ -634,6 +635,7 @@
                 document.getElementById("smallGuide").innerHTML=s+"";
                 var user=document.getElementById("user").value;
                 document.getElementById('Mainid').src='${ctx}/Order/bookinglist.do';
+               // document.getElementById('Mainid').src='${ctx}/Order/date.do';
 			}
             //==============================================================================================================================//
 
@@ -846,6 +848,18 @@
                 }
                 var currentdate = year + seperator1 + month + seperator1 + strDate;
                 return currentdate;
+            }
+            function checkEn()
+            {
+                var ifr = document.getElementsByName("main")[0];
+                var btn = ifr.contentWindow.document.getElementById("enBtn");
+                btn.click();
+            }
+            function checkZh()
+            {
+                var ifr = document.getElementsByName("main")[0];
+                var btn = ifr.contentWindow.document.getElementById("zhBtn");
+                btn.click();
             }
 			/*
             function hotelm() {

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set  value="${pageContext.request.contextPath}" scope="page" var="ctx"></c:set>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">--%>
 <html>
 	<head>
 		<meta charset="utf-8">
@@ -26,6 +26,7 @@
 		<script src="${ctx}/js/layui/layui.all.js"></script>
 
 		<script type="text/javascript" src="${ctx}/js/page.js"></script>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
 	<style>
 		/*body{*/
@@ -62,13 +63,22 @@
 		}
 	</style>
 	<body id="bo">
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+		<button class="btn btn-small btn-success"id="enBtn">
+			English
+		</button>
+		<button class="btn btn-small btn-success"id="zhBtn">
+			简体中文
+		</button>
+	</div>
 	<div class="layui-container">
+
 		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
 			<ul class="layui-tab-title">
-				<li class="layui-this">已确定</li>
-				<li>已入住</li>
-				<li>已退房</li>
-				<li>已到账</li>
+				<li class="layui-this" lang>established</li>
+				<li lang>checkedin</li>
+				<li lang>Check-out</li>
+				<li lang>arrival</li>
 			</ul>
 			<div class="layui-tab-content">
 				<div class="layui-tab-item layui-show">
@@ -82,34 +92,33 @@
 										<div class="layui-col-xs4"><span class="layui-badge-rim">${item.supplierName}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}间</span></div>
-										<div class="layui-col-xs4">${item.roomNumber}房</div>
-										<div class="layui-col-xs6 "><span>电话:${item.phoneNumber}</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}<span lang>bed</span></span></div>
+										<div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+										<div class="layui-col-xs6 "><span><span lang>phone</span>:${item.phoneNumber}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}晚</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}<span lang>night</span></span></div>
 										<div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}" pattern="yyyy-MM-dd"/>
-						</span> 至 <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
+						</span>  <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
 											<%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
-										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> 至 <span>${item.out}</span></div>
+										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span lang>to</span> <span>${item.out}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs4"><span>总价：<c:if test="${item.currency==1}">RMB</c:if>
+										<div class="layui-col-xs4"><span><span lang>total</span> ：<c:if test="${item.currency==1}">RMB</c:if>
 							<c:if test="${item.currency==2}">PHP</c:if>
 												${item.money}</span></div>
-										<div class="layui-col-xs3"><span>账户：${item.accountName}</span></div>
-										<div class="layui-col-xs5"><span>到账：<c:if test="${item.daoTime!=null}">
+										<div class="layui-col-xs3"><span><span lang>accounts</span>：${item.accountName}</span></div>
+										<div class="layui-col-xs5"><span><span lang>payment</span>：<c:if test="${item.daoTime!=null}">
 											<fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
 										</c:if></span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs7 "><span style="padding:0px 10px;">姓名:${item.name}</span></div>
+										<div class="layui-col-xs7 "><span style="padding:0px 10px;"><span lang>name</span>:${item.name}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
 										<div class="layui-col-xs2 layui-col-xs-offset8">
 				<%--	onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=5')"--%>
-							<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.orderNumber})" >
-								入住</span></div>
+							<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.orderNumber})" lang>ins</span></div>
 									</div>
 								</div>
 							</div>
@@ -128,35 +137,34 @@
 										<div class="layui-col-xs4"><span class="layui-badge-rim">${item.supplierName}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}间</span></div>
-										<div class="layui-col-xs4">${item.roomNumber}房</div>
-										<div class="layui-col-xs6 "><span>电话:${item.phoneNumber}</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}<span lang>bed</span></span></div>
+										<div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+										<div class="layui-col-xs6 "><span><span lang>phone</span>:${item.phoneNumber}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}晚</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}<span lang>night</span></span></div>
 										<div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}" pattern="yyyy-MM-dd"/>
-						</span> 至 <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
+						</span>  <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
 											<%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
-										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> 至 <span>${item.out}</span></div>
+										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span lang>to</span> <span>${item.out}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs4"><span>总价：<c:if test="${item.currency==1}">RMB</c:if>
+										<div class="layui-col-xs4"><span><span lang>total</span> ：<c:if test="${item.currency==1}">RMB</c:if>
 							<c:if test="${item.currency==2}">PHP</c:if>
 												${item.money}</span></div>
-										<div class="layui-col-xs3"><span>账户：${item.accountName}</span></div>
-										<div class="layui-col-xs5"><span>到账：<c:if test="${item.daoTime!=null}">
+										<div class="layui-col-xs3"><span><span lang>accounts</span>：${item.accountName}</span></div>
+										<div class="layui-col-xs5"><span><span lang>payment</span>：<c:if test="${item.daoTime!=null}">
 											<fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
 										</c:if></span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs7 "><span style="padding:0px 10px;">姓名:${item.name}</span></div>
+										<div class="layui-col-xs7 "><span style="padding:0px 10px;"><span lang>name</span>:${item.name}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
 										<div class="layui-col-xs2 layui-col-xs-offset8">
 
 											<%--onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=6')"--%>
-							<span class="layui-btn layui-btn-normal layui-btn-sm"onclick="checkout(${item.orderNumber})"
-								 >退房</span></div>
+							<span class="layui-btn layui-btn-normal layui-btn-sm"onclick="checkout(${item.orderNumber})" lang>out</span></div>
 											<%--<div class="layui-col-xs2 "><span class="layui-btn layui-btn-normal layui-btn-sm">撤销</span></div>--%>
 									</div>
 
@@ -177,28 +185,28 @@
 										<div class="layui-col-xs4"><span class="layui-badge-rim">${item.supplierName}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}间</span></div>
-										<div class="layui-col-xs4">${item.roomNumber}房</div>
-										<div class="layui-col-xs6 "><span>电话:${item.phoneNumber}</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}<span lang>bed</span></span></div>
+										<div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+										<div class="layui-col-xs6 "><span><span lang>phone</span>:${item.phoneNumber}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}晚</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}<span lang>night</span></span></div>
 										<div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}" pattern="yyyy-MM-dd"/>
-						</span> 至 <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
+						</span>  <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
 											<%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
-										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> 至 <span>${item.out}</span></div>
+										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span lang>to</span> <span>${item.out}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs4"><span>总价：<c:if test="${item.currency==1}">RMB</c:if>
+										<div class="layui-col-xs4"><span><span lang>total</span> ：<c:if test="${item.currency==1}">RMB</c:if>
 							<c:if test="${item.currency==2}">PHP</c:if>
 												${item.money}</span></div>
-										<div class="layui-col-xs3"><span>账户：${item.accountName}</span></div>
-										<div class="layui-col-xs5"><span>到账：<c:if test="${item.daoTime!=null}">
+										<div class="layui-col-xs3"><span><span lang>accounts</span>：${item.accountName}</span></div>
+										<div class="layui-col-xs5"><span><span lang>payment</span>：<c:if test="${item.daoTime!=null}">
 											<fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
 										</c:if></span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs7 "><span style="padding:0px 10px;">电话:${item.name}</span></div>
+										<div class="layui-col-xs7 "><span style="padding:0px 10px;"><span lang>name</span>:${item.name}</span></div>
 									</div>
 										<%--<div class="rmb-title layui-row">
                                             <div class="layui-col-xs2 layui-col-xs-offset8"><span class="layui-btn layui-btn-normal layui-btn-sm">确认</span></div>
@@ -221,28 +229,28 @@
 										<div class="layui-col-xs4"><span class="layui-badge-rim">${item.supplierName}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}间</span></div>
-										<div class="layui-col-xs4">${item.roomNumber}房</div>
-										<div class="layui-col-xs6 "><span>${item.phoneNumber}</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinNumber}<span lang>bed</span></span></div>
+										<div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+										<div class="layui-col-xs6 "><span><span lang>phone</span>:${item.phoneNumber}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}晚</span></div>
+										<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">${item.checkinDay}<span lang>night</span></span></div>
 										<div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}" pattern="yyyy-MM-dd"/>
-						</span> 至 <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
+						</span>  <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}" pattern="yyyy-MM-dd"/></span></div>
 											<%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
-										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> 至 <span>${item.out}</span></div>
+										<div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span lang>to</span> <span>${item.out}</span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs4"><span>总价：<c:if test="${item.currency==1}">RMB</c:if>
+										<div class="layui-col-xs4"><span><span lang>total</span> ：<c:if test="${item.currency==1}">RMB</c:if>
 							<c:if test="${item.currency==2}">PHP</c:if>
 												${item.money}</span></div>
-										<div class="layui-col-xs3"><span>账户：${item.accountName}</span></div>
-										<div class="layui-col-xs5"><span>到账：<c:if test="${item.daoTime!=null}">
+										<div class="layui-col-xs3"><span><span lang>accounts</span>：${item.accountName}</span></div>
+										<div class="layui-col-xs5"><span><span lang>payment</span>：<c:if test="${item.daoTime!=null}">
 											<fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
 										</c:if></span></div>
 									</div>
 									<div class="rmb-title layui-row">
-										<div class="layui-col-xs7 "><span style="padding:0px 10px;">${item.name}</span></div>
+										<div class="layui-col-xs7 "><span style="padding:0px 10px;"><span lang>name</span>:${item.name}</span></div>
 									</div>
 										<%--<div class="rmb-title layui-row">
                                             <div class="layui-col-xs2 layui-col-xs-offset8"><span class="layui-btn layui-btn-normal layui-btn-sm">确认</span></div>

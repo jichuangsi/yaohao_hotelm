@@ -25,6 +25,7 @@
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <%--<script src="${ctx}/js/weeklyCalendar.js"></script>--%>
+    <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
     .x-body {
@@ -56,6 +57,14 @@
     }
 </style>
 <div class="x-body">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+        <button class="btn btn-small btn-success"id="enBtn">
+            English
+        </button>
+        <button class="btn btn-small btn-success"id="zhBtn">
+            简体中文
+        </button>
+    </div>
         <table class="layui-table">
             <thead>
             <%--<input type="hidden" id="excel" value="${time}">
@@ -66,18 +75,16 @@
             </tr>--%>
             <tr>
                 <th colspan="6">
-                    <div class="layui-btn layui-btn-sm layui-btn-normal toadd">
-                        新增
-                    </div>
+                    <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
                 </th>
             </tr>
             <tr>
-                <th>序号</th>
-                <th>酒店</th>
-                <th>房间Room</th>
-                <th>日期</th>
-                <th>名称</th>
-                <th>消费</th>
+                <th lang>serial</th>
+                <th lang>hotelm</th>
+                <th lang>roomNumber</th>
+                <th lang>date</th>
+                <th lang>type</th>
+                <th lang>consumption</th>
             </tr>
             <c:forEach items="${list}" var="item">
             <tr>
@@ -107,7 +114,7 @@
 <div id="add_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off">
         <div class="layui-form-item">
-            <label class="layui-form-label">房间：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
                 <select name="roomId" lay-verify="required">
                     <c:forEach items="${rlist}" var="item">
@@ -117,7 +124,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">消费类型：</label>
+            <label class="layui-form-label"><span lang>type</span>：</label>
             <div class="layui-input-block widths">
                 <select name="cid" lay-verify="required">
                     <c:forEach items="${clist}" var="item">
@@ -127,13 +134,13 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">花费：</label>
+            <label class="layui-form-label"><span lang>consumption</span>：</label>
             <div class="layui-input-block widths">
-                <input type="text" name="money" id="money" value="70790" class="layui-input " lay-verify="required">
+                <input type="text" name="money" id="money" value="" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">时间(精确到日)：</label>
+            <label class="layui-form-label"><span lang>time</span> ：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="time" class="layui-input time" lay-verify="required">
             </div>
@@ -141,7 +148,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <div class="layui-btn" lay-submit lay-filter="add_Pwd">添加</div>
+                <div class="layui-btn" lay-submit lay-filter="add_Pwd" lang>Submission</div>
             </div>
         </div>
     </form>

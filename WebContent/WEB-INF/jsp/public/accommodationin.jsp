@@ -28,6 +28,8 @@
 
 		<script type="text/javascript" src="${ctx}/js/page.js"></script>
 		<link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
+
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
 	<style>
 		.x-body {
@@ -55,6 +57,14 @@
 		}
 	</style>
 	<body>
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+		<button class="btn btn-small btn-success"id="enBtn">
+			English
+		</button>
+		<button class="btn btn-small btn-success"id="zhBtn">
+			简体中文
+		</button>
+	</div>
 	<div class="x-body">
 		<div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
 			<form class="layui-form layui-col-md12" >
@@ -84,20 +94,20 @@
 			<table class="layui-table">
 				<thead>
 				<tr>
-					<th>序号</th>
-					<th>平台</th>
-					<th>订单号</th>
-					<th>酒店名</th>
-					<th>房间号</th>
-					<th>旅客姓名</th>
-					<th>联系电话</th>
-					<th>入住时间</th>
-					<th>退房时间</th>
-					<th>入住人数</th>
-					<th>价格</th>
-					<th>是否到账</th>
-					<th>到账时间</th>
-					<th>操作</th>
+					<th lang>serial</th>
+					<th lang>patform</th>
+					<th lang>orderNumber</th>
+					<th lang>hotelname</th>
+					<th lang>roomNumber</th>
+					<th lang>name</th>
+					<th lang>phone</th>
+					<th lang>checkin</th>
+					<th lang>checkout</th>
+					<th lang>checknumber</th>
+					<th lang>Price</th>
+					<th lang>account</th>
+					<th lang>payment</th>
+					<th lang>operation</th>
 				</tr>
 				<c:forEach items="${list.result}" var="item">
 					<tr>
@@ -118,16 +128,16 @@
 							<td>(CNY)${item.money}</td>
 						</c:if>
 						<c:if test="${item.isdao==1}"><%--javascript:window.open('${ctx}/Hotelm/updaDao.do?id=${item.id}')--%>
-							<td onclick="change(${item.id})">否</td>
+							<td onclick="change(${item.id})" lang>no</td>
 						</c:if>
 						<c:if test="${item.isdao==2}">
-							<td>是</td>
+							<td lang>yes</td>
 						</c:if>
 						<td>${item.daotime}</td>
 						<td>
 
 							<c:if test="${item.status==4}"><%--//已入住--%>
-								<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},5)">退房</span>
+								<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},5)" lang>out</span>
 							</c:if>
 						</td>
 

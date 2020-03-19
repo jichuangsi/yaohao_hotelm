@@ -33,4 +33,6 @@ public interface FinanceService {
 
     //财务报表按月
     public List<FinancePo> list(String time);
+
+    public Integer updateRoomNuberByRoomId(Integer roomId,String roomNumber);
 }

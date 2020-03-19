@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css"/>
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
     .x-body {
@@ -44,6 +46,14 @@
     }
 </style>
 <body>
+<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+    <button class="btn btn-small btn-success"id="enBtn">
+        English
+    </button>
+    <button class="btn btn-small btn-success"id="zhBtn">
+        简体中文
+    </button>
+</div>
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12">
@@ -56,9 +66,7 @@
         </form>
     </div>
     <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-        <div class="layui-btn layui-btn-sm layui-btn-normal toadd">
-            新增
-        </div>
+        <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
     </div>
 </div>
 </body>
@@ -66,7 +74,7 @@
 <div id="add_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="add_pwd">
         <div class="layui-form-item">
-            <label class="layui-form-label">供应商：</label>
+            <label class="layui-form-label"><span lang>supplier</span>：</label>
             <div class="layui-input-block widths">
                 <select name="supplierID" id="supplierID" lay-verify="required">
                     <c:forEach items="${slist}" var="item">
@@ -76,20 +84,20 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">房间号：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="roomId" value="">
                 <input type="text" name="roomNumber" id="room" class="layui-input" value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">床位数：</label>
+            <label class="layui-form-label"><span lang>roomAmount</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="roomAmount" class="layui-input" value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">等级：</label>
+            <label class="layui-form-label"><span lang>guestRoomLevelID</span>：</label>
             <div class="layui-input-block widths">
                 <select name="guestRoomLevelID" lay-verify="required">
                     <c:forEach items="${glist}" var="item">
@@ -99,14 +107,14 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">价格：</label>
+            <label class="layui-form-label"><span lang>referencePrice</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="referencePrice" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <div class="layui-btn" lay-submit lay-filter="update_add">提交</div>
+                <div class="layui-btn" lay-submit lay-filter="update_add" lang>Submission</div>
             </div>
         </div>
 
@@ -118,13 +126,13 @@
     <table class="layui-table">
         <thead>
         <tr>
-            <th>序号</th>
-            <th>酒店名称</th>
-            <th>房间号</th>
-            <th>床位数</th>
-            <th>类型</th>
-            <th>参考价</th>
-           <th>操作</th>
+            <th lang>serial</th>
+            <th lang>hotelname</th>
+            <th lang>roomNumber</th>
+            <th lang>roomAmount</th>
+            <th lang>guestRoomLevelID</th>
+            <th lang>referencePrice</th>
+           <th>operation</th>
             <%--<th width="200px">备注</th>--%>
         </tr>
         <c:forEach items="${list.result}" var="item">
@@ -138,7 +146,7 @@
                 <th hidden>${item.supplierId}</th>
                 <th hidden>${item.guestRoomLevelID}</th>
                 <th> <%--onclick="modify(${item.id},${item.supplierName},${item.roomNumber},${item.roomAmount},${item.guestRoomLevelName},${item.referencePrice})"--%>
-                    <div class=" layui-btn layui-btn-normal layui-btn-sm tomodify"onclick="modify(this)">修改</div>
+                    <div class=" layui-btn layui-btn-normal layui-btn-sm tomodify"onclick="modify(this)" lang>amended</div>
                 </th>
             </tr>
         </c:forEach>
@@ -301,41 +309,41 @@
 <div id="modify_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
         <div class="layui-form-item">
-            <label class="layui-form-label">供应商：</label>
+            <label class="layui-form-label"><span lang>supplier</span>：</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="supplierID" class="layui-input" value="">
                 <input type="text" name="supplierName" id="supplierName" class="layui-input" readonly value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">房间号：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="roomId" id="roomId" value="">
                 <input type="text" name="roomNumber" id="number" class="layui-input" value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">床位数：</label>
+            <label class="layui-form-label"><span lang>roomAmount</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="roomAmount" id="roomAmount" class="layui-input"value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">等级：</label>
+            <label class="layui-form-label"><span lang>guestRoomLevelID</span>：</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="guestRoomLevelID"class="layui-input" value="" >
                 <input type="text" name="guestRoomLevelName" id="guestRoomLevelName" readonly class="layui-input" value="" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">价格：</label>
+            <label class="layui-form-label"><span lang>referencePrice</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="referencePrice" id="referencePrice" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <div class="layui-btn" lay-submit lay-filter="update_modify">修改</div>
+                <div class="layui-btn" lay-submit lay-filter="update_modify" lang>amended</div>
             </div>
         </div>
     </form>

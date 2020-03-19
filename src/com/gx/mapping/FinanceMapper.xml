@@ -127,4 +127,8 @@
 	FROM `finance` f
 	WHERE `yearM`= #{yearM,jdbcType=VARCHAR}
     </select>
+
+    <select id="updateRoomNuberByRoomId" resultType="java.lang.Integer">
+        UPDATE `finance` SET `roomNumber`=#{roomNumber,jdbcType=VARCHAR} WHERE `roomId`=#{roomId,jdbcType=INTEGER}
+    </select>
 </mapper>

@@ -26,7 +26,7 @@
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <script src="${ctx}/js/weeklyCalendar.js"></script>
-
+    <script src="${ctx}/assets/js/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
@@ -149,12 +149,20 @@
 <body>
 
 <div class="layui-row">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+        <button class="btn btn-small btn-success"id="enBtn">
+            English
+        </button>
+        <button class="btn btn-small btn-success"id="zhBtn">
+            简体中文
+        </button>
+    </div>
     <div class="layui-col-xs12 layui-col-md6 layui-col-md-offset3">
         <div class="layui-row date">
             <div id="j_weeklyCalendar" class="myWeeklyCanlendar">
                 <div class="datetime_header">
                     <a href="javascript:;" title="上一周" class="prev_icon" role="prev_week"></a>
-                    <span><b role="year_selector"></b ><span lang>year</span><b role="month_selector"></b>月</span><span
+                    <span><b role="year_selector"></b >年<b role="month_selector"></b>月</span><span
                         style="margin-left: 20px;display: none">第<b
                         role="week_selector"></b>周</span>
                     <a href="javascript:;" title="下一周" class="next_icon" role="next_week"></a>
@@ -173,7 +181,7 @@
                                 <div class="layui-col-xs4 " style="padding-left: 15px;">
                                     <h2>${item.roomNumber}</h2>
                                 </div>
-                                <div class="layui-btn layui-btn-normal " style="float: right" onclick="date(${item.roomNumber},${item.roomId})">查看空房</div>
+                                <div class="layui-btn layui-btn-normal " style="float: right" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
                             </h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row">
@@ -182,15 +190,13 @@
                                     <div class="">${item.supplierName}-${item.roomNumber}</div>
                                 </div>
                                 <div class="layui-row">
-                                    <div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">剩余
+                                    <div class="layui-col-xs2"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>
 											<c:if test="${item.remainingBeds==null}">${item.roomAmount}</c:if>
 											<c:if test="${item.remainingBeds!=null}">${item.remainingBeds}</c:if>
-											间</span></div>
+											<span lang>bed</span></span></div>
                                     <c:if test="${item.remainingBeds!=0}">
                                         <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-                                            <div class="layui-btn layui-btn-sm layui-btn-normal toadd">
-                                                新增
-                                            </div>
+                                            <div class="layui-btn layui-btn-sm layui-btn-normal toadd " lang>add</div>
                                         </div>
                                     </c:if>
 
@@ -208,7 +214,7 @@
 <div id="add" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="test">
         <div class="layui-form-item">
-            <label class="layui-form-label">订单：</label>
+            <label class="layui-form-label"><span lang>order</span>:</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="id"/>
                 <input type="text" name="orderNumber" id="order" class="layui-input " lay-verify="required"
@@ -216,7 +222,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">平台：</label>
+            <label class="layui-form-label"><span lang>patform</span>：</label>
             <div class="layui-input-block widths">
                 <select name="platformId" lay-verify="required" id="pt">
                     <c:forEach items="${slist}" var="item">
@@ -226,7 +232,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">供应商：</label>
+            <label class="layui-form-label"><span lang>supplier</span>：</label>
             <div class="layui-input-block widths">
                 <select name="hotelmId" lay-verify="required" id="gys">
                     <c:forEach items="${plist}" var="item">
@@ -236,70 +242,70 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">房间号：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="roomId" value="" lay-verify="required">
                 <input type="text" name="roomNumber" class="layui-input" value="" readonly lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">币种：</label>
+            <label class="layui-form-label"><span lang>currency</span>：</label>
             <div class="layui-input-block widths">
                 <select name="currency" lay-verify="required">
                     <option value="-1"></option>
-                    <option value="1">人民币</option>
-                    <option value="2">菲律宾币</option>
+                    <option value="1" lang>RMB</option>
+                    <option value="2" lang>PHP</option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">价格：</label>
+            <label class="layui-form-label"><span lang>Price</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="money" class="layui-input " lay-verify="required">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">入住时间：</label>
+            <label class="layui-form-label"><span lang>checkin</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="checkinTime" id="checkinTime" class="layui-input " readonly
                        lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">退房时间：</label>
+            <label class="layui-form-label"><span lang>checkout</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="checkoutTime" class="layui-input time" id="checkoutTime" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">姓名：</label>
+            <label class="layui-form-label"><span lang>name</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="name" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">联系电话：</label>
+            <label class="layui-form-label"><span lang>phone</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="phoneNumber" class="layui-input " lay-verify="required">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">入住人数：</label>
+            <label class="layui-form-label"><span lang>checknumber</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">是否到账：</label>
+            <label class="layui-form-label"><span lang>account</span>：</label>
             <div class="layui-input-block widths">
                 <input type="radio" name="isdao" value="2" title="是">
                 <input type="radio" name="isdao" value="1" title="否" checked="">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">账户：</label>
+            <label class="layui-form-label"><span lang>accounts</span>：</label>
             <div class="layui-input-block widths">
                 <select name="account" lay-verify="required" id="zh">
                     <c:forEach items="${alist}" var="item">
@@ -310,7 +316,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="addMenu">提交</button>
+                <button class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</button>
             </div>
         </div>
     </form>
@@ -405,8 +411,31 @@
                 layer.msg('请选择币种!');
                 return false;
             }
-            console.log(falg = day(param))
+            var checkin=param.checkinTime;
+                var checkout=param.checkoutTime;
+                if(checkin>checkout){
+                alert('时间不正确');
+                return;
+            }
+            var phone= /^[1][3,4,5,7,8,9][0-9]{9}$/;//手机
+            var myreg = /^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
+             var phon2=param.phoneNumber;
+            if(phone.test(phon2) ||myreg.test(phon2)){
+                console.log('true');
+            }else{
+                alert('手机格式输入不正确');
+                return;
+            }
+            var reg = new RegExp('^[1-9](\\d{1,9})((\\.\\d{1,3})?)$');
+            var s=param.money;
+            if(reg.test(s)){
+                console.log('true');
+            }else{
+                alert('价格输入不正确，不超过9位数');
+                return;
+            }
             console.log(falg)
+            falg=day(param);
             if (falg == true) {
                 $.ajax({
                     cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -434,6 +463,7 @@
              var roomId=document.getElementById("id").value;*/
 
         });
+
 
         // 默认周历
         weeklyCalendar('#j_weeklyCalendar', {
@@ -483,24 +513,24 @@
                             listStr += '<h2 class="layui-colla-title">';
                             listStr += '<div class="layui-col-xs4 " style="padding-left: 15px;">';
                             listStr += '<h2>'+item.roomNumber+'</h2>\n' + '</div>';
-                            listStr+=' <div class="layui-btn layui-btn-normal " style="float: right" onclick="date('+item.roomNumber+','+item.roomId+')">查看空房</div>';
+                            listStr+=' <div class="layui-btn layui-btn-normal " style="float: right" onclick="date('+item.roomNumber+','+item.roomId+')" lang>check</div>';
                             listStr += '</h2>';
                             listStr += '<div class="layui-colla-content"><div class="layui-row">';
                             listStr += '<input type="hidden" name="roomNumber" value=""+item.roomNumber+">';
                             listStr += '<input type="hidden" name="roomId" value=""+item.roomId+">';
                             listStr += '<div class="">'+item.supplierName+'-'+item.roomNumber+'</div></div>';
                             listStr += '<div class="layui-row">';
-                            listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray">剩余';
+                            listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray" ><span lang>surplus</span>';
                             if (item.remainingBeds==null) {
                                 listStr += item.roomAmount;
                             }else if (item.remainingBeds!=null) {
                                 listStr += item.remainingBeds;
                             }
-                            listStr += '间</span></div>';
+                            listStr += '<span lang>bed</span></span></div>';
                             if (item.remainingBeds!=0) {
                                 listStr += '<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">';
-                                listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd">';
-                                listStr += '新增</div></div>';
+                                listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>';
+                                listStr += 'add</div></div>';
                             }
                             listStr += ' </div></div></div> ';
 
@@ -526,15 +556,21 @@
             async: false,                                          // 是否 异步 提交
             success: function (result) {                          // 不出现异常 进行立面方
                 if (result != 1) {
-                    layer.msg('入住失败，人数大于剩余床位数！' + ' \n ' + 'Check in failed');             //提示框
+                    alert("入住失败，人数大于剩余床位数")
+                 /*   layer.msg('入住失败，人数大于剩余床位数！' + ' \n ' + 'Check in failed');             //提示框*/
                     document.getElementById("order").value = "";     //这个id的文本框的值 将会清空
                     document.getElementById("order").focus();      // 给这个id的文本框提供焦点
                     falg = false;
                     return false;
+                }else {
+                    falg = true;
+                    return false;
                 }
+            },
+            error: function (data) {
+                alert("请求失败")
             }
         })
-        falg = true;
         return falg;
     }
 

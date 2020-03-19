@@ -22,6 +22,7 @@
 
 		<script type="text/javascript" src="${ctx}/js/page.js"></script>
 		<link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
 	<style>
 		.x-body {
@@ -43,6 +44,14 @@
 		}
 	</style>
 	<body>
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+		<button class="btn btn-small btn-success"id="enBtn">
+			English
+		</button>
+		<button class="btn btn-small btn-success"id="zhBtn">
+			简体中文
+		</button>
+	</div>
 	<div class="x-body">
 		<div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
 			<form class="layui-form layui-col-md12" >
@@ -61,30 +70,25 @@
 
 				<div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
 			</form>
-			<%--<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-				<div class="layui-btn layui-btn-sm layui-btn-normal toadd">
-					新增
-				</div>
-			</div>--%>
 		</div>
 
 		<div class="x-body">
 			<table class="layui-table">
 				<thead>
 				<tr>
-					<th>序号</th>
-					<th>平台</th>
-					<th>订单号</th>
-					<th>酒店名</th>
-					<th>房间号</th>
-					<th>旅客姓名</th>
-					<th>联系电话</th>
-					<th>入住时间</th>
-					<th>退房时间</th>
-					<th>入住人数</th>
-					<th>价格</th>
-					<th>是否到账</th>
-					<th>到账时间</th>
+					<th lang>serial</th>
+					<th lang>patform</th>
+					<th lang>orderNumber</th>
+					<th lang>hotelname</th>
+					<th lang>roomNumber</th>
+					<th lang>name</th>
+					<th lang>phone</th>
+					<th lang>checkin</th>
+					<th lang>checkout</th>
+					<th lang>checknumber</th>
+					<th lang>Price</th>
+					<th lang>account</th>
+					<th lang>payment</th>
 				</tr>
 				<c:forEach items="${list.result}" var="item">
 					<tr>

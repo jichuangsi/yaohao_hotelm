@@ -27,6 +27,7 @@
 
 		<script type="text/javascript" src="${ctx}/js/page.js"></script>
 		<link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 
 	</head>
 	<style>
@@ -55,6 +56,14 @@
 		}
 	</style>
 	<body>
+	<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+		<button class="btn btn-small btn-success"id="enBtn">
+			English
+		</button>
+		<button class="btn btn-small btn-success"id="zhBtn">
+			简体中文
+		</button>
+	</div>
 	<div class="x-body">
 		<div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
 			<form class="layui-form layui-col-md12" >
@@ -74,9 +83,7 @@
 				<div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
 			</form>
 			<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-				<div class="layui-btn layui-btn-sm layui-btn-normal toadd" >
-					新增
-				</div>
+				<div class="layui-btn layui-btn-sm layui-btn-normal toadd" >add</div>
 			</div>
 		</div>
 
@@ -84,20 +91,20 @@
 			<table class="layui-table">
 				<thead>
 				<tr>
-					<th>序号</th>
-					<th>平台</th>
-					<th>订单号</th>
-					<th>酒店名</th>
-					<th>房间号</th>
-					<th>旅客姓名</th>
-					<th>联系电话</th>
-					<th>入住时间</th>
-					<th>退房时间</th>
-					<th>入住人数</th>
-					<th>价格</th>
-					<th>是否到账</th>
-					<th>到账时间</th>
-					<th>操作</th>
+					<th lang>serial</th>
+					<th lang>patform</th>
+					<th lang>orderNumber</th>
+					<th lang>hotelname</th>
+					<th lang>roomNumber</th>
+					<th lang>name</th>
+					<th lang>phone</th>
+					<th lang>checkin</th>
+					<th lang>checkout</th>
+					<th lang>checknumber</th>
+					<th lang>Price</th>
+					<th lang>account</th>
+					<th lang>payment</th>
+					<th lang>operation</th>
 				</tr>
 				<c:forEach items="${list.result}" var="item">
 					<tr>
@@ -118,30 +125,30 @@
 							<td>(CNY)${item.money}</td>
 						</c:if>
 						<c:if test="${item.isdao==1}"><%--javascript:window.open('${ctx}/Hotelm/updaDao.do?id=${item.id}')--%>
-							<td onclick="change(${item.id})">否</td>
+							<td onclick="change(${item.id})" lang>no</td>
 						</c:if>
 						<c:if test="${item.isdao==2}">
-							<td>是</td>
+							<td lang>yes</td>
 						</c:if>
 						<td>${item.daotime}</td>
 						<td>
 							<input type="hidden" name="id" value="${item.id}" /><%--//获取这个值就可以--%>
 							<c:if test="${item.status==1}"><%--//未确认 onclick="javascript:window.open('${ctx}/Hotelm/updateStatus.do?id=${item.id}&status=2')"--%>
 								<span class=" layui-btn layui-btn-normal layui-btn-sm"
-									  onclick="checkin(${item.id},2)">确认</span><%--//或者把这个值放this里面id--%>
-								<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick=" checkin(${item.id},3)" >撤销</span>
+									  onclick="checkin(${item.id},2)" lang>confirm</span><%--//或者把这个值放this里面id--%>
+								<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick=" checkin(${item.id},3)"  lang>Revoke</span>
 							</c:if>
 							<c:if test="${item.status==2}"><%--//已确认确认--%>
-							<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},4)">入住</span>
+							<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},4)" lang>ins</span>
 						</c:if>
 							<c:if test="${item.status==3}"><%--//已撤销--%>
-							<span class=" layui-btn layui-btn-normal layui-btn-sm layui-bg-gray">已撤销</span>
+							<span class=" layui-btn layui-btn-normal layui-btn-sm layui-bg-gray" lang>rescinded</span>
 						</c:if>
 						<c:if test="${item.status==4}"><%--//已入住--%>
-						<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},5)">退房</span>
+						<span class=" layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(${item.id},5)" lang>out</span>
 						</c:if>
 							<c:if test="${item.status==5}"><%--//已入住--%>
-								<span class=" layui-btn layui-btn-normal layui-btn-sm layui-bg-gray">已退房</span>
+								<span class=" layui-btn layui-btn-normal layui-btn-sm layui-bg-gray" lang>checkedout</span>
 							</c:if>
 						</td>
 
@@ -166,78 +173,78 @@
 	<div id="add_apar" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
 			<div class="layui-form-item">
-				<label class="layui-form-label">订单：</label>
+				<label class="layui-form-label"><span lang>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="hidden" name="id"/>
-					<input type="text" name="orderNumber" value="7079060" id="order" class="layui-input " lay-verify="required" onblur="order()">
+					<input type="text" name="orderNumber" value="" id="order" class="layui-input " lay-verify="required" onblur="order()">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">平台：</label>
+				<label class="layui-form-label"><span lang>patform</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="paltform" value="7079060" class="layui-input " lay-verify="required">
+					<input type="text" name="paltform" value="" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">酒店：</label>
+				<label class="layui-form-label"><span lang>hotelname</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="hotelm" value="7079060" class="layui-input " lay-verify="required">
+					<input type="text" name="hotelm" value="" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">房间号：</label>
+				<label class="layui-form-label"><span lang>roomNumber</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="roomNumber" value="7079060" class="layui-input " lay-verify="required">
+					<input type="text" name="roomNumber" value="" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">旅客姓名：</label>
+				<label class="layui-form-label"><span lang>name</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="pname" value="7079060" class="layui-input " lay-verify="required">
+					<input type="text" name="pname" value="" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">联系方式：</label>
+				<label class="layui-form-label"><span lang>phone</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="phone"  value="13098987876"class="layui-input " lay-verify="required">
+					<input type="text" name="phone"  value=""class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">币种：</label>
+				<label class="layui-form-label"><span lang>currency</span>：</label>
 				<div class="layui-input-block widths">
 					<select name="currency" lay-verify="required">
 						<option value="-1"></option>
-						<option value="1">人民币</option>
-						<option value="2">菲律宾币</option>
+						<option value="1">RMB</option>
+						<option value="2">PHP</option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">价格：</label>
+				<label class="layui-form-label"><span lang>Price</span>：</label>
 				<div class="layui-input-block widths">
-					<input type="text" name="money"  value="7079060"class="layui-input " lay-verify="required">
+					<input type="text" name="money"  value=""class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">入住时间：</label>
+				<label class="layui-form-label"><span lang>checkin</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="text" name="checkintime" class="layui-input time" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">退房时间：</label>
+				<label class="layui-form-label"><span lang>checkout</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="text" name="checkouttime" class="layui-input time" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">入住人数：</label>
+				<label class="layui-form-label"><span lang>checknumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="text" name="checkinNumber" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">是否到账：</label>
+				<label class="layui-form-label"><span lang>account</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="radio" name="isdao" value="2" title="是">
 					<input type="radio" name="isdao" value="1" title="否" checked="">
@@ -245,7 +252,7 @@
 			</div>
 			<div class="layui-form-item">
 				<div class="layui-input-block">
-					<div class="layui-btn" lay-submit lay-filter="update_Pwd">添加</div>
+					<div class="layui-btn" lay-submit lay-filter="update_Pwd" lang>Submission</div>
 				</div>
 			</div>
 		</form>
@@ -254,62 +261,62 @@
 	<div id="modify_apar" class="layui-fluid">
 		<form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
 			<div class="layui-form-item">
-				<label class="layui-form-label">平台：</label>
+				<label class="layui-form-label"><span lang>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="firstPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">酒店：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="firstPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">房间号：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">旅客姓名：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">币种：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="radio" name="sex" value="" title="人民币-￥">
 					<input type="radio" name="sex" value="男" title="菲律宾币-₱">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">参考价：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">入住时间：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input time" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">退房时间：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input time" lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">入住人数：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input " lay-verify="required">
 				</div>
 			</div>
 			<div class="layui-form-item">
-				<label class="layui-form-label">参考价：</label>
+				<label class="layui-form-label"><span>orderNumber</span>：</label>
 				<div class="layui-input-block widths">
 					<input type="password" name="secondPwd" class="layui-input " lay-verify="required">
 				</div>

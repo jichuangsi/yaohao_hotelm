@@ -51,6 +51,14 @@
     }
 </style>
 <div class="x-body">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+        <button class="btn btn-small btn-success"id="enBtn">
+            English
+        </button>
+        <button class="btn btn-small btn-success"id="zhBtn">
+            简体中文
+        </button>
+    </div>
         <table class="layui-table">
             <thead>
             <%--<input type="hidden" id="excel" value="${time}">
@@ -61,19 +69,17 @@
             </tr>--%>
             <tr>
                 <th colspan="7">
-                    <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>
-                        add
-                    </div>
+                    <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
                 </th>
             </tr>
             <tr>
-                <th>序号</th>
-                <th>酒店</th>
-                <th>房间Room</th>
-                <th>姓名</th>
-                <th>电话</th>
-                <th>日期</th>
-                <th>提成</th>
+                <th lang>serial</th>
+                <th lang>hotelm</th>
+                <th lang>roomNumber</th>
+                <th lang>name</th>
+                <th lang>phone</th>
+                <th lang>date</th>
+                <th lang>ticheng</th>
             </tr>
             <c:forEach items="${list.result}" var="item">
             <tr>
@@ -95,7 +101,7 @@
 <div id="add_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off">
         <div class="layui-form-item">
-            <label class="layui-form-label">房间：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
                 <select name="roomId" lay-verify="required">
                     <c:forEach items="${rlist}" var="item">
@@ -105,25 +111,25 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">姓名：</label>
+            <label class="layui-form-label"><span lang>name</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="name" id="name"class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">电话：</label>
+            <label class="layui-form-label"><span lang>phone</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="phoneName" id="phoneName" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">花费：</label>
+            <label class="layui-form-label"><span lang>consumption</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="money" id="money" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">时间(精确到日)：</label>
+            <label class="layui-form-label"><span lang>time</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="time" class="layui-input time" lay-verify="required">
             </div>
@@ -131,7 +137,7 @@
 
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <div class="layui-btn" lay-submit lay-filter="add_Pwd">添加</div>
+                <div class="layui-btn" lay-submit lay-filter="add_Pwd" lang>Submission</div>
             </div>
         </div>
     </form>

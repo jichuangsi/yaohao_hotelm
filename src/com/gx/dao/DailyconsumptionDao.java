@@ -18,4 +18,6 @@ public interface DailyconsumptionDao {
                                  @Param("supplierId")Integer supplierId);
 
     public List<DailyconsumptionPo> list();
+
+    public Integer updateNumberByRoomId(@Param("roomId")Integer roomId,@Param("roomNumber")String roomNumber);
 }

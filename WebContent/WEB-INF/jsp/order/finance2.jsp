@@ -27,7 +27,7 @@
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <script src="${ctx}/js/weeklyCalendar.js"></script>
 
-
+    <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
     .x-body {
@@ -41,29 +41,37 @@
 </style>
 <body>
 <div class="x-body">
+    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
+        <button class="btn btn-small btn-success"id="enBtn">
+            English
+        </button>
+        <button class="btn btn-small btn-success"id="zhBtn">
+            简体中文
+        </button>
+    </div>
     <table class="layui-table">
         <input type="hidden" id="excel" value="${time}">
         <thead>
         <tr>
-            <th colspan="6">日期date:${time}<%--<span id="span"></span>--%></th>
-            <th colspan="9" id="exc">导出</th>
+            <th colspan="6" lang>date:${time}<%--<span id="span"></span>--%></th>
+            <th colspan="9" id="exc" lang>excel</th>
         </tr>
         <tr>
-            <th>序号</th>
-            <th>房间Room</th>
-            <th>订单收入(PHP)</th>
-            <th>订单收入(RMB)</th>
-            <th>房租rent(PHP)</th>
-            <th>水费</th>
-            <th>电费</th>
-            <th>维修费</th>
-            <th>网络</th>
-            <th>大厦管理费</th>
-            <th>被铺清洗费</th>
-            <th>日常用品</th>
-            <th>其他费用</th>
-            <th>小计</th>
-            <th>操作</th>
+            <th lang>serial</th>
+            <th lang>roomNumber</th>
+            <th><span lang>revenue</span>(PHP)</th>
+            <th><span lang>revenue</span>(RMB)</th>
+            <th><span lang>rent</span>(PHP)</th>
+            <th lang>water</th>
+            <th lang>electricity</th>
+            <th lang>maintenance</th>
+            <th lang>network</th>
+            <th lang>expense</th>
+            <th lang>cleaning</th>
+            <th lang>supplies</th>
+            <th lang>other</th>
+            <th lang>subtotal</th>
+            <th lang>operation</th>
             <%--<th width="200px">备注</th>--%>
         </tr>
         <c:forEach items="${list}" var="item">
@@ -101,7 +109,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th>提成</th>
+            <th lang>ticheng</th>
             <th>${booking}</th>
             <th></th>
             <th></th>
@@ -288,46 +296,46 @@
 <div id="add_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="mod_pwd">
         <div class="layui-form-item">
-            <input name="id" type="text" value="">
+            <input name="id" type="hidden" value="">
             <input name="yearM" type="hidden" value="">
-            <label class="layui-form-label">房租：</label>
+            <label class="layui-form-label"><span lang>rent</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="rent" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">水费：</label>
+            <label class="layui-form-label"><span lang>water</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="water" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">电费：</label>
+            <label class="layui-form-label"><span lang>electricity</span>：</label>
             <div class="layui-input-block widths">
                 <input type="password" name="electricity" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">维修费：</label>
+            <label class="layui-form-label"><span lang>maintenance</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="maintenanceCost" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">网费：</label>
+            <label class="layui-form-label"><span lang>network</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="network" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">大厦管理费：</label>
+            <label class="layui-form-label"><span lang>expense</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="buildingManagementFee" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <div class="layui-btn" lay-submit lay-filter="update_add">提交</div>
+                <div class="layui-btn" lay-submit lay-filter="update_add" lang>Submission</div>
             </div>
         </div>
     </form>

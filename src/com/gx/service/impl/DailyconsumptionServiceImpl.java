@@ -43,4 +43,9 @@ private DailyconsumptionDao dailyconsumptionDao;
     public List<DailyconsumptionPo> list() {
         return dailyconsumptionDao.list();
     }
+
+    @Override
+    public Integer updateNumberByRoomId(Integer roomId, String roomNumber) {
+        return dailyconsumptionDao.updateNumberByRoomId(roomId, roomNumber);
+    }
 }
