@@ -425,7 +425,7 @@
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
-                    tableStr += '<td>'+接单提成walk in guest dapfasom+'</td>';
+                    tableStr += '<td>接单提成walkinguestdapfasom</td>';
                     tableStr += '<td>' + res.booking + '</td>';
                     tableStr += '</tr>';
 
@@ -442,8 +442,8 @@
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
-                    tableStr += '<td>'+合计Total（PHP）+'</td>';
-                    tableStr += '<td>' + res.booking + '</td>';
+                    tableStr += '<td>'+合计Total(PHP)+'</td>';
+                    tableStr += '<td>' + res.sumPHP + '</td>';
                     tableStr += '</tr>';
 
                     tableStr += '<tr>';
@@ -459,14 +459,14 @@
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
-                    tableStr += '<td>'+提成+'</td>';
-                    tableStr += '<td>' + res.booking + '</td>';
+                    tableStr += '<td>'+合计Total(CNY)+'</td>';
+                    tableStr += '<td>' + res.sumCNY + '</td>';
                     tableStr += '</tr>';
                 }
                 tableStr +='</table>';
                 //添加到div中
                 document.getElementById("exportBtn").onclick = function() {
-                    exporExcel("考勤记录", tableStr);
+                    exporExcel(time+"财务报表", tableStr);
                 }
             }
         });
