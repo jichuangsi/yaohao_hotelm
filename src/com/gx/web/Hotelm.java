@@ -260,7 +260,7 @@ public class Hotelm {
 
 
     ////////////////////////////////////导出exxcel
-    //财务报表
+   /* //财务报表
     @ResponseBody
     @RequestMapping("/excel")
     public void excel(String time,String orderNumber,String pname,Integer currentPage) {
@@ -283,7 +283,7 @@ public class Hotelm {
         List<PublicOrderPo> list=publicOrderService.selectfinance(time2,orderNumber, pname,currentPage,vo.getPageSize());
 
 
-        /*Integer count=stayRegisterService.countAll();*/
+        *//*Integer count=stayRegisterService.countAll();*//*
         //创建excel表的表头
         String[] headers = {"序号", "平台", "订单号", "酒店","房间Room", "旅客 ", "电话 phone", "入住时间checkin"
                 , "退房时间", "入住人数", "价格"};
@@ -446,11 +446,11 @@ public class Hotelm {
             // TODO 自动生成的 catch 块
             e.printStackTrace();
         }
-       /* mv=new ModelAndView("redirect:/Order/financial.do");
-        return mv;*/
-       /* Gson gson = new Gson();
-        return gson.toJson(1);*/
-    }
+       *//* mv=new ModelAndView("redirect:/Order/financial.do");
+        return mv;*//*
+       *//* Gson gson = new Gson();
+        return gson.toJson(1);*//*
+    }*/
 
 
     /**
@@ -484,5 +484,200 @@ public class Hotelm {
                 return paths + "\\" + filename;
             }
         }
+    }
+
+    //财务报表
+    @ResponseBody
+    @RequestMapping("/excel")
+    public Object excel(String time,String orderNumber,String pname,Integer currentPage) {
+        ModelAndView mv = null;
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        String time2=null;
+        time2=time;
+        FinancePo fp=new FinancePo();
+        Page<PublicOrderPo> vo=new Page<PublicOrderPo>();
+        List<FinancePo> fpl=new ArrayList<FinancePo>();
+        double sumPHP=0d;
+        double sumCNY=0d;
+        double PHP=0d;
+        double RMB=0d;
+        //全部订单
+        List<PublicOrderPo> list=publicOrderService.selectfinance(time2,orderNumber, pname,currentPage,vo.getPageSize());
+
+        Gson gson=new Gson();
+        return gson.toJson(list);
+/*
+
+        *//*Integer count=stayRegisterService.countAll();*//*
+        //创建excel表的表头
+        String[] headers = {"序号", "平台", "订单号", "酒店","房间Room", "旅客 ", "电话 phone", "入住时间checkin"
+                , "退房时间", "入住人数", "价格"};
+        //创建Excel工作簿
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //创建一个工作表sheet
+        HSSFSheet sheet = workbook.createSheet();
+
+        //字体
+        // 1.生成字体对象
+        Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 11);
+        font.setFontName("宋体");
+
+        // 2.生成样式对象
+        CellStyle style = workbook.createCellStyle();
+        style.setFont(font); // 调用字体样式对象
+        style.setWrapText(true);//自动换行
+
+
+        //创建第一行
+        HSSFRow row = sheet.createRow(0);
+        //定义一个单元格,相当于在第一行插入了三个单元格值分别是
+
+        HSSFCell cell = null;
+        row.setHeightInPoints(30);//目的是想把行高设置成20px
+
+        //插入第一行数据
+        for (int i = 0; i < headers.length; i++) {
+            cell = row.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(style);
+        }
+        int cou = 0;
+        //追加数据
+        HSSFRow nextrow = null;
+        for (int i = 1; i <= list.size(); i++) {
+            cou++;
+
+            if (list.get(i - 1).getCurrency() == 1) {
+                sumCNY=sumCNY+list.get(i - 1).getMoney();
+            } else if (list.get(i - 1).getCurrency() == 2) {
+                sumPHP=sumPHP+list.get(i - 1).getMoney();
+            }
+
+            if (list.get(i - 1).getCurrency() == 1) {
+                if (list.get(i - 1).getIsdao() == 2) {
+                    RMB=RMB+list.get(i - 1).getMoney();
+                }
+            } else if (list.get(i - 1).getCurrency() == 2) {
+                if (list.get(i - 1).getIsdao() == 1) {
+                    if (list.get(i - 1).getIsdao() == 2) {
+                        PHP=PHP+list.get(i - 1).getMoney();
+                    }
+                }
+            }
+
+
+            nextrow = sheet.createRow(i);
+            HSSFCell cell2 = nextrow.createCell(0);
+            // 3.单元格应用样式
+            cell2.setCellStyle(style);
+            cell2.setCellValue(i);
+            cell2 = nextrow.createCell(1);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getPaltform());
+            cell2 = nextrow.createCell(2);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getOrderNumber());
+            cell2 = nextrow.createCell(3);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getHotelm());
+            cell2 = nextrow.createCell(4);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getRoomNumber());
+            cell2 = nextrow.createCell(5);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getPname());
+            cell2 = nextrow.createCell(6);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getPhone());
+            cell2 = nextrow.createCell(7);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getCheckintime());
+            cell2 = nextrow.createCell(8);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getCheckouttime());
+            cell2 = nextrow.createCell(9);
+            cell2.setCellStyle(style);
+            cell2.setCellValue(list.get(i - 1).getCheckinNumber());
+            cell2 = nextrow.createCell(10);
+            cell2.setCellStyle(style);
+            if (list.get(i - 1).getCurrency() == 1) {
+                cell2.setCellValue("￥" + list.get(i - 1).getMoney());
+            } else if (list.get(i - 1).getCurrency() == 2) {
+                cell2.setCellValue("₱" + list.get(i - 1).getMoney());
+            }
+            cell2 = nextrow.createCell(11);
+
+
+            sheet.setColumnWidth(i, 25 * 256);
+            if (cou == list.size()) {
+                nextrow = sheet.createRow(list.size()+1);
+                cell2 = nextrow.createCell(7);
+                cell2.setCellStyle(style);
+                cell2.setCellValue("合计PHP");
+                cell2 = nextrow.createCell(8);
+                cell2.setCellStyle(style);
+                cell2.setCellValue(sumPHP);
+
+                cell2 = nextrow.createCell(9);
+                cell2.setCellStyle(style);
+                cell2.setCellValue("合计RMB");
+                cell2 = nextrow.createCell(10);
+                cell2.setCellStyle(style);
+                cell2.setCellValue(sumCNY);
+
+                nextrow = sheet.createRow(list.size()+2);
+                cell2 = nextrow.createCell(7);
+                cell2.setCellStyle(style);
+                cell2.setCellValue("到账PHP");
+                cell2 = nextrow.createCell(8);
+                cell2.setCellStyle(style);
+                cell2.setCellValue(PHP);
+
+                cell2 = nextrow.createCell(9);
+                cell2.setCellStyle(style);
+                cell2.setCellValue("到账RMB");
+                cell2 = nextrow.createCell(10);
+                cell2.setCellStyle(style);
+                cell2.setCellValue(RMB);
+
+
+
+                sheet.setColumnWidth(cou+4, 20 * 256);
+                sheet.setColumnWidth(cou+5, 20 * 256);
+                sheet.setColumnWidth(cou+6, 20 * 256);
+            }
+
+        }
+
+        //创建一个文件
+        File file=null;
+        String name=getFileName("d:/hotelm/",time2+"财务报表.xls",0);
+        file = new File(name);
+
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            // TODO 自动生成的 catch 块
+            e.printStackTrace();
+        }
+        //将内容存盘
+        FileOutputStream stream;
+        try {
+            stream = FileUtils.openOutputStream(file);
+            workbook.write(stream);
+            stream.close();
+        } catch (IOException e) {
+            // TODO 自动生成的 catch 块
+            e.printStackTrace();
+        }*/
+       /* mv=new ModelAndView("redirect:/Order/financial.do");
+        return mv;*/
+       /* Gson gson = new Gson();
+        return gson.toJson(1);*/
     }
 }

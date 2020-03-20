@@ -60,10 +60,9 @@
 			</form>
 
 		</div>
-
+		<%--<a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a></p>--%>
 	<div class="x-body">
-		<p id="exc" value="导出">
-			<a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a></p>
+		<p id="exc" value="导出" onclick="setExcel()" lang>excel</p>
 		<table class="layui-table">
 			<thead>
 			<tr>
@@ -211,68 +210,52 @@
 
 	<script>
         function setExcel() {
-           /* var data = {
-                dpid: getUser().deptId,
-                openid: getUser().wechat,
-                timeStart: dateStart,
-                timeEnd: dateEnd
-            }*/
+            var time=document.getElementById("time").value;
+            var orderNumber=document.getElementById("orderNumber").value;
+            var pname=document.getElementById("pname").value;
             $.ajax({
                 type: "post",
-                url: httpUrl() + "/kq/importDailyList?dpid=" + getUser().deptId + "&openid=" + getUser().wechat + "&timeStart=" + dateStart + "&timeEnd=" + dateEnd,
+                url: '${ctx}/Hotelm/excel.do?time='+time+'&orderNumber='+orderNumber+'&pname='+pname,
                 async: false,
-                headers: {
-                    'content-type': 'application/x-www-form-urlencoded',
-                    'accessToken': getToken()
-                },
                 contentType: "application/json",
                 dataType: 'json',
                 success: function(res) {
                     var tableStr = '<table border="0" cellspacing="" cellpadding="">'
                     tableStr += '<tr>';
                     tableStr += '<th width="15%">' + '序号' + '</td>';
-                    tableStr += '<th width="15%">' + '姓名' + '</td>';
-                    tableStr += '<th width="15%">' + '部门' + '</td>';
-                    tableStr += '<th width="15%">' + '考勤' + '</td>';
-                    tableStr += '<th width="15%">' + '打卡时间' + '</td>';
-                    tableStr += '<th width="15%">' + '考勤时间' + '</td>';
-                    tableStr += '<th width="15%">' + '状态' + '</td>';
+                    tableStr += '<th width="15%">' + '平台' + '</td>';
+                    tableStr += '<th width="15%">' + '订单号' + '</td>';
+                    tableStr += '<th width="15%">' + '酒店' + '</td>';
+                    tableStr += '<th width="15%">' + '房间Room' + '</td>';
+                    tableStr += '<th width="15%">' + '旅客' + '</td>';
+                    tableStr += '<th width="15%">' + '电话' + '</td>';
+                    tableStr += '<th width="15%">' + '入住时间' + '</td>';
+                    tableStr += '<th width="15%">' + '退房时间' + '</td>';
+                    tableStr += '<th width="15%">' + '入住人数' + '</td>';
+                    tableStr += '<th width="15%">' + '价格' + '</td>';
                     tableStr += '</tr>';
                     var len = res.data.length;
                     var data = res.data;
                     for(var i = 0; i < len; i++) {
                         tableStr += '<tr>';
                         tableStr += '<td>' + i+1 + '</td>';
-                        tableStr += '<td>' + data[i].peopleName + '</td>';
-                        tableStr += '<td>' + data[i].department + '</td>';
-                        tableStr += '<td>' + data[i].jurisdiction + '</td>';
-                        if(data[i].stuas == 1) {
-                            tableStr += '<td>' + '上班打卡' + '</td>';
-                        } else if(data[i].stuas == 2) {
-                            tableStr += '<td>' + '下班打卡' + '</td>';
-                        }
-                        tableStr += '<td>' + new Date(+new Date(data[i].chockinTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') + '</td>'
-                        tableStr += '<td>' + new Date(+new Date(data[i].time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') + '</td>'
-                        if(data[i].stuas2 == 0) {
-                            tableStr += '<td>' + '正常' + '</td>';
-                        } else if(data[i].stuas2 == 1) {
-                            tableStr += '<td>' + '考勤异常' + '</td>';
-                        } else if(data[i].stuas2 == 2) {
-                            tableStr += '<td>' + '迟到' + '</td>';
-                        } else if(data[i].stuas2 == 3) {
-                            tableStr += '<td>' + '早退' + '</td>';
-                        }
+                        tableStr += '<td>' + data[i].paltform + '</td>';
+                        tableStr += '<td>' + data[i].orderNumber + '</td>';
+                        tableStr += '<td>' + data[i].hotelm + '</td>';
+                        tableStr += '<td>' + data[i].paltform + '</td>';
+                        tableStr += '<td>' + data[i].roomNumber + '</td>';
+                        tableStr += '<td>' + data[i].pname + '</td>';
+                        tableStr += '<td>' + data[i].phone + '</td>';
+                        tableStr += '<td>' + data[i].checkintime + '</td>';
+                        tableStr += '<td>' + data[i].checkouttime + '</td>';
+                        tableStr += '<td>' + data[i].checkinNumber + '</td>';
+                        tableStr += '<td>' + data[i].money + '</td>';
                         tableStr += '</tr>';
-                    }
-                    if(len == 0) {
-                        tableStr += '<tr style="text-align: center">';
-                        tableStr += '<td colspan="6">' + '暂无记录' + '</font></td>';
-                        tableStr += '</tr>'
                     }
                     tableStr +='</table>';
                     //添加到div中
                     document.getElementById("exportBtn").onclick = function() {
-                        exporExcel("考勤记录", tableStr);
+                        exporExcel(time+"合约酒店财务报表", tableStr);
                     }
                 }
             });
