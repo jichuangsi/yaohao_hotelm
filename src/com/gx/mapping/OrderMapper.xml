@@ -337,11 +337,15 @@
       UPDATE `order` SET `isdao`=2,`daoTime`=#{time,jdbcType=TIMESTAMP} WHERE `id`=#{id,jdbcType=INTEGER}
   </update>
 
+  <update id="updateInEnd">
+      UPDATE `order` SET `in`=#{start,jdbcType=VARCHAR},`out`=#{end,jdbcType=VARCHAR} WHERE id=#{id,jdbcType=INTEGER}
+  </update>
+
     <select id="selectDayRoom" resultType="com.gx.vo.DayRoomNumberVo">
         SELECT r.id AS roomId,r.*,s.`supplierName`,o.`checkinTime`,o.`checkoutTime`,s.id AS supplierId,o.`checkinNumber`
         FROM `order` o INNER JOIN `room` r ON o.`roomId`=r.id INNER JOIN `supplier` s ON s.id=r.`supplierID`
-        WHERE DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') >DATE_FORMAT(`checkinTime`, '%Y-%m-%d')
-      AND DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') &lt;=DATE_FORMAT(`checkoutTime`, '%Y-%m-%d')
+        WHERE DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') &gt;= DATE_FORMAT(`checkinTime`, '%Y-%m-%d')
+      AND DATE_FORMAT( #{time,jdbcType=TIMESTAMP}, '%Y-%m-%d') &lt; DATE_FORMAT(`checkoutTime`, '%Y-%m-%d')
         AND `roomId`=#{roomId,jdbcType=INTEGER} AND o.status!=6
   </select>
 

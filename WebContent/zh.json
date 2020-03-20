@@ -85,7 +85,8 @@
 	"userName":"管理员",
 	"password":"密码",
 	"rpassword":"确认密码",
-	"anser":"回答"
+	"anser":"回答",
+	"question":"酒店问题"
 
 
 }

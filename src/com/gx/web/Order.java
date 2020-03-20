@@ -57,6 +57,8 @@ public class Order {
     private ConsumptiontypeService consumptiontypeService;
     @Autowired
     private BookingcommissionService bookingcommissionService;
+    @Autowired
+    private  QuestionService questionService;
 
 
     ///自有公寓
@@ -445,7 +447,7 @@ public class Order {
     //修改订单状态
     @ResponseBody
     @RequestMapping("updateStatus")
-    public Object updateStatus(String orderNumber,Integer status){
+    public Object updateStatus(String orderNumber,Integer status,String time){
         ModelAndView mv=null;
         Integer counts=0;
         if (status==5){//入住
@@ -457,11 +459,17 @@ public class Order {
         OrderPo orderPo=orderService.selectByOrderNumber(orderNumber);//根据订单号查询订单
         RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
         if (status==6){//退房
+            String satrt=time.substring(0,time.lastIndexOf("-"));
+            String end=time.substring(time.lastIndexOf("-")+1,time.length());
+            if (satrt!=null && satrt!="" ||end!=null && end!=""){
+                counts=orderService.updateInEnd(satrt,end,orderPo.getId());
+            }
+
             //退房就到账
             Timestamp d = new Timestamp(System.currentTimeMillis());
             counts=orderService.updateMoney(orderPo.getId(),d);
 
-          roomAndTimeService.deleteOrder(orderPo.getId());
+        /*  roomAndTimeService.deleteOrder(orderPo.getId());*/
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
             String time2 = new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
             int count=financeService.countFinanceM(time2,orderPo.getRoomId());
@@ -481,7 +489,11 @@ public class Order {
             FinancePo financePo=new FinancePo();
             financePo.setRoomId(orderPo.getRoomId());
             financePo.setRoomNumber(roomSetPo.getRoomNumber());
-            financePo.setSupplierId(roomSetPo.getSupplierID());
+            if (roomSetPo.getSupplierID()==null) {
+                financePo.setSupplierId(roomSetPo.getSupplierId());
+            }else {
+                financePo.setSupplierId(roomSetPo.getSupplierID());
+            }
                 if (orderPo.getCurrency()==1){//RMB
                     financePo.setRMB(orderPo.getMoney());
                     financePo.setYearM(time2);
@@ -541,22 +553,35 @@ public class Order {
             po.setId(po1.getId());
             counst= dailyconsumptionService.updateTimeRoom(po);
         }
-        //int id=po.getId();
         double sum=dailyconsumptionService.selectSumMoney(po.getTime(),po.getCid(),po.getRoomId(),po.getSupplierId());
-        int count=financeService.slectCountRoom();
-        double money=sum/count;
-        FinancePo po2=new FinancePo();
-        po2.setYearM(y);
-        if (po.getCid()==1){//被子清理费
-            po2.setLinenCleaningfee(money);
+        FinancePo po2=financeService.selectByyearM(y,po.getRoomId());
+        if (po2!=null) {
+            po2.setYearM(y);
+            if (po.getCid() == 1) {//被子清理费
+                po2.setLinenCleaningfee(sum);
 
-        }else if (po.getCid()==2){//日常
-            po2.setDailySupplies(money);
-        }else if (po.getCid()==3){//其他
-            po2.setOtherExpenses(money);
+            } else if (po.getCid() == 2) {//日常
+                po2.setDailySupplies(sum);
+            } else if (po.getCid() == 3) {//其他
+                po2.setOtherExpenses(sum);
+            }
+            counst = financeService.updateOtherById(po2);
+        }else {//添加
+            FinancePo ppo=new FinancePo();
+            ppo.setYearM(y);
+            ppo.setRoomId(po.getRoomId());
+            ppo.setSupplierId(po.getSupplierId());
+            ppo.setRoomNumber(r.getRoomNumber());
+            if (po.getCid() == 1) {//被子清理费
+                ppo.setLinenCleaningfee(sum);
+
+            } else if (po.getCid() == 2) {//日常
+                ppo.setDailySupplies(sum);
+            } else if (po.getCid() == 3) {//其他
+                ppo.setOtherExpenses(sum);
+            }
+            counst=financeService.insertAll(ppo);
         }
-        counst=financeService.updateOtherById(po2);
-      /*  return mv;*/
         Gson gson=new Gson();
         return gson.toJson(counst);
     }
@@ -795,15 +820,33 @@ public class Order {
     }
 
     //查询问题
-    @RequestMapping("financial")
+    @RequestMapping("question")
     public ModelAndView question(String name,Integer currentPage){
         ModelAndView mv=null;
-        mv=new ModelAndView("/order/finance2");
-
+        mv=new ModelAndView("/order/question");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        List<QuestionPo> list=questionService.listall(name);
+        mv.addObject("list",list);
         return mv;
     }
 
+    //查询问题
+    @ResponseBody
+    @RequestMapping("addquestion")
+    public Object addquestion(QuestionPo questionPo){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/order/question");
 
+        questionPo.setCreateTime(System.currentTimeMillis());
+        Integer count=questionService.inserAll(questionPo);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+       // return mv;
+    }
 
     ////////////////////////////////////共有////////////////////////////////////////////////////////////////////////////
 
@@ -987,8 +1030,8 @@ public class Order {
         for (int i = 1; i <= list.size(); i++) {
             cou++;
             nextrow = sheet.createRow(i);
-            nextrow.setHeightInPoints(20);
-       /*     nextrow.setHeight((short) 20);  */            //设置行高
+            nextrow.setHeightInPoints(40);
+          /*  nextrow.setHeight((short) 40);              //设置行高*/
             HSSFCell cell2 = nextrow.createCell(0);
             // 3.单元格应用样式
             cell2.setCellStyle(style);
@@ -1030,12 +1073,18 @@ public class Order {
             cell2.setCellStyle(style);
             cell2.setCellValue(list.get(i - 1).getOtherExpenses());
             cell2 = nextrow.createCell(13);
+            double summ=list.get(i - 1).getPHP()-list.get(i - 1).getRent()-list.get(i - 1).getWater()-list.get(i - 1).getElectricity()
+                    -list.get(i - 1).getMaintenanceCost()-list.get(i - 1).getNetwork()-list.get(i - 1).getBuildingManagementFee()
+                    -list.get(i - 1).getLinenCleaningfee()-list.get(i - 1).getDailySupplies()-list.get(i - 1).getOtherExpenses();
+            cell2.setCellStyle(style);
+            cell2.setCellValue(summ);
+            cell2 = nextrow.createCell(14);
 
 
             sheet.setColumnWidth(i, 25 * 256);
             if (cou == list.size()) {
                 nextrow = sheet.createRow(list.size()+1);
-             /*   nextrow.setHeightInPoints(50);*/
+                nextrow.setHeightInPoints(50);
                 cell2 = nextrow.createCell(12);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("接单提成walk in guest dapfasom");
@@ -1044,7 +1093,7 @@ public class Order {
                 cell2.setCellValue(booking);
 
                 nextrow = sheet.createRow(list.size()+2);
-                nextrow.setHeightInPoints(20);
+                nextrow.setHeightInPoints(40);
                 cell2 = nextrow.createCell(1);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("合计");
@@ -1056,7 +1105,7 @@ public class Order {
                 cell2.setCellValue(sumPHP);
 
                 nextrow = sheet.createRow(list.size()+3);
-                nextrow.setHeightInPoints(20);
+                nextrow.setHeightInPoints(40);
                 cell2 = nextrow.createCell(12);
                 cell2.setCellStyle(style);
                 cell2.setCellValue("合计Total（CNY）" );

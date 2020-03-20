@@ -312,7 +312,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>electricity</span>：</label>
             <div class="layui-input-block widths">
-                <input type="password" name="electricity" class="layui-input " lay-verify="required">
+                <input type="text" name="electricity" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">

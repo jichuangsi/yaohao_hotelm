@@ -276,6 +276,8 @@
 	    element.render();
 
 
+
+
 	    window.checkin=function (value) {
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -297,25 +299,41 @@
             })
         }
 
-        window.checkout=function (value) {
-            $.ajax({
-                cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
-                type: "POST",                                           //上面3行都是必须要的
-                url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
-                data: "orderNumber="+value+"&status=6",                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
-                async: false,                                          // 是否 异步 提交
-                success: function (result) {                          // 不出现异常 进行立面方
-                    if (result != 1) {
-                        /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
-                        document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
-                        document.getElementById("room").focus();      // 给这个id的文本框提供焦点
-                        return false;
-                    } else {
-                        location.href = '${ctx}/Order/myorder.do';
-                        return true;
+		//退房
+        window.checkout=function (value2) {
+		var time;
+            layer.prompt({
+                formType: 0,
+                value: '12:00-14:00',
+                title: '请输入值',
+                area: ['800px', '350px'] //自定义文本域宽高
+            }, function(value, index, elem){
+                time=value;
+               if(value.indexOf ("-")== -1) {
+                   alert("格式不正确"); //得到value
+			   }
+                alert(value); //得到value
+                $.ajax({
+                    cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                    type: "POST",                                           //上面3行都是必须要的
+                    url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
+                    data: "orderNumber="+value2+"&status=6&time="+time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                    async: false,                                          // 是否 异步 提交
+                    success: function (result) {                          // 不出现异常 进行立面方
+                        if (result != 1) {
+                            /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                            document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
+                            document.getElementById("room").focus();      // 给这个id的文本框提供焦点
+                            return false;
+                        } else {
+                            location.href = '${ctx}/Order/myorder.do';
+                            return true;
+                        }
                     }
-                }
-            })
+                })
+                layer.close(index);
+            });
+
         }
 	});
 

@@ -91,6 +91,9 @@ public interface OrderDao {
 
     public List<OrderTimeVo> selectRoomByins(@Param("allList")List<Integer> allList);
 
+    public Integer updateInEnd(@Param("start")String start,@Param("end")String end,
+                               @Param("id")Integer id);
+
     /////////////////////////////////////////////////////////////////////////////////////
     public List<OrderDetailsVo> allContractOrder(@Param("name")String name,@Param("orderNumber")String orderNumber,
                                                  @Param("start")int start, @Param("size")int size);

@@ -75,13 +75,15 @@
       UPDATE `finance` SET linenCleaningfee=#{linenCleaningfee,jdbcType=DOUBLE},
 			                  dailySupplies=#{dailySupplies,jdbcType=DOUBLE},
 			                   otherExpenses=#{otherExpenses,jdbcType=DOUBLE}
-                   WHERE `yearM`= #{yearM,jdbcType=VARCHAR}
+                   WHERE `yearM`= #{yearM,jdbcType=VARCHAR} AND `roomId`=#{roomId,jdbcType=INTEGER}
    </update>
 
     <delete id="deleteById" parameterType="java.lang.Integer">
     DELETE  `finance` WHERE id = #{id,jdbcType=INTEGER}
   </delete>
-
+<!--<select id="selectYearId"  resultType="com.gx.po.FinancePo">
+     SELECT * FROM `finance` WHERE `yearM` = #{yearM,jdbcType=VARCHAR} AND `roomId`=#{roomId,jdbcType=INTEGER}
+</select>-->
 
     <!--   分页模糊查询 -->
     <select id="pageFinance" resultType="com.gx.po.FinancePo">

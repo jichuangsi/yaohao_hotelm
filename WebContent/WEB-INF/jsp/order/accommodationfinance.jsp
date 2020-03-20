@@ -211,7 +211,7 @@
 </div>
 
 </body>
-<div id="add" class="layui-fluid">
+<div id="add" class="layui-fluid" style="display: none">
     <form class="layui-form" autocomplete="off" lay-filter="test">
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>order</span>:</label>
@@ -333,6 +333,8 @@
             shadeClose: true, //点击遮罩关闭
             content: $('#add')
         });
+        registerWords();
+        setLanguage(getCookieVal("lang"));
     }
     function date(value,value2){
         index = layer.open({
@@ -490,18 +492,19 @@
                         var slist = result.slist;
                         $('#gys').empty();
                         var gysStr = '';
+
                         $.each(slist, function (index, item) {
-                            gysStr += '<option value="' + 'item.id+">item.name</option>';
+                            gysStr += '<option value="' + 'item.id+">'+item.supplierName+'</option>';
                         });
                         $('#pt').empty();
                         var ptStr = '';
                         $.each(pList, function (index, item) {
-                            ptStr += '<option value="' + 'item.id+">item.name</option>';
+                            ptStr += '<option value="' + 'item.id+">'+item.name+'</option>';
                         });
                         $('#zh').empty();
                         var zhStr = '';
                         $.each(alist, function (index, item) {
-                            zhStr += '<option value="' + 'item.id+">item.name</option>';
+                            zhStr += '<option value="' + 'item.id+">'+item.name+'</option>';
                         });
                         $('#gys').append(gysStr);
                         $('#zh').append(zhStr);
@@ -520,7 +523,7 @@
                             listStr += '<input type="hidden" name="roomId" value=""+item.roomId+">';
                             listStr += '<div class="">'+item.supplierName+'-'+item.roomNumber+'</div></div>';
                             listStr += '<div class="layui-row">';
-                            listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray" ><span lang>surplus</span>';
+                            listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>';
                             if (item.remainingBeds==null) {
                                 listStr += item.roomAmount;
                             }else if (item.remainingBeds!=null) {
@@ -529,16 +532,16 @@
                             listStr += '<span lang>bed</span></span></div>';
                             if (item.remainingBeds!=0) {
                                 listStr += '<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">';
-                                listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>';
-                                listStr += 'add</div></div>';
+                                listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang="add">add</div>';
+                                listStr += '</div>';
                             }
                             listStr += ' </div></div></div> ';
-
                         });
-
                         $('#list').append(listStr);
                         element.render();
                         form.render();
+                        registerWords();
+                        setLanguage(getCookieVal("lang"));
                     },
                     error: function (data) {
                     }
@@ -591,5 +594,4 @@
     }
 
 </script>
-
 </html>

@@ -36,7 +36,6 @@ function getCookieVal(name) {
 }
 
 function setCookie(cookie) {
-    console.log(cookie)
     document.cookie = cookie;
 }
 
@@ -64,7 +63,6 @@ function loadDict() {
         type: "GET",
         url: "../" + lang + ".json",
         success: function (msg) {
-            console.log(msg)
             dict = eval(msg);
         }
     });

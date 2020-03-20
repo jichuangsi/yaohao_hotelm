@@ -192,6 +192,12 @@ public class OrderServiceImpl implements OrderService {
         return orderDao.selectRoomByins(allList);
     }
 
+    @Override
+    public Integer updateInEnd(String start, String end, Integer id) {
+        return orderDao.updateInEnd(start, end, id);
+    }
+
+
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override

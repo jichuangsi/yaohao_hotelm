@@ -136,6 +136,12 @@
 									<span lang>ticheng</span>
 								</a>
 							</li>
+							<li>
+								<a id="questionId" onclick="question()">
+									<i class="icon-double-angle-right"></i>
+									<span lang>question</span>
+								</a>
+							</li>
 						</ul>
 					</li>
 					<li>
@@ -637,6 +643,16 @@
                 document.getElementById('Mainid').src='${ctx}/Order/bookinglist.do';
                // document.getElementById('Mainid').src='${ctx}/Order/date.do';
 			}
+            function question() {
+                var time=getNowFormatDate();
+                var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("questionId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/Order/question.do';
+                // document.getElementById('Mainid').src='${ctx}/Order/date.do';
+            }
             //==============================================================================================================================//
 
             function platformmanager() {

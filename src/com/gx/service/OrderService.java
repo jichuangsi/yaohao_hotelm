@@ -55,6 +55,7 @@ public interface OrderService {
 
     List<OrderTimeVo> selectRoomByins(List<Integer> allList);
 
+    public Integer updateInEnd(String start,String end,Integer id);
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public Page<OrderDetailsVo> allContractOrder(String name,String orderNumber,Page<OrderDetailsVo> vo);
