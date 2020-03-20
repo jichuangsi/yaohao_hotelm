@@ -11,12 +11,7 @@
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
-		<%--<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="../css/index.css" />
-		<link rel="stylesheet" href="../css/administration.css" />
-		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
-		<script src="../lib/js/jquery.min.js"></script>
-		<script src="../lib/layui/layui.all.js"></script>--%>
+
 		<link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="${ctx}/css/index.css" />
 		<link rel="stylesheet" href="${ctx}/css/administration.css" />
@@ -27,6 +22,10 @@
 
 		<script type="text/javascript" src="${ctx}/js/page.js"></script>
 		<link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
+
+
+		<script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 
 		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
@@ -63,7 +62,8 @@
 		</div>
 
 	<div class="x-body">
-		<p id="exc" value="导出" lang>excel</p>
+		<p id="exc" value="导出">
+			<a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a></p>
 		<table class="layui-table">
 			<thead>
 			<tr>
@@ -150,7 +150,24 @@
                     "&orderNumber="+orderNumber+"&pname="+pname;
             }
         });
+
+        $(function() {
+            //导出excel表
+            $("#consumesOutExcel").on('click',function(){
+                var time=document.getElementById("time").value;
+                var orderNumber=document.getElementById("orderNumber").value;
+                var pname=document.getElementById("pname").value;
+                $.messager.progress({
+                    title : '处理中',
+                    msg : '请稍后',
+                });
+                $.messager.progress('close');
+                location.href='${ctx}/Hotelm/excel.do?time='+time+'&orderNumber='+orderNumber+'&pname='+pname;
+
+            });
+        });
 	</script>
+
 	<script>
 
             layui.use(['form', 'table'], function() {
@@ -190,6 +207,125 @@
                     error: function(data) {  }
                 });
             })
+	</script>
+
+	<script>
+        function setExcel() {
+           /* var data = {
+                dpid: getUser().deptId,
+                openid: getUser().wechat,
+                timeStart: dateStart,
+                timeEnd: dateEnd
+            }*/
+            $.ajax({
+                type: "post",
+                url: httpUrl() + "/kq/importDailyList?dpid=" + getUser().deptId + "&openid=" + getUser().wechat + "&timeStart=" + dateStart + "&timeEnd=" + dateEnd,
+                async: false,
+                headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'accessToken': getToken()
+                },
+                contentType: "application/json",
+                dataType: 'json',
+                success: function(res) {
+                    var tableStr = '<table border="0" cellspacing="" cellpadding="">'
+                    tableStr += '<tr>';
+                    tableStr += '<th width="15%">' + '序号' + '</td>';
+                    tableStr += '<th width="15%">' + '姓名' + '</td>';
+                    tableStr += '<th width="15%">' + '部门' + '</td>';
+                    tableStr += '<th width="15%">' + '考勤' + '</td>';
+                    tableStr += '<th width="15%">' + '打卡时间' + '</td>';
+                    tableStr += '<th width="15%">' + '考勤时间' + '</td>';
+                    tableStr += '<th width="15%">' + '状态' + '</td>';
+                    tableStr += '</tr>';
+                    var len = res.data.length;
+                    var data = res.data;
+                    for(var i = 0; i < len; i++) {
+                        tableStr += '<tr>';
+                        tableStr += '<td>' + i+1 + '</td>';
+                        tableStr += '<td>' + data[i].peopleName + '</td>';
+                        tableStr += '<td>' + data[i].department + '</td>';
+                        tableStr += '<td>' + data[i].jurisdiction + '</td>';
+                        if(data[i].stuas == 1) {
+                            tableStr += '<td>' + '上班打卡' + '</td>';
+                        } else if(data[i].stuas == 2) {
+                            tableStr += '<td>' + '下班打卡' + '</td>';
+                        }
+                        tableStr += '<td>' + new Date(+new Date(data[i].chockinTime) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') + '</td>'
+                        tableStr += '<td>' + new Date(+new Date(data[i].time) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '') + '</td>'
+                        if(data[i].stuas2 == 0) {
+                            tableStr += '<td>' + '正常' + '</td>';
+                        } else if(data[i].stuas2 == 1) {
+                            tableStr += '<td>' + '考勤异常' + '</td>';
+                        } else if(data[i].stuas2 == 2) {
+                            tableStr += '<td>' + '迟到' + '</td>';
+                        } else if(data[i].stuas2 == 3) {
+                            tableStr += '<td>' + '早退' + '</td>';
+                        }
+                        tableStr += '</tr>';
+                    }
+                    if(len == 0) {
+                        tableStr += '<tr style="text-align: center">';
+                        tableStr += '<td colspan="6">' + '暂无记录' + '</font></td>';
+                        tableStr += '</tr>'
+                    }
+                    tableStr +='</table>';
+                    //添加到div中
+                    document.getElementById("exportBtn").onclick = function() {
+                        exporExcel("考勤记录", tableStr);
+                    }
+                }
+            });
+        }
+        /**
+         * 注：如果想设置单元格格式，比如数字太多，默认导出会按科学计数法转换，这个时候要写成文本格式
+         * 可以这样使用 在td 上 使用style；如：<td style='mso-number-format:"@";'>第一行 </td>
+         *   style='mso-number-format:"@";'  转文本
+         * **/
+        /**
+         * @params: FileName:导出Excel的文件名称，excel:需要导出的table
+         * 如果没有table列表，只有json数据的话，将json数据拼接成table字符串模板即可
+         * **/
+        function exporExcel(FileName, excel) {
+            var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+            excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
+            excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
+            excelFile += '; charset=UTF-8">';
+            excelFile += "<head>";
+            excelFile += "<!--[if gte mso 9]>";
+            excelFile += "<xml>";
+            excelFile += "<x:ExcelWorkbook>";
+            excelFile += "<x:ExcelWorksheets>";
+            excelFile += "<x:ExcelWorksheet>";
+            excelFile += "<x:Name>";
+            excelFile += "{worksheet}";
+            excelFile += "</x:Name>";
+            excelFile += "<x:WorksheetOptions>";
+            excelFile += "<x:DisplayGridlines/>";
+            excelFile += "</x:WorksheetOptions>";
+            excelFile += "</x:ExcelWorksheet>";
+            excelFile += "</x:ExcelWorksheets>";
+            excelFile += "</x:ExcelWorkbook>";
+            excelFile += "</xml>";
+            excelFile += "<![endif]-->";
+            excelFile += "</head>";
+            excelFile += "<body>";
+            excelFile += excel;
+            excelFile += "</body>";
+            excelFile += "</html>";
+
+            var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
+
+            var link = document.createElement("a");
+            link.href = uri;
+
+            link.style = "visibility:hidden";
+            link.download = FileName; //格式默认为.xls
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 	</script>
 	</body>
 </html>

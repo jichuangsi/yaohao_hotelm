@@ -1,0 +1,46 @@
+package com.gx.vo;
+
+import com.gx.po.FinancePo;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class FinanceVo {
+    public List<FinancePo> list=new ArrayList<FinancePo>();
+    public String time;
+    public double booking=0d;
+    public double sumPHP=0d;
+    public double sumCNY=0d;
+
+    public List<FinancePo> getList() {
+        return list;
+    }
+
+    public void setList(List<FinancePo> list) {
+        this.list = list;
+    }
+
+    public double getBooking() {
+        return booking;
+    }
+
+    public void setBooking(double booking) {
+        this.booking = booking;
+    }
+
+    public double getSumPHP() {
+        return sumPHP;
+    }
+
+    public void setSumPHP(double sumPHP) {
+        this.sumPHP = sumPHP;
+    }
+
+    public double getSumCNY() {
+        return sumCNY;
+    }
+
+    public void setSumCNY(double sumCNY) {
+        this.sumCNY = sumCNY;
+    }
+}

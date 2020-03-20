@@ -263,7 +263,7 @@ public class Hotelm {
     //财务报表
     @ResponseBody
     @RequestMapping("/excel")
-    public Object excel(String time,String orderNumber,String pname,Integer currentPage) {
+    public void excel(String time,String orderNumber,String pname,Integer currentPage) {
         ModelAndView mv = null;
         if (currentPage==null) {
             currentPage=1;
@@ -448,8 +448,8 @@ public class Hotelm {
         }
        /* mv=new ModelAndView("redirect:/Order/financial.do");
         return mv;*/
-        Gson gson = new Gson();
-        return gson.toJson(1);
+       /* Gson gson = new Gson();
+        return gson.toJson(1);*/
     }
 
 

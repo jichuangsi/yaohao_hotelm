@@ -956,11 +956,52 @@ public class Order {
 
 
     ///////////////导出excel////////////////////
+    @ResponseBody
+    @RequestMapping("/excel2")
+        public Object list(String time){
+        String time2=null;
+        if (time==null ||time==""){//默认当前月
+            Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+            time2= new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
+        }else {//根据月查
+            time2 = time;
+        }
+        FinancePo fp=new FinancePo();
+        List<FinancePo> fpl=new ArrayList<FinancePo>();
+        FinanceVo financeVo=new FinanceVo();
+        List<FinanceVo> lists=new ArrayList<FinanceVo>();
+        double sumPHP=0d;//php
+        double sumCNY=0d;//人民币
+        double booking=0d;//提成
+        List<FinancePo> list=financeService.list(time2);
+        financeVo.setList(list);
+        BookingcommissionPo book=bookingcommissionService.selectMoney(time2);//按月查
+        if (book==null){
+            booking=0d;
+            financeVo.setBooking(booking);
+        }else {
+            booking=book.getBooking();
+            financeVo.setBooking(booking);
+        }
+
+        for (FinancePo f:list) {
+            sumPHP=sumPHP+f.getCount();//合计php
+            sumCNY=sumCNY+f.getRMB();//总人名币
+        }
+        sumPHP=sumPHP-booking;
+        financeVo.setSumPHP(sumPHP);
+        financeVo.setSumCNY(sumCNY);
+        lists.add(financeVo);
+        Gson gson=new Gson();
+        return gson.toJson(1);
+       /* return lists;*/
+        }
+
 
     //财务报表
     @ResponseBody
     @RequestMapping("/excel")
-    public Object excel(String time) {
+    public void excel(String time) {
         ModelAndView mv = null;
         String time2=null;
         if (time==null ||time==""){//默认当前月
@@ -1143,8 +1184,8 @@ public class Order {
         }
        /* mv=new ModelAndView("redirect:/Order/financial.do");
         return mv;*/
-        Gson gson = new Gson();
-        return gson.toJson(1);
+      /*  Gson gson = new Gson();
+        return gson.toJson(1);*/
     }
 
 

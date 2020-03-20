@@ -12,12 +12,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
-    <%--<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="stylesheet" href="../css/administration.css" />
-    <link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
-    <script src="../lib/js/jquery.min.js"></script>
-    <script src="../lib/layui/layui.all.js"></script>--%>
+
     <link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="${ctx}/css/index.css"/>
     <link rel="stylesheet" href="${ctx}/css/administration.css"/>
@@ -26,7 +21,7 @@
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <script src="${ctx}/js/weeklyCalendar.js"></script>
-
+    <script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
 </head>
 <style>
@@ -54,7 +49,8 @@
         <thead>
         <tr>
             <th colspan="6" lang>date:${time}<%--<span id="span"></span>--%></th>
-            <th colspan="9" id="exc" lang>excel</th>
+            <th colspan="9" id="exc" onclick="setExcel()" lang>excel</th>
+            <%-- <a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a>--%>
         </tr>
         <tr>
             <th lang>serial</th>
@@ -180,7 +176,7 @@
         }
 
 
-        $("#exc").click(function () {
+      /*  $("#exc").click(function () {
             var time = document.getElementById("excel").value;
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -190,10 +186,10 @@
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     if (result != 1) {
-                        /* alert("新增订单失败，"+' \n '+"Failed to add order");*/
+                        /!* alert("新增订单失败，"+' \n '+"Failed to add order");*!/
                         return false;
                     } else {
-                        /* alert("新增订单成功！"+' \n '+"New order succeeded");*/
+                        /!* alert("新增订单成功！"+' \n '+"New order succeeded");*!/
                         location.href = '${ctx}/Order/myfinance.do?time=' + time;
                         return true;
                     }
@@ -201,7 +197,7 @@
                 error: function (data) {
                 }
             });
-        })
+        })*/
     });
 
 </script>
@@ -291,6 +287,23 @@
         })
         return falg;
     }
+
+
+
+    $(function() {
+        //导出excel表
+        $("#consumesOutExcel").on('click',function(){
+
+            var time = document.getElementById("excel").value;
+            $.messager.progress({
+                title : '处理中',
+                msg : '请稍后',
+            });
+            $.messager.progress('close');
+            location.href='${ctx}/Order/excel.do?time='+time;
+
+        });
+    });
 </script>
 </body>
 <div id="add_apar" class="layui-fluid">
@@ -340,5 +353,172 @@
         </div>
     </form>
 </div>
+<script>
+    function setExcel() {
+        var data = {
+            dpid: getUser().deptId,
+            openid: getUser().wechat,
+            timeStart: dateStart,
+            timeEnd: dateEnd
+        }
+        $.ajax({
+            type: "post",
+            url: "${ctx}/Order/excel.do",
+            data:"time="+time,
+            async: false,
+           /* headers: {
+                'content-type': 'application/x-www-form-urlencoded',
+                'accessToken': getToken()
+            },*/
+            contentType: "application/json",
+            dataType: 'json',
+            success: function(res) {
+                var tableStr = '<table border="0" cellspacing="" cellpadding="">'
+                tableStr += '<tr>';
+                tableStr += '<th width="15%">' + '序号' + '</td>';
+                tableStr += '<th width="15%">' + '房间Room' + '</td>';
+                tableStr += '<th width="15%">' + '订单收入Order revenue（PHP）' + '</td>';
+                tableStr += '<th width="15%">' + '订单收入Order revenue（CNY）' + '</td>';
+                tableStr += '<th width="15%">' + '房租rent（PHP）' + '</td>';
+                tableStr += '<th width="15%">' + '水费Charge for water' + '</td>';
+                tableStr += '<th width="15%">' + '电费Electricity fees' + '</td>';
+                tableStr += '<th width="15%">' + '维修费maintenance cost' + '</td>';
+                tableStr += '<th width="15%">' + '网络network' + '</td>';
+                tableStr += '<th width="15%">' + '大厦管理费Building management fee' + '</td>';
+                tableStr += '<th width="15%">' + '被铺清洗费Linen Cleaning fee' + '</td>';
+                tableStr += '<th width="15%">' + '日常用品Daily supplies' + '</td>';
+                tableStr += '<th width="15%">' + '其他费用Other expenses' + '</td>';
+                tableStr += '<th width="15%">' + '小计Subtotal' + '</td>';
+                tableStr += '</tr>';
+                var len = res.list.length;
+                var data = res.list;
+                var count=0;
+                for(var i = 0; i < len; i++) {
+                    tableStr += '<tr>';
+                    tableStr += '<td>' + i+1 + '</td>';
+                    tableStr += '<td>' + data[i].roomNumber + '</td>';
+                    tableStr += '<td>' + data[i].PHP + '</td>';
+                    tableStr += '<td>' + data[i].RMB + '</td>';
+                    tableStr += '<td>' + data[i].rent + '</td>';
+                    tableStr += '<td>' + data[i].water + '</td>';
+                    tableStr += '<td>' + data[i].electricity + '</td>';
+                    tableStr += '<td>' + data[i].maintenanceCost + '</td>';
+                    tableStr += '<td>' + data[i].network + '</td>';
+                    tableStr += '<td>' + data[i].buildingManagementFee + '</td>';
+                    tableStr += '<td>' + data[i].linenCleaningfee + '</td>';
+                    tableStr += '<td>' + data[i].dailySupplies + '</td>';
+                    tableStr += '<td>' + data[i].otherExpenses + '</td>';
+                    tableStr += '<td>' + data[i].count+ '</td>';
+                    tableStr += '</tr>';
+                }
+                if(len.length == count) {
+                    tableStr += '<tr>';
+                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td>'+接单提成walk in guest dapfasom+'</td>';
+                    tableStr += '<td>' + res.booking + '</td>';
+                    tableStr += '</tr>';
 
+                    tableStr += '<tr>';
+                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td>'+合计Total（PHP）+'</td>';
+                    tableStr += '<td>' + res.booking + '</td>';
+                    tableStr += '</tr>';
+
+                    tableStr += '<tr>';
+                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td></td>';
+                    tableStr += '<td>'+提成+'</td>';
+                    tableStr += '<td>' + res.booking + '</td>';
+                    tableStr += '</tr>';
+                }
+                tableStr +='</table>';
+                //添加到div中
+                document.getElementById("exportBtn").onclick = function() {
+                    exporExcel("考勤记录", tableStr);
+                }
+            }
+        });
+    }
+    /**
+     * 注：如果想设置单元格格式，比如数字太多，默认导出会按科学计数法转换，这个时候要写成文本格式
+     * 可以这样使用 在td 上 使用style；如：<td style='mso-number-format:"@";'>第一行 </td>
+     *   style='mso-number-format:"@";'  转文本
+     * **/
+    /**
+     * @params: FileName:导出Excel的文件名称，excel:需要导出的table
+     * 如果没有table列表，只有json数据的话，将json数据拼接成table字符串模板即可
+     * **/
+    function exporExcel(FileName, excel) {
+        var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+        excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">';
+        excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
+        excelFile += '; charset=UTF-8">';
+        excelFile += "<head>";
+        excelFile += "<!--[if gte mso 9]>";
+        excelFile += "<xml>";
+        excelFile += "<x:ExcelWorkbook>";
+        excelFile += "<x:ExcelWorksheets>";
+        excelFile += "<x:ExcelWorksheet>";
+        excelFile += "<x:Name>";
+        excelFile += "{worksheet}";
+        excelFile += "</x:Name>";
+        excelFile += "<x:WorksheetOptions>";
+        excelFile += "<x:DisplayGridlines/>";
+        excelFile += "</x:WorksheetOptions>";
+        excelFile += "</x:ExcelWorksheet>";
+        excelFile += "</x:ExcelWorksheets>";
+        excelFile += "</x:ExcelWorkbook>";
+        excelFile += "</xml>";
+        excelFile += "<![endif]-->";
+        excelFile += "</head>";
+        excelFile += "<body>";
+        excelFile += excel;
+        excelFile += "</body>";
+        excelFile += "</html>";
+
+        var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(excelFile);
+
+        var link = document.createElement("a");
+        link.href = uri;
+
+        link.style = "visibility:hidden";
+        link.download = FileName; //格式默认为.xls
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+</script>
 </html>
