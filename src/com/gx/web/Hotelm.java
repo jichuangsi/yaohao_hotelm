@@ -488,7 +488,7 @@ public class Hotelm {
 
     //财务报表
     @ResponseBody
-    @RequestMapping("/excel")
+    @RequestMapping("/excel2")
     public Object excel(String time,String orderNumber,String pname,Integer currentPage) {
         ModelAndView mv = null;
         if (currentPage==null) {

@@ -23,6 +23,7 @@
     <script src="${ctx}/js/weeklyCalendar.js"></script>
     <script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
+    <script type="text/javascript" src="${ctx}/js/layui/layui_exts/excel.js"></script>
 </head>
 <style>
     .x-body {
@@ -50,6 +51,7 @@
         <tr>
             <th colspan="6" lang>date:${time}<%--<span id="span"></span>--%></th>
             <th colspan="9" id="exc" onclick="setExcel()" lang>excel</th>
+            <th hidden><button id="exportBtn"></button></th>
             <%-- <a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a>--%>
         </tr>
         <tr>
@@ -355,23 +357,19 @@
 </div>
 <script>
     function setExcel() {
-        var data = {
+      /*  var data = {
             dpid: getUser().deptId,
             openid: getUser().wechat,
             timeStart: dateStart,
             timeEnd: dateEnd
-        }
+        }*/
+        var time = document.getElementById("excel").value;
         $.ajax({
+            cache: false,
             type: "post",
-            url: "${ctx}/Order/excel.do",
+            url: "${ctx}/Order/excel2.do",
             data:"time="+time,
             async: false,
-           /* headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'accessToken': getToken()
-            },*/
-            contentType: "application/json",
-            dataType: 'json',
             success: function(res) {
                 var tableStr = '<table border="0" cellspacing="" cellpadding="">'
                 tableStr += '<tr>';
@@ -391,29 +389,30 @@
                 tableStr += '<th width="15%">' + '小计Subtotal' + '</td>';
                 tableStr += '</tr>';
                 var len = res.list.length;
-                var data = res.list;
+                var data = res;
                 var count=0;
                 for(var i = 0; i < len; i++) {
                     tableStr += '<tr>';
                     tableStr += '<td>' + i+1 + '</td>';
-                    tableStr += '<td>' + data[i].roomNumber + '</td>';
-                    tableStr += '<td>' + data[i].PHP + '</td>';
-                    tableStr += '<td>' + data[i].RMB + '</td>';
-                    tableStr += '<td>' + data[i].rent + '</td>';
-                    tableStr += '<td>' + data[i].water + '</td>';
-                    tableStr += '<td>' + data[i].electricity + '</td>';
-                    tableStr += '<td>' + data[i].maintenanceCost + '</td>';
-                    tableStr += '<td>' + data[i].network + '</td>';
-                    tableStr += '<td>' + data[i].buildingManagementFee + '</td>';
-                    tableStr += '<td>' + data[i].linenCleaningfee + '</td>';
-                    tableStr += '<td>' + data[i].dailySupplies + '</td>';
-                    tableStr += '<td>' + data[i].otherExpenses + '</td>';
-                    tableStr += '<td>' + data[i].count+ '</td>';
+                    tableStr += '<td>' + res.list[i].roomNumber + '</td>';
+                    tableStr += '<td>' + res.list[i].PHP + '</td>';
+                    tableStr += '<td>' + res.list[i].RMB + '</td>';
+                    tableStr += '<td>' + res.list[i].rent + '</td>';
+                    tableStr += '<td>' + res.list[i].water + '</td>';
+                    tableStr += '<td>' + res.list[i].electricity + '</td>';
+                    tableStr += '<td>' + res.list[i].maintenanceCost + '</td>';
+                    tableStr += '<td>' + res.list[i].network + '</td>';
+                    tableStr += '<td>' + res.list[i].buildingManagementFee + '</td>';
+                    tableStr += '<td>' + res.list[i].linenCleaningfee + '</td>';
+                    tableStr += '<td>' + res.list[i].dailySupplies + '</td>';
+                    tableStr += '<td>' + res.list[i].otherExpenses + '</td>';
+                    tableStr += '<td>' + res.list[i].count+ '</td>';
                     tableStr += '</tr>';
+                    count++;
                 }
-                if(len.length == count) {
+                if(len == count) {
                     tableStr += '<tr>';
-                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td>' + len+1 + '</td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
@@ -430,7 +429,7 @@
                     tableStr += '</tr>';
 
                     tableStr += '<tr>';
-                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td>' + len+2 + '</td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
@@ -442,12 +441,12 @@
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
-                    tableStr += '<td>'+合计Total(PHP)+'</td>';
+                    tableStr += '<td>合计Total(PHP)</td>';
                     tableStr += '<td>' + res.sumPHP + '</td>';
                     tableStr += '</tr>';
 
                     tableStr += '<tr>';
-                    tableStr += '<td>' + len.length+1 + '</td>';
+                    tableStr += '<td>' + len+3 + '</td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
@@ -459,15 +458,16 @@
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
                     tableStr += '<td></td>';
-                    tableStr += '<td>'+合计Total(CNY)+'</td>';
+                    tableStr += '<td>合计Total(CNY)</td>';
                     tableStr += '<td>' + res.sumCNY + '</td>';
                     tableStr += '</tr>';
                 }
                 tableStr +='</table>';
                 //添加到div中
-                document.getElementById("exportBtn").onclick = function() {
+               /* document.getElementById("exportBtn").onclick = function() {
                     exporExcel(time+"财务报表", tableStr);
-                }
+                }*/
+                exporExcel(time+"财务报表", tableStr);
             }
         });
     }

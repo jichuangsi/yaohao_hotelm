@@ -234,15 +234,14 @@
                     tableStr += '<th width="15%">' + '入住人数' + '</td>';
                     tableStr += '<th width="15%">' + '价格' + '</td>';
                     tableStr += '</tr>';
-                    var len = res.data.length;
-                    var data = res.data;
+                    var len = res.length;
+                    var data = res;
                     for(var i = 0; i < len; i++) {
                         tableStr += '<tr>';
                         tableStr += '<td>' + i+1 + '</td>';
                         tableStr += '<td>' + data[i].paltform + '</td>';
                         tableStr += '<td>' + data[i].orderNumber + '</td>';
                         tableStr += '<td>' + data[i].hotelm + '</td>';
-                        tableStr += '<td>' + data[i].paltform + '</td>';
                         tableStr += '<td>' + data[i].roomNumber + '</td>';
                         tableStr += '<td>' + data[i].pname + '</td>';
                         tableStr += '<td>' + data[i].phone + '</td>';
@@ -254,9 +253,10 @@
                     }
                     tableStr +='</table>';
                     //添加到div中
-                    document.getElementById("exportBtn").onclick = function() {
+                   /* document.getElementById("exportBtn").onclick = function() {
                         exporExcel(time+"合约酒店财务报表", tableStr);
-                    }
+                    }*/
+                    exporExcel(time+"合约酒店财务报表", tableStr);
                 }
             });
         }

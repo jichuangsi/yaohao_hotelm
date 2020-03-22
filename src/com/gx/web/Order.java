@@ -974,7 +974,7 @@ public class Order {
         double sumCNY=0d;//人民币
         double booking=0d;//提成
         List<FinancePo> list=financeService.list(time2);
-        financeVo.setList(list);
+     /*   financeVo.setList(list);*/
         BookingcommissionPo book=bookingcommissionService.selectMoney(time2);//按月查
         if (book==null){
             booking=0d;
@@ -991,9 +991,10 @@ public class Order {
         sumPHP=sumPHP-booking;
         financeVo.setSumPHP(sumPHP);
         financeVo.setSumCNY(sumCNY);
-        lists.add(financeVo);
+        financeVo.setList(list);
+      /*  lists.add(financeVo);*/
         Gson gson=new Gson();
-        return gson.toJson(1);
+        return gson.toJson(financeVo);
        /* return lists;*/
         }
 
