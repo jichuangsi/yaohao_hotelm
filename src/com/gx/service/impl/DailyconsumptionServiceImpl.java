@@ -1,6 +1,7 @@
 package com.gx.service.impl;
 
 import com.gx.dao.DailyconsumptionDao;
+import com.gx.page.Page;
 import com.gx.po.DailyconsumptionPo;
 import com.gx.service.DailyconsumptionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,18 @@ private DailyconsumptionDao dailyconsumptionDao;
     @Override
     public Integer updateNumberByRoomId(Integer roomId, String roomNumber) {
         return dailyconsumptionDao.updateNumberByRoomId(roomId, roomNumber);
+    }
+
+    @Override
+    public Page<DailyconsumptionPo> listpage(String time, Page<DailyconsumptionPo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<DailyconsumptionPo> list=dailyconsumptionDao.listPage(time, start, vo.getPageSize());
+        vo.setResult(list);
+        int count=dailyconsumptionDao.countpage(time);
+        vo.setTotal(count);
+        return vo;
     }
 }

@@ -209,6 +209,9 @@
 
   <select id="selectRoom" resultType="com.gx.vo.OrderTimeVo">
      SELECT *,id AS roomId  FROM `room`
+  </select>
+  <select id="selectRoomPage" resultType="com.gx.vo.OrderTimeVo">
+     SELECT *,id AS roomId  FROM `room`
       LIMIT #{start},#{size}
   </select>
   <select id="countSelectRoom" resultType="java.lang.Integer">

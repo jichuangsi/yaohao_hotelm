@@ -21,6 +21,8 @@
     <script src="${ctx}/js/layui/layui.all.js"></script>
 
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
+    <script type="text/javascript" src="${ctx}/js/page.js"></script>
+    <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
     .x-body {
@@ -65,9 +67,9 @@
             <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
         </form>
     </div>
-    <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
+   <%-- <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
         <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
-    </div>
+    </div>--%>
 </div>
 </body>
 <!-- 添加 -->
@@ -112,6 +114,7 @@
                 <input type="text" name="referencePrice" class="layui-input " lay-verify="required">
             </div>
         </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <div class="layui-btn" lay-submit lay-filter="update_add" lang>Submission</div>
@@ -126,13 +129,22 @@
     <table class="layui-table">
         <thead>
         <tr>
+            <th colspan="1">
+                <div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
+              <%--  <div class="layui-col-xs2  layui-col-md-offset1 layui-col-xs-offset3">
+
+                </div>--%>
+            </th>
+            <th colspan="6"> </th>
+        </tr>
+        <tr>
             <th lang>serial</th>
             <th lang>hotelname</th>
             <th lang>roomNumber</th>
             <th lang>roomAmount</th>
             <th lang>guestRoomLevelID</th>
             <th lang>referencePrice</th>
-           <th>operation</th>
+           <th lang>operation</th>
             <%--<th width="200px">备注</th>--%>
         </tr>
         <c:forEach items="${list.result}" var="item">
@@ -152,8 +164,23 @@
         </c:forEach>
         </thead>
     </table>
+    <div class="span11">
+        <div class="row-fluid">
+            <div class="tcdPageCode" style="text-align:center;"></div>
+        </div>
+    </div>
 </div>
 <script>
+
+    /* 分页要用的 */
+    $(".tcdPageCode").createPage({
+
+        pageCount:${list.totalPage},
+        current:${list.currentPage},
+        backFn:function(p){
+            location.href="${ctx}/RoomSet/tolist.do?currentPage="+p;
+        }
+    });
     function add() {
         index = layer.open({
             type: 1,
@@ -234,9 +261,10 @@
                     url: '${ctx}/RoomSet/add.do',       //地址 type 带参数
                     data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
-                    success: function (result) {                          // 不出现异常 进行立面方
-                        if (result != 1) {
-                            /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                    success: function (result) {
+                        location.href = '${ctx}/RoomSet/tolist.do';// 不出现异常 进行立面方
+                        /*if (result != 1) {
+                            /!*alert("新增失败"+' \n '+"Failed to add");        *!/             //提示框
                             document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
                             document.getElementById("room").focus();      // 给这个id的文本框提供焦点
                             return false;
@@ -244,7 +272,7 @@
                             alert("新增成功！" + ' \n ' + "succeeded");
                             location.href = '${ctx}/RoomSet/tolist.do';
                             return true;
-                        }
+                        }*/
                     },
                     error: function (data) {
                     }
@@ -260,17 +288,18 @@
                     url: '${ctx}/RoomSet/update.do',       //地址 type 带参数
                     data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
-                    success: function (result) {                          // 不出现异常 进行立面方
-                        if (result != 1) {
-                            /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                    success: function (result) {
+                        location.href = '${ctx}/RoomSet/tolist.do';// 不出现异常 进行立面方
+                        /*if (result != 1) {
+                            /!*alert("新增失败"+' \n '+"Failed to add");        *!/             //提示框
                             document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
                             document.getElementById("room").focus();      // 给这个id的文本框提供焦点
                             return false;
                         } else {
                             alert("新增成功！" + ' \n ' + "succeeded");
-                            location.href = '${ctx}/RoomSet/tolist.do';
+
                             return true;
-                        }
+                        }*/
                     }
                 })
         });
@@ -318,7 +347,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>roomNumber</span>：</label>
             <div class="layui-input-block widths">
-                <input type="hidden" name="roomId" id="roomId" value="">
+                <input type="hidden" name="id" id="id" value="">
                 <input type="text" name="roomNumber" id="number" class="layui-input" value="" lay-verify="required">
             </div>
         </div>

@@ -20,6 +20,9 @@
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/page.js"></script>
+    <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
     .x-body {
@@ -94,6 +97,12 @@
             </tr>
             </c:forEach>
         </table>
+    <div class="span11">
+        <div class="row-fluid">
+            <div class="tcdPageCode" style="text-align:center;"></div>
+        </div>
+    </div>
+
     </div>
 
 </body>
@@ -144,6 +153,16 @@
 </div>
 
 <script>
+    /* 分页要用的 */
+    $(".tcdPageCode").createPage({
+
+        pageCount:${list.totalPage},
+        current:${list.currentPage},
+        backFn:function(p){
+            location.href="${ctx}/Order/bookinglist.do?currentPage="+p;
+        }
+    });
+
     layui.use(['form', 'element', 'laydate'], function () {
         var form = layui.form,
             laydate = layui.laydate,

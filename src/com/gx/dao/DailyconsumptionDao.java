@@ -20,4 +20,7 @@ public interface DailyconsumptionDao {
     public List<DailyconsumptionPo> list();
 
     public Integer updateNumberByRoomId(@Param("roomId")Integer roomId,@Param("roomNumber")String roomNumber);
+
+    public List<DailyconsumptionPo> listPage(@Param("time") String time,@Param("start")  int start,@Param("pageSize")  int pageSize);
+    public Integer countpage(@Param("time") String time);
 }

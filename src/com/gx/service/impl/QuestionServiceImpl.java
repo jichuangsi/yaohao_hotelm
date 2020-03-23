@@ -37,7 +37,7 @@ public class QuestionServiceImpl implements QuestionService {
   }
     @Override
     public Integer inserAll(QuestionPo po) {
-        return questionDao.inserAll(po);
+        return questionDao.insertAll(po);
     }
 
     @Override

@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -234,21 +235,22 @@ public class Order {
         List<Integer> allid=new ArrayList<Integer>();//全部房间id
         Map<Integer,Integer> key=new HashMap<Integer,Integer>();
 
-        Page<OrderTimeVo> rlist=orderService.selectRoom(vo);
+        //根据分页查出分页房间
+        Page<OrderTimeVo> rlist=orderService.selectRoomPage(vo);
         for (OrderTimeVo v:rlist.getResult()){
             allid.add(v.getRoomId());
         }
-        List<OrderTimeVo> olist2=orderService.selectRoomByTimes(timestamp,allid);//入住
+        List<OrderTimeVo> olist2=orderService.selectRoomByTimes(timestamp,allid);//查出入住房间
         for (OrderTimeVo o:olist2){
             id.add(o.getRoomId());
         }
         List<OrderTimeVo> olist3=null;
-        if (id.size()==0){
+        if (id.size()==0){//判断入住是否为空
             olist3=orderService.selectRoomByins(allid);//全空房
         }else {
             olist3=orderService.selectRoomByin(id,allid);//全空房
         }
-        for (OrderTimeVo v:olist3){
+        for (OrderTimeVo v:olist3){//得到全空房的剩余床位
             ov=new OrderTimeVo();
             ov.setRoomId(v.getRoomId());
             ov.setRoomNumber(v.getRoomNumber());
@@ -266,7 +268,7 @@ public class Order {
                 }
         }
 
-        for (OrderTimeVo o :olist2 ) {
+        for (OrderTimeVo o :olist2 ) {//得到去重后的已有人入住房间俺的剩余床位
             if (coun.containsKey(o.getRoomId())){
                 ov=new OrderTimeVo();
                 if (!key.containsKey(o.getRoomId())) {//去重
@@ -319,8 +321,8 @@ public class Order {
         List<Integer> allid=new ArrayList<Integer>();//全部房间id
         Map<Integer,Integer> key=new HashMap<Integer,Integer>();
 
-        Page<OrderTimeVo> rlist=orderService.selectRoom(vo);
-        for (OrderTimeVo v:rlist.getResult()){
+        List<OrderTimeVo> rlist=orderService.selectRoom();
+        for (OrderTimeVo v:rlist){
             allid.add(v.getRoomId());
         }
         List<OrderTimeVo> olist2=orderService.selectRoomByTimes(timestamp,allid);//入住
@@ -609,6 +611,7 @@ public class Order {
         Gson gson=new Gson();
         return gson.toJson(count);
     }
+
     @RequestMapping("bookinglist")
     public ModelAndView bookinglist(String name,Integer currentPage){
         ModelAndView mv=null;
@@ -629,17 +632,27 @@ public class Order {
 
 
     @RequestMapping("todaily")
-    public ModelAndView todaily(String time){
+    public ModelAndView todaily(String time,Integer currentPage){
         ModelAndView mv=null;
         mv=new ModelAndView("/order/addDaily");
-        List<ConsumptiontypePo> clist=consumptiontypeService.list();/*
-        DailyconsumptionPo po1=dailyconsumptionService.selectById(id);*/
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<DailyconsumptionPo> vo=new Page<DailyconsumptionPo>();
+        vo.setCurrentPage(currentPage);
+
+        List<ConsumptiontypePo> clist=consumptiontypeService.list();
+        /*DailyconsumptionPo po1=dailyconsumptionService.selectById(id);*/
         List<DailyconsumptionPo> dlist=dailyconsumptionService.list();
+        Page<DailyconsumptionPo> list=dailyconsumptionService.listpage(time,vo);
         List<SupplierPo> slist=supplierService.listHaveAll();
         List<RoomSetPo> rlist=roomSetService.selectHave();
         mv.addObject("clist",clist);/*
         mv.addObject("po1",po1);*/
         mv.addObject("list",dlist);
+        mv.addObject("lists",list);
         mv.addObject("slist",slist);
         mv.addObject("rlist",rlist);
         return mv;
@@ -823,7 +836,7 @@ public class Order {
     @RequestMapping("question")
     public ModelAndView question(String name,Integer currentPage){
         ModelAndView mv=null;
-        mv=new ModelAndView("/order/question");
+        mv=new ModelAndView("/order/questions");
         if (currentPage==null) {
             currentPage=1;
         }else if (currentPage==0) {
@@ -837,12 +850,17 @@ public class Order {
     //查询问题
     @ResponseBody
     @RequestMapping("addquestion")
-    public Object addquestion(QuestionPo questionPo){
+    public Object addquestion(String title){
         ModelAndView mv=null;
         mv=new ModelAndView("/order/question");
-
+        QuestionPo questionPo=new QuestionPo();
+        questionPo.setHotelm(1);
+        questionPo.setTitle(title);
         questionPo.setCreateTime(System.currentTimeMillis());
-        Integer count=questionService.inserAll(questionPo);
+        Integer count=0;
+        if (title!=null && title!=" " && title.length()==0){
+            count=questionService.inserAll(questionPo);
+        }
         Gson gson=new Gson();
         return gson.toJson(count);
        // return mv;

@@ -1,5 +1,6 @@
 package com.gx.service;
 
+import com.gx.page.Page;
 import com.gx.po.BookingcommissionPo;
 import com.gx.po.DailyconsumptionPo;
 
@@ -21,4 +22,6 @@ public interface DailyconsumptionService {
     public List<DailyconsumptionPo> list();
 
     public Integer updateNumberByRoomId(Integer roomId,String roomNumber);
+
+    public Page<DailyconsumptionPo> listpage(String time,Page<DailyconsumptionPo> vo);
 }

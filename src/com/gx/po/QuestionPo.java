@@ -3,7 +3,7 @@ package com.gx.po;
 public class QuestionPo {
 
     private Integer id;
-    private Integer roomId;
+    private Integer hotelm;
     private String title;
     private long createTime;
 
@@ -15,12 +15,12 @@ public class QuestionPo {
         this.id = id;
     }
 
-    public Integer getRoomId() {
-        return roomId;
+    public Integer getHotelm() {
+        return hotelm;
     }
 
-    public void setRoomId(Integer roomId) {
-        this.roomId = roomId;
+    public void setHotelm(Integer hotelm) {
+        this.hotelm = hotelm;
     }
 
     public String getTitle() {

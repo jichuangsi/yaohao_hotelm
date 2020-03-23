@@ -109,7 +109,7 @@
 							<li>
 								<a id="roomSetId" onclick="roomSet()">
 									<i class="icon-double-angle-right"></i>
-									<span lang>room</span>
+									<span lang>roomset</span>
 								</a>
 							</li>
 							<li>
@@ -252,7 +252,7 @@
 				</div>
 
 				<div style="width:100%;height:100%;">
-				  <iframe id="Mainid" src="${ctx}/Main/todata.do" name="main"style="width:100%;height:100%;"  frameBorder="0" scrolling="no"></iframe>
+				  <iframe id="Mainid" src="${ctx}/Main/todata.do" name="main"style="width:100%;height:100%;"  frameBorder="0" scrolling="yes"></iframe>
 				</div>
 
 				<div class="ace-settings-container" id="ace-settings-container">
@@ -789,8 +789,8 @@
             function exit() {
                 var flag=confirm("确定退出吗?");
                 if (flag==true){
-                    window.location.href="http://localhost:8080/hotelm/Login/tomain.do";
-                    //window.location.href="http://hotelm.sample.jichuangsi.com/hotelm/Login/tomain.do";
+                    //window.location.href="http://localhost:8080/hotelm/Login/tomain.do";
+                    window.location.href="http://hotelm.sample.jichuangsi.com/hotelm/Login/tomain.do";
                 }
 
             }

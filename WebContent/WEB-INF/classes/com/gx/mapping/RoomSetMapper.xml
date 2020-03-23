@@ -62,7 +62,7 @@
 			             roomNumber=#{roomNumber,jdbcType=VARCHAR},
 			             roomAmount=#{roomAmount,jdbcType=VARCHAR},
 			             referencePrice=#{referencePrice,jdbcType=DOUBLE},
-			             supplierID=#{supplierID,jdbcType=INTEGER}}
+			             supplierID=#{supplierID,jdbcType=INTEGER}
                    WHERE id = #{id,jdbcType=INTEGER}
    </update>
     <!--&lt;!&ndash;    修改 &ndash;&gt;

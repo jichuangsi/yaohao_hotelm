@@ -24,6 +24,9 @@
     <script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
     <script type="text/javascript" src="${ctx}/js/layui/layui_exts/excel.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/page.js"></script>
+    <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
     .x-body {
@@ -151,7 +154,9 @@
         </tr>
         </thead>
     </table>
+
 </div>
+
 <!-- 添加 -->
 
 <script type="text/javascript">
@@ -200,6 +205,8 @@
                 }
             });
         })*/
+
+
     });
 
 </script>
@@ -306,6 +313,8 @@
 
         });
     });
+
+
 </script>
 </body>
 <div id="add_apar" class="layui-fluid">

@@ -28,6 +28,9 @@
     <script src="${ctx}/js/weeklyCalendar.js"></script>
     <script src="${ctx}/assets/js/jquery-2.0.3.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/page.js"></script>
+    <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
     /* 		body {
@@ -172,16 +175,17 @@
             </div>
         </div>
 
-        <div class=" layui-row ht-box">
+        <div class=" layui-row ht-box"  >
             <div class="layui-row layui-form">
                 <div class="layui-collapse" id="list">
+                    <%--<div class="layui-row layui-tab-content teacherClass" style="margin: 0 auto 20px 20px;">--%>
                     <c:forEach items="${list.result}" var="item">
                         <div class="layui-colla-item">
                             <h2 class="layui-colla-title">
                                 <div class="layui-col-xs4 " style="padding-left: 15px;">
                                     <h2>${item.roomNumber}</h2>
                                 </div>
-                                <div class="layui-btn layui-btn-normal " style="float: right" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
+                                <div class="layui-btn layui-btn-normal layui-btn-sm" style="float: right;margin-top: 5px" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
                             </h2>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row">
@@ -199,14 +203,22 @@
                                             <div class="layui-btn layui-btn-sm layui-btn-normal toadd " lang>add</div>
                                         </div>
                                     </c:if>
-
                                 </div>
                             </div>
                         </div>
                     </c:forEach>
+                    <div class="span11">
+                        <div class="row-fluid">
+                            <div class="tcdPageCode" style="text-align:center;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
+
+
+
     </div>
 </div>
 
@@ -347,10 +359,19 @@
             content:'../date/date.html?roomId='+value2
         });
     }
+    /* 分页要用的 */
+    $(".tcdPageCode").createPage({
+        pageCount:${list.totalPage},
+        current:${list.currentPage},
+        backFn:function(p){
+            location.href="${ctx}/Order/occupancy.do?currentPage="+p;
+        }
+    });
 </script>
 <script>
-    layui.use(['element', 'form', 'laydate'], function () {
+    layui.use(['element', 'form', 'laydate','laypage'], function () {
         var element = layui.element,
+            laypage=layui.laypage,
             laydate = layui.laydate,
             form = layui.form;
 
@@ -360,6 +381,7 @@
                 type: 'datetime'
             });
         })
+
         $(document).on('click', '.todate', function () {
             $('this').addCss('bj');
 
@@ -511,35 +533,41 @@
                         $('#pt').append(ptStr);
                         $('#list').empty()
                         var listStr = '';
+                        var count=0;
+
                         $.each(list, function (index, item) {
+                            count++;
                             listStr += '<div class="layui-colla-item">';
                             listStr += '<h2 class="layui-colla-title">';
                             listStr += '<div class="layui-col-xs4 " style="padding-left: 15px;">';
-                            listStr += '<h2>'+item.roomNumber+'</h2>\n' + '</div>';
-                            listStr+=' <div class="layui-btn layui-btn-normal " style="float: right" onclick="date('+item.roomNumber+','+item.roomId+')" lang>check</div>';
+                            listStr += '<h2>' + item.roomNumber + '</h2>\n' + '</div>';
+                            listStr += ' <div class="layui-btn layui-btn-normal " style="float: right" onclick="date(' + item.roomNumber + ',' + item.roomId + ')" lang>check</div>';
                             listStr += '</h2>';
                             listStr += '<div class="layui-colla-content"><div class="layui-row">';
                             listStr += '<input type="hidden" name="roomNumber" value=""+item.roomNumber+">';
                             listStr += '<input type="hidden" name="roomId" value=""+item.roomId+">';
-                            listStr += '<div class="">'+item.supplierName+'-'+item.roomNumber+'</div></div>';
+                            listStr += '<div class="">' + item.supplierName + '-' + item.roomNumber + '</div></div>';
                             listStr += '<div class="layui-row">';
                             listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>';
-                            if (item.remainingBeds==null) {
+                            if (item.remainingBeds == null) {
                                 listStr += item.roomAmount;
-                            }else if (item.remainingBeds!=null) {
+                            } else if (item.remainingBeds != null) {
                                 listStr += item.remainingBeds;
                             }
                             listStr += '<span lang>bed</span></span></div>';
-                            if (item.remainingBeds!=0) {
+                            if (item.remainingBeds != 0) {
                                 listStr += '<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">';
                                 listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang="add">add</div>';
                                 listStr += '</div>';
                             }
                             listStr += ' </div></div></div> ';
+                          ;
                         });
+                        listStr+='<div id="testPage"></div>'
                         $('#list').append(listStr);
                         element.render();
                         form.render();
+                        // laypage.render();
                         registerWords();
                         setLanguage(getCookieVal("lang"));
                     },
@@ -548,8 +576,8 @@
                 })
             }
         });
-    });
 
+    });
     function day(param) {
         $.ajax({
             cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -592,6 +620,8 @@
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
     }
+
+
 
 </script>
 </html>

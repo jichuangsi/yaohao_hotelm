@@ -26,8 +26,6 @@
 
 		<script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
 		<script type="text/javascript" src="${ctx}/js/language.js"></script>
-
-		<script type="text/javascript" src="${ctx}/js/language.js"></script>
 	</head>
 	<style>
 		.x-body{

@@ -78,7 +78,6 @@ public class TimeTransformation {
         for (int j = 0; j <= (count - 1); ) {
             cal.add(Calendar.DATE,  j == 0 ? +0 : +1);
             j++;
-            System.out.println(sdf.format(cal.getTime()));
             fullDayList.add(sdfs.format(cal.getTime()));
         }
         return fullDayList;

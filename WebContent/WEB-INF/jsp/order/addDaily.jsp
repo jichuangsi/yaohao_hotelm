@@ -11,21 +11,16 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
-    <%--<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="stylesheet" href="../css/administration.css" />
-    <link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
-    <script src="../lib/js/jquery.min.js"></script>
-    <script src="../lib/layui/layui.all.js"></script>--%>
     <link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="${ctx}/css/index.css"/>
-    <%--<link rel="stylesheet" href="${ctx}/css/administration.css"/>--%>
     <link rel="stylesheet" href="${ctx}/css/ht.css"/>
     <link rel="stylesheet" href="${ctx}/js/layui/css/modules/layui-icon-extend/iconfont.css"/>
     <script src="${ctx}/js/jquery.min.js"></script>
     <script src="${ctx}/js/layui/layui.all.js"></script>
-    <%--<script src="${ctx}/js/weeklyCalendar.js"></script>--%>
     <script type="text/javascript" src="${ctx}/js/language.js"></script>
+
+    <script type="text/javascript" src="${ctx}/js/page.js"></script>
+    <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
     .x-body {
@@ -86,7 +81,7 @@
                 <th lang>type</th>
                 <th lang>consumption</th>
             </tr>
-            <c:forEach items="${list}" var="item">
+            <c:forEach items="${lists.result}" var="item">
             <tr>
                 <th>${item.id}</th>
                 <th>${item.supplierName}</th>
@@ -107,6 +102,11 @@
             </tr>
             </c:forEach>
         </table>
+    <div class="span11">
+        <div class="row-fluid">
+            <div class="tcdPageCode" style="text-align:center;"></div>
+        </div>
+    </div>
     </div>
 
 </body>
@@ -155,6 +155,16 @@
 </div>
 
 <script>
+
+    /* 分页要用的 */
+    $(".tcdPageCode").createPage({
+
+        pageCount:${lists.totalPage},
+        current:${lists.currentPage},
+        backFn:function(p){
+            location.href="${ctx}/Order/todaily.do?currentPage="+p;
+        }
+    });
     layui.use(['form', 'table', 'element', 'laydate'], function () {
         var form = layui.form,
             table = layui.table,

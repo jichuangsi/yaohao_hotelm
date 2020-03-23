@@ -10,7 +10,7 @@ public interface QuestionDao {
     public List<QuestionPo> list(@Param("title") String title,@Param("start")int start,@Param("pageSize")  int pageSize);
     public List<QuestionPo> listall(@Param("title") String title);
     public Integer count(@Param("title") String title);
-    public Integer inserAll(QuestionPo po);
+    public Integer insertAll(QuestionPo po);
 
     public Integer updateById(QuestionPo po);
 

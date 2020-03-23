@@ -53,11 +53,19 @@ $(document).ready(function(){
 				center: 'title',
 				right: 'month'
 			},
+           /* buttonText: {
+                prev: "上月",
+                next: "下月",
+                today: "今天",
+                month: "月"
+            },*/
+            code: "zh-cn",
 			/*buttonText:{
 				today:'跳转到当天'
 			},*/
             //这里是设置标题自定义的，我设置为“个人日程安排”了
            /* titleFormat:'酒店日程',*/
+            locale:'zh-cn',
             editable: true,
             themeSystem:'bootstrap3',
 			events:function (start, end, callback) {

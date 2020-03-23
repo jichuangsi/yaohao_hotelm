@@ -11,12 +11,6 @@
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
-		<%--<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="../css/index.css" />
-		<link rel="stylesheet" href="../css/administration.css" />
-		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
-		<script src="../lib/js/jquery.min.js"></script>
-		<script src="../lib/layui/layui.all.js"></script>--%>
 		<link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="${ctx}/css/index.css" />
 		<link rel="stylesheet" href="${ctx}/css/ht.css"/>
@@ -25,6 +19,9 @@
 		<script src="${ctx}/js/jquery.min.js"></script>
 		<script src="${ctx}/js/layui/layui.all.js"></script>
 		<script type="text/javascript" src="${ctx}/js/language.js"></script>
+
+		<script type="text/javascript" src="${ctx}/js/page.js"></script>
+		<link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 	</head>
 	<style>
 		.x-body {
@@ -64,9 +61,9 @@
 					<div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
 				</form>
 			</div>
-			<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
+			<%--<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
 				<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
-			</div>
+			</div>--%>
 		</div>
 	</body>
 	<!-- 添加 -->
@@ -110,6 +107,12 @@
 		<table class="layui-table">
 			<thead>
 			<tr>
+				<th colspan="1">
+					<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang>add</div>
+				</th>
+				<th colspan="1"> </th>
+			</tr>
+			<tr>
 				<th lang>serial</th>
 				<th lang>patform</th>
 				<%--<th>是否启用</th>--%>
@@ -125,8 +128,23 @@
 			</c:forEach>
 			</thead>
 		</table>
+		<div class="span11">
+			<div class="row-fluid">
+				<div class="tcdPageCode" style="text-align:center;"></div>
+			</div>
+		</div>
 	</div>
 	<script>
+        /* 分页要用的 */
+        $(".tcdPageCode").createPage({
+
+            pageCount:${list.totalPage},
+            current:${list.currentPage},
+            backFn:function(p){
+                location.href="${ctx}/Platform/tolist.do?currentPage="+p;
+            }
+        });
+
 		function add() {
 			index = layer.open({
 				type: 1,

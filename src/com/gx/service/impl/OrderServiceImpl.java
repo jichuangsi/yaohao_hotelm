@@ -155,18 +155,22 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Page<OrderTimeVo> selectRoom(Page<OrderTimeVo> vo) {
+    public Page<OrderTimeVo> selectRoomPage(Page<OrderTimeVo> vo) {
         int start=0;
         if (vo.getCurrentPage()>1) {
             start=(vo.getCurrentPage()-1)*vo.getPageSize();
         }
-        List<OrderTimeVo> list=orderDao.selectRoom(start, vo.getPageSize());
+        List<OrderTimeVo> list=orderDao.selectRoomPage(start, vo.getPageSize());
         vo.setResult(list);
         int count=orderDao.countSelectRoom();
         vo.setTotal(count);
         return vo;
     }
-
+   @Override
+   public List<OrderTimeVo> selectRoom() {
+       List<OrderTimeVo> list=orderDao.selectRoom();
+       return list;
+   }
     @Override
     public List<OrderTimeVo> selectRoomByTimes(Timestamp time,List<Integer> list) {
         return orderDao.selectRoomByTimes(time,list);

@@ -9,7 +9,7 @@
     -->
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-        <idArg column="roomId" jdbcType="INTEGER" javaType="java.lang.Integer" />
+        <idArg column="hotelm" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="title" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="createTime" jdbcType="BIGINT" javaType="java.lang.Long" />
     </constructor>
@@ -40,9 +40,9 @@
     </select>
   <!--   新增 -->
   <insert id="insertAll" parameterType="com.gx.po.QuestionPo"  useGeneratedKeys="true"  keyProperty="id">
-    INSERT INTO `question` (`roomId`, `title`, `createTime`)
+    INSERT INTO `question` (`hotelm`, `title`, `createTime`)
     VALUES
-  (#{roomId,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{createTime,jdbcType=BIGINT}) ;
+  (#{hotelm,jdbcType=INTEGER},#{title,jdbcType=VARCHAR},#{createTime,jdbcType=BIGINT}) ;
   </insert>
   <!--    修改 -->
   <update id="updateById" parameterType="com.gx.po.QuestionPo">

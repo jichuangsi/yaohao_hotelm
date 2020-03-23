@@ -61,7 +61,28 @@ INNER JOIN `supplier` s ON s.id=d.`supplierId`
     </select>
 
     <select id="updateNumberByRoomId" resultType="java.lang.Integer">
-      UPDATE `dailyconsumption` SET `roomNumber`=#{roomNumber,jdbcType=VARCHAR} WHERE `roomId`#{roomId,jdbcType=INTEGER}
+      UPDATE `dailyconsumption` SET `roomNumber`=#{roomNumber,jdbcType=VARCHAR} WHERE `roomId`=#{roomId,jdbcType=INTEGER}
     </select>
 
+    <select id="listPage"  resultType="com.gx.po.DailyconsumptionPo">
+        SELECT  d.*,c.`name`,s.`supplierName`
+          FROM `dailyconsumption` d INNER JOIN `consumptiontype` c
+          ON d.cid=c.id INNER JOIN `supplier` s ON s.id=d.`supplierId`
+          WHERE 1=1
+          <if test="time!=null and time!=''">
+            AND  DATE_FORMAT(#{time,,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
+          </if>
+        ORDER BY `time`
+        LIMIT #{start},#{pageSize}
+    </select>
+
+    <select id="countpage"  resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM `dailyconsumption` d INNER JOIN `consumptiontype` c
+        ON d.cid=c.id INNER JOIN `supplier` s ON s.id=d.`supplierId`
+        WHERE 1=1
+        <if test="time!=null and time!=''">
+            AND  DATE_FORMAT(#{time,,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
+        </if>
+    </select>
 </mapper>

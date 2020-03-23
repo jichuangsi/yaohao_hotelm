@@ -11,12 +11,6 @@
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
-		<%--<link rel="stylesheet" href="../lib/layui/css/layui.css" media="all" />
-		<link rel="stylesheet" href="../css/index.css" />
-		<link rel="stylesheet" href="../css/administration.css" />
-		<link rel="stylesheet" href="../lib/layui/css/modules/layui-icon-extend/iconfont.css" />
-		<script src="../lib/js/jquery.min.js"></script>
-		<script src="../lib/layui/layui.all.js"></script>--%>
 		<link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all" />
 		<link rel="stylesheet" href="${ctx}/css/index.css" />
 		<link rel="stylesheet" href="${ctx}/css/administration.css" />
