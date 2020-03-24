@@ -213,7 +213,7 @@
             var pname=document.getElementById("pname").value;
             $.ajax({
                 type: "post",
-                url: '${ctx}/Hotelm/excel.do?time='+time+'&orderNumber='+orderNumber+'&pname='+pname,
+                url: '${ctx}/Hotelm/excel2.do?time='+time+'&orderNumber='+orderNumber+'&pname='+pname,
                 async: false,
                 contentType: "application/json",
                 dataType: 'json',
