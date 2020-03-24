@@ -148,21 +148,6 @@
             }
         });
 
-        $(function() {
-            //导出excel表
-            $("#consumesOutExcel").on('click',function(){
-                var time=document.getElementById("time").value;
-                var orderNumber=document.getElementById("orderNumber").value;
-                var pname=document.getElementById("pname").value;
-                $.messager.progress({
-                    title : '处理中',
-                    msg : '请稍后',
-                });
-                $.messager.progress('close');
-                location.href='${ctx}/Hotelm/excel.do?time='+time+'&orderNumber='+orderNumber+'&pname='+pname;
-
-            });
-        });
 	</script>
 
 	<script>
@@ -180,30 +165,6 @@
 
                 });
             });
-
-            $("#exc").click(function () {
-                var time=document.getElementById("time").value;
-                var orderNumber=document.getElementById("orderNumber").value;
-                var pname=document.getElementById("pname").value;
-                $.ajax({
-                    cache:false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
-                    type: "POST",                                           //上面3行都是必须要的
-                    url: '${ctx}/Hotelm/excel.do',       //地址 type 带参数
-                    data:"time="+time+"&orderNumber="+orderNumber+"&pname="+pname,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
-                    async:false,                                          // 是否 异步 提交
-                    success: function (result) {                          // 不出现异常 进行立面方
-                        if(result!=1){
-                            /* alert("新增订单失败，"+' \n '+"Failed to add order");*/
-                            return false;
-                        }else {
-                            /* alert("新增订单成功！"+' \n '+"New order succeeded");*/
-                            location.href='${ctx}/Hotelm/myfinance.do?time='+time+"&orderNumber="+orderNumber+"&pname="+pname;
-                            return true;
-                        }
-                    },
-                    error: function(data) {  }
-                });
-            })
 	</script>
 
 	<script>
