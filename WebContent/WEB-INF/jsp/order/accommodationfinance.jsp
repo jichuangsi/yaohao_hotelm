@@ -10,7 +10,8 @@
     <title>房型列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <%--<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>--%>
 
     <link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all"/>
     <link rel="stylesheet" href="${ctx}/css/index.css"/>
@@ -27,9 +28,16 @@
     <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
 </head>
 <style>
-    /* 		body {
-        background-color: gainsboro;
-    } */
+    /*.widths{*/
+        /*width: 80%;*/
+    /*}*/
+
+    body {
+        font-size: 62.5%;
+    }
+    body span{
+       font-size: 1rem;
+    }
     .layui-unselect {
         margin-bottom: 0.5rem;
     }
@@ -40,7 +48,9 @@
     .layui-collapse {
         margin-bottom: 1.25rem;
     }
-
+    .layui-form-item {
+        margin-right: 1rem;
+    }
     #add {
         display: none;
         margin-top: 10px;
@@ -142,6 +152,9 @@
         color: #ccc;
         pointer-events: none
     }
+    .layui-form .layui-form-label{
+        font-size: 1rem;
+    }
 </style>
 <body>
 
@@ -175,12 +188,12 @@
                     <%--<div class="layui-row layui-tab-content teacherClass" style="margin: 0 auto 20px 20px;">--%>
                     <c:forEach items="${list.result}" var="item">
                         <div class="layui-colla-item">
-                            <h2 class="layui-colla-title">
+                            <h4 class="layui-colla-title">
                                 <div class="layui-col-xs4 " style="padding-left: 15px;">
-                                    <h2>${item.roomNumber}</h2>
+                                    <h2 style="font-size: 1rem;">${item.roomNumber}</h2>
                                 </div>
-                                <div class="layui-btn layui-btn-normal layui-btn-sm" style="float: right;margin-top: 5px" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
-                            </h2>
+                                <div class="layui-btn layui-btn-normal layui-btn-sm" style="float: right;margin-top: 5px;font-size:10px;" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
+                            </h4>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row">
                                     <input type="hidden" name="roomNumber" value="${item.roomNumber}">
@@ -188,13 +201,13 @@
                                     <div class="">${item.supplierName}-${item.roomNumber}</div>
                                 </div>
                                 <div class="layui-row">
-                                    <div class="layui-col-xs2"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>
+                                    <div class="layui-col-xs4"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>
 											<c:if test="${item.remainingBeds==null}">${item.roomAmount}</c:if>
 											<c:if test="${item.remainingBeds!=null}">${item.remainingBeds}</c:if>
 											<span lang>bed</span></span></div>
                                     <c:if test="${item.remainingBeds!=0}">
                                         <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-                                            <div class="layui-btn layui-btn-sm layui-btn-normal toadd " lang>add</div>
+                                            <div class="layui-btn layui-btn-sm toadd "  lang>add</div>
                                         </div>
                                     </c:if>
                                 </div>
@@ -222,13 +235,13 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>order</span>:</label>
             <div class="layui-input-block widths">
-                <input type="hidden" name="id"/>
+                <input type="hidden" name="roomId"/>
                 <input type="text" name="orderNumber" id="order" class="layui-input " lay-verify="required"
                        onblur="order()">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>patform</span>：</label>
+            <label class="layui-form-label"><span lang>patform</span>:</label>
             <div class="layui-input-block widths">
                 <select name="platformId" lay-verify="required" id="pt">
                     <c:forEach items="${slist}" var="item">
@@ -238,7 +251,7 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>supplier</span>：</label>
+            <label class="layui-form-label"><span lang>supplier</span>:</label>
             <div class="layui-input-block widths">
                 <select name="hotelmId" lay-verify="required" id="gys">
                     <c:forEach items="${plist}" var="item">
@@ -248,14 +261,14 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>roomNumber</span>：</label>
+            <label class="layui-form-label"><span lang>roomNumber</span>:</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="roomId" value="" lay-verify="required">
                 <input type="text" name="roomNumber" class="layui-input" value="" readonly lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>currency</span>：</label>
+            <label class="layui-form-label"><span lang>currency</span>:</label>
             <div class="layui-input-block widths">
                 <select name="currency" lay-verify="required">
                     <option value="-1"></option>
@@ -265,53 +278,53 @@
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>Price</span>：</label>
+            <label class="layui-form-label"><span lang>Price</span>:</label>
             <div class="layui-input-block widths">
                 <input type="text" name="money" class="layui-input " lay-verify="required">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>checkin</span>：</label>
+            <label class="layui-form-label"><span lang>checkin</span>:</label>
             <div class="layui-input-block widths">
-                <input type="text" name="checkinTime" id="checkinTime" class="layui-input " readonly
+                <input type="text" name="checkinTime" id="checkinTime" class="layui-input time"
                        lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>checkout</span>：</label>
+            <label class="layui-form-label"><span lang>checkout</span>:</label>
             <div class="layui-input-block widths">
                 <input type="text" name="checkoutTime" class="layui-input time" id="checkoutTime" lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>name</span>：</label>
+            <label class="layui-form-label"><span lang>name</span>:</label>
             <div class="layui-input-block widths">
                 <input type="text" name="name" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>phone</span>：</label>
+            <label class="layui-form-label"><span lang>phone</span>:</label>
             <div class="layui-input-block widths">
                 <input type="text" name="phoneNumber" class="layui-input " lay-verify="required">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>checknumber</span>：</label>
+            <label class="layui-form-label"><span lang>checknumber</span>:</label>
             <div class="layui-input-block widths">
                 <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>account</span>：</label>
+            <label class="layui-form-label"><span lang>account</span>:</label>
             <div class="layui-input-block widths">
                 <input type="radio" name="isdao" value="2" title="是">
                 <input type="radio" name="isdao" value="1" title="否" checked="">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label"><span lang>accounts</span>：</label>
+            <label class="layui-form-label"><span lang>accounts</span>:</label>
             <div class="layui-input-block widths">
                 <select name="account" lay-verify="required" id="zh">
                     <c:forEach items="${alist}" var="item">
@@ -332,16 +345,23 @@
     function add() {
         index = layer.open({
             type: 1,
-            area: ['80%', '90%'],
+            area: ['80%', '100%'],
             anim: 2,
             title: '添加订单',
             maxmin: true,
-            shadeClose: true, //点击遮罩关闭
-            content: $('#add')
+           /* shadeClose: true, //点击遮罩关闭*/
+            content: $('#add'),
+            cancel:function () {
+                $("#add").css('display','none');
+            }
         });
         registerWords();
         setLanguage(getCookieVal("lang"));
     }
+
+   /* $(".layui-layer-close").on('click',function () {
+
+    })*/
     function date(value,value2){
         index = layer.open({
             type: 2,
@@ -394,8 +414,8 @@
             var time = getNowFormatDate();
             form.val('test', {
                 "roomNumber": roomNumber,
-                "roomId": id,
-                "checkinTime": time + " 00:00:00"
+                "roomId": id
+              /*  "checkinTime": time + " 00:00:00"*/
             });
         }
 
@@ -532,17 +552,17 @@
                         $.each(list, function (index, item) {
                             count++;
                             listStr += '<div class="layui-colla-item">';
-                            listStr += '<h2 class="layui-colla-title">';
+                            listStr += '<h2 class="layui-colla-title" style="font-size: 10px;">';
                             listStr += '<div class="layui-col-xs4 " style="padding-left: 15px;">';
-                            listStr += '<h2>' + item.roomNumber + '</h2>\n' + '</div>';
-                            listStr += ' <div class="layui-btn layui-btn-normal " style="float: right" onclick="date(' + item.roomNumber + ',' + item.roomId + ')" lang>check</div>';
+                            listStr += '<h2 style="font-size:10px;">' + item.roomNumber + '</h2>\n' + '</div>';
+                            listStr += ' <div class="layui-btn layui-btn-normal " style="float: right;margin-top: 5px;font-size: 10px;" onclick="date(' + item.roomNumber + ',' + item.roomId + ')" lang>check</div>';
                             listStr += '</h2>';
                             listStr += '<div class="layui-colla-content"><div class="layui-row">';
-                            listStr += '<input type="hidden" name="roomNumber" value=""+item.roomNumber+">';
-                            listStr += '<input type="hidden" name="roomId" value=""+item.roomId+">';
+                            listStr += '<input type="hidden" name="roomNumber" value="'+item.roomNumber+'">';
+                            listStr += '<input type="hidden" name="roomId" value="'+item.roomId+'">';
                             listStr += '<div class="">' + item.supplierName + '-' + item.roomNumber + '</div></div>';
                             listStr += '<div class="layui-row">';
-                            listStr += '<div class="layui-col-xs2"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>';
+                            listStr += '<div class="layui-col-xs4"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>';
                             if (item.remainingBeds == null) {
                                 listStr += item.roomAmount;
                             } else if (item.remainingBeds != null) {
@@ -551,7 +571,7 @@
                             listStr += '<span lang>bed</span></span></div>';
                             if (item.remainingBeds != 0) {
                                 listStr += '<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">';
-                                listStr += '<div class="layui-btn layui-btn-sm layui-btn-normal toadd" lang="add">add</div>';
+                                listStr += '<div class="layui-btn layui-btn-sm  toadd" lang="add">add</div>';
                                 listStr += '</div>';
                             }
                             listStr += ' </div></div></div> ';
