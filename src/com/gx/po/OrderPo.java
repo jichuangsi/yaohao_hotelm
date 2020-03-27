@@ -19,23 +19,33 @@ public class OrderPo {
     private Integer isdao;//是否到账 1未到账 2到账
     private Timestamp daoTime;//到账时间
     private Integer checkinNumber;//入住人数
-    private int account;//账户
-    private int checkinDay;//入住天数
-    private int type;//类型 1自己 2合约
+    private Integer checkinRoom;//入住床位数
+    private Integer account;//账户
+    private Integer checkinDay;//入住天数
+    private Integer type;//类型 1自己 2合约
 
-    public int getType() {
+
+    public Integer getCheckinRoom() {
+        return checkinRoom;
+    }
+
+    public void setCheckinRoom(Integer checkinRoom) {
+        this.checkinRoom = checkinRoom;
+    }
+
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public int getCheckinDay() {
+    public Integer getCheckinDay() {
         return checkinDay;
     }
 
-    public void setCheckinDay(int checkinDay) {
+    public void setCheckinDay(Integer checkinDay) {
         this.checkinDay = checkinDay;
     }
 
@@ -159,11 +169,11 @@ public class OrderPo {
         this.roomId = roomId;
     }
 
-    public int getAccount() {
+    public Integer getAccount() {
         return account;
     }
 
-    public void setAccount(int account) {
+    public void setAccount(Integer account) {
         this.account = account;
     }
 

@@ -9,23 +9,28 @@
     -->
     <constructor >
       <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="supplierId" jdbcType="VARCHAR" javaType="java.lang.Integer" />
-      <arg column="roomId" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="roomNumber" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="money" jdbcType="DOUBLE" javaType="java.lang.Double" />
-      <arg column="cid" jdbcType="INTEGER" javaType="java.lang.Integer" />
-      <arg column="time" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+        <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
     </constructor>
   </resultMap>
 
-<!--<insert id="inserAll" parameterType="com.gx.po.ConsumptiontypePo" useGeneratedKeys="true"  keyProperty="id">
-      INSERT INTO `consumptiontype` (`supplierId`,`roomId`,`money`, cid,`time`)
-     VALUES (#{supplierId,jdbctype=INTEGER}, #{roomId,jdbctype=INTEGER}, #{money,jdbctype=DOUBLE},
-           #{cid,jdbctype=INTEGER},#{time,jdbctype=VARCHAR}) ;
-</insert>-->
+<insert id="inserAll" parameterType="com.gx.po.ConsumptiontypePo" useGeneratedKeys="true"  keyProperty="id">
+      INSERT INTO `consumptiontype` (`name`,status)
+     VALUES (#{name,jdbcType=VARCHAR},1) ;
+</insert>
 
   <select id="list" resultType="com.gx.po.ConsumptiontypePo">
-     SELECT * FROM `consumptiontype`
+     SELECT * FROM `consumptiontype` WHERE status=1
   </select>
 
+  <select id="nameYZ" resultType="com.gx.po.ConsumptiontypePo">
+      SELECT * FROM `consumptiontype` WHERE `name`=#{name,jdbcType=VARCHAR}
+  </select>
+
+    <update id="updateStatus">
+        UPDATE `consumptiontype` SET `status`=#{status,jdbcType=INTEGER} WHERE id=#{id,jdbcType=INTEGER}
+    </update>
+    <select id="listAll" resultType="com.gx.po.ConsumptiontypePo">
+          SELECT * FROM `consumptiontype`
+    </select>
 </mapper>

@@ -23,6 +23,7 @@
       <arg column="isdao" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="daoTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
       <arg column="checkinNumber" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="checkinRoom" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="account" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="checkinDay" jdbcType="INTEGER" javaType="java.lang.Integer" />
       <arg column="type" jdbcType="INTEGER" javaType="java.lang.Integer" />
@@ -34,12 +35,12 @@
 <!--  //新增订单-->
   <insert id="inserAll" parameterType="com.gx.po.OrderPo" useGeneratedKeys="true"  keyProperty="id">
      INSERT INTO `order` (orderNumber,status,platformId,money,currency,hotelmId,roomId,checkinTime,checkoutTime,orderTime,
-     passengerId,isdao,daoTime,checkinNumber,account,checkinDay,`type`)
+     passengerId,isdao,daoTime,checkinNumber,checkinRoom,account,checkinDay,`type`)
      values (#{orderNumber,jdbcType=VARCHAR},#{status,jdbcType=INTEGER}
      ,#{platformId,jdbcType=INTEGER},#{money,jdbcType=DOUBLE}
      ,#{currency,jdbcType=INTEGER},#{hotelmId,jdbcType=INTEGER},#{roomId,jdbcType=INTEGER},#{checkinTime,jdbcType=TIMESTAMP}
      ,#{checkoutTime,jdbcType=TIMESTAMP},#{orderTime,jdbcType=TIMESTAMP},#{passengerId,jdbcType=INTEGER},#{isdao,jdbcType=INTEGER}
-     ,#{daoTime,jdbcType=TIMESTAMP},#{checkinNumber,jdbcType=INTEGER},#{account,jdbcType=INTEGER},#{checkinDay,jdbcType=INTEGER},
+     ,#{daoTime,jdbcType=TIMESTAMP},#{checkinNumber,jdbcType=INTEGER},#{checkinRoom,jdbcType=INTEGER},#{account,jdbcType=INTEGER},#{checkinDay,jdbcType=INTEGER},
     #{type,jdbcType=INTEGER} )
   </insert>
 <!--已确认-->
@@ -393,4 +394,18 @@
     AND s.`have`=2
     AND s.`isenabled`=0
   </select>
+
+<select id="fianceorder" resultType="com.gx.vo.OrderDetailsVo">
+  SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE `roomId`=#{roomId,jdbcType=INTEGER}
+    ORDER BY `orderTime`
+</select>
+
 </mapper>

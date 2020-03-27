@@ -38,6 +38,7 @@
         margin-top: 10px;
     }
 </style>
+<c:if test="${da!=0}">
 <body>
 <div class="x-body">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
@@ -48,114 +49,80 @@
             简体中文
         </button>
     </div>
+    <div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
+        <form class="layui-form layui-col-md12" >
+            <div class="layui-input-inline">
+                <input type="text" name="time" id="time" placeholder="订单时间" autocomplete="off" class="layui-input time" style="width: 200px;">
+            </div>
+
+            <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
+        </form>
+
+    </div>
     <table class="layui-table">
         <input type="hidden" id="excel" value="${time}">
         <thead>
         <tr>
-            <th colspan="6" lang>date:${time}<%--<span id="span"></span>--%></th>
-            <th colspan="9" id="exc" onclick="setExcel()" lang>excel</th>
-            <th hidden><button id="exportBtn"></button></th>
-            <%-- <a id="consumesOutExcel" class="easyui-linkbutton" style="" data-options="iconCls:'icon-redo'"  lang>excel</a>--%>
+            <th colspan="6" lang>date:${time}</th>
+            <th colspan="${size-5}" id="exc" onclick="setExcel()" lang>excel</th>
         </tr>
+
+
+
         <tr>
-            <th lang>serial</th>
-            <th lang>roomNumber</th>
-            <th><span lang>revenue</span>(PHP)</th>
-            <th><span lang>revenue</span>(RMB)</th>
-            <th><span lang>rent</span>(PHP)</th>
-            <th lang>water</th>
-            <th lang>electricity</th>
-            <th lang>maintenance</th>
-            <th lang>network</th>
-            <th lang>expense</th>
-            <th lang>cleaning</th>
-            <th lang>supplies</th>
-            <th lang>other</th>
-            <th lang>subtotal</th>
-            <th lang>operation</th>
-            <%--<th width="200px">备注</th>--%>
+            <c:forEach items="${name}" var="item">
+                <th>${item}</th>
+            </c:forEach>
+
+            <th>操作</th>
         </tr>
         <c:forEach items="${list}" var="item">
             <tr>
                 <input type="hidden" name="idstr" value="${item.id}">
                 <th>${item.id}</th>
                 <th>${item.roomNumber}</th>
-                <th>${item.PHP}(PHP)</th>
-                <th>${item.RMB}(RMB)</th>
+                <th onclick="orders(${item.roomId})">${item.PHP}(PHP)</th>
+                <th onclick="orders(${item.roomId})">${item.RMB}(RMB)</th>
                 <th>${item.rent}(PHP)</th>
                 <th>${item.water}</th>
                 <th>${item.electricity}</th>
                 <th>${item.maintenanceCost}</th>
                 <th>${item.network}</th>
                 <th>${item.buildingManagementFee}</th>
-                <th>${item.linenCleaningfee}</th>
-                <th>${item.dailySupplies}</th>
-                <th>${item.otherExpenses}</th>
+                <c:forEach items="${item.dlist}" var="tem">
+                    <th onclick="ctype(${item.roomId},${tem.cid})">${tem.mm}</th>
+                </c:forEach>
                 <th>${item.count}</th>
                 <th>
                     <div class=" layui-btn layui-btn-normal layui-btn-sm toadd" onclick="add(${item.id},${item.yearM})">添加消费</div>
                 </th>
-                    <%--<th width="200px">备注</th>--%>
             </tr>
         </c:forEach>
+
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th lang>ticheng</th>
+            <th colspan="${name.size()-1}">提成</th>
             <th>${booking}</th>
             <th></th>
-            <th></th>
-            <%--<th width="200px">备注</th>--%>
         </tr>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>PHP</th>
+            <th  colspan="${name.size()-1}">PHP</th>
             <th>${sumPHP}</th>
             <th></th>
-            <%--<th width="200px">备注</th>--%>
         </tr>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th>(CNY)</th>
+            <th  colspan="${name.size()-1}">(RMB)</th>
             <th>${sumCNY}</th>
             <th></th>
-            <%--<th width="200px">备注</th>--%>
         </tr>
         </thead>
     </table>
 
 </div>
+    <div>
+        <table class="layui-table " id="addtable">
+
+        </table>
+    </div>
 
 <!-- 添加 -->
 
@@ -185,10 +152,11 @@
 
 </script>
 <script>
-    layui.use(['form', 'table', 'element'], function () {
+    layui.use(['form', 'table', 'element','laydate'], function () {
         var form = layui.form,
             element = layui.element,
             table = layui.table;
+             laydate=layui.laydate;
 
         window.add=function(id,yearM) {
             index = layer.open({
@@ -208,13 +176,12 @@
 
         element.init();
         form.render()
-
-        // $(document).on('click','.toadd',function (obj) {
-        //     add();
-        //     var id=$(obj).parent().parent().find("input[name=idstr]").val();
-        //     console.log($(obj).parent().parent().find("input[name=idstr]").val())
-        //     alert(id)
-        // })
+        $('.time').each(function () {
+            laydate.render({
+                elem: this,
+                type: 'date'
+            });
+        })
         var falg;
         form.on('submit(update_add)', function (obj) {
             var param = obj.field;
@@ -242,6 +209,10 @@
             })
         });
 
+        form.on('submit(search)',function () {
+            var time=document.getElementById("time").value;
+            location.href="${ctx}/Order/myfinance.do?time="+time;
+        });
 
     })
 
@@ -271,7 +242,109 @@
         return falg;
     }
 
+    function orders(obj){
+        var time=$("#excel").val();
+        var roomId=obj;
+        console.log($(obj))
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${ctx}/Order/financeDatil.do",
+            data:"time="+time+"&roomId="+roomId,
+            async: false,
+            success: function(res) {
+                var len = res.length;
+                var date = res;
+                $('#addtable').empty()
+                var str='';
+                str+='<tr>';
+                str+='<th>序号</th>';
+                str+='<th>平台</th>';
+                str+='<th>订单号</th>';
+                str+='<th>酒店</th>';
+                str+='<th>房号</th>';
+                str+='<th>姓名</th>';
+                str+='<th>电话</th>';
+                str+='<th>价格</th>';
+                str+='<th>订单时间</th>';
+                str+='</tr>';
+                for (var i=0;i<len;i++){
+                    str+='<tr>';
+                    str+='<th>'+(i+1)+'</th>';
+                    str+='<th>'+date[i].platformName+'</th>';
+                    str+='<th>'+date[i].orderNumber+'</th>';
+                    str+='<th>'+date[i].supplierName+'</th>';
+                    str+='<th>'+date[i].roomNumber+'</th>';
+                    str+='<th>'+date[i].name+'</th>';
+                    str+='<th>'+date[i].phoneNumber+'</th>';
+                    if (date[i].currency==1){
+                        str+='<th>(PHP)'+date[i].money+'</th>';
+                    }
+                    if (date[i].currency==2){
+                        str+='<th>(RMB)'+date[i].money+'</th>';
+                    }
+                    str+='<th>'+timestampToTime(date[i].orderTime)+'</th>';/*
+                    str+='<th>'+timestampToTime(date[i].checkouttime)+'</th>';*/
+                    str+='</tr>';
+                }
+            $("#addtable").append(str);
+            }
 
+        })
+    }
+
+
+
+    function ctype(value,value2) {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: "${ctx}/Order/otherDatil.do",
+            data:"roomId="+value+"&cid="+value2,
+            async: false,
+            success: function(res) {
+
+                    var len = res.length;
+                    var date = res;
+                    $('#addtable').empty()
+                    var str = '';
+                    str += '<tr>';
+                    str += '<th>序号</th>';
+                    str += '<th>房号</th>';
+                    str += '<th>消费类型</th>';
+                    str += '<th>消费商品</th>';
+                    str += '<th>价钱</th>';
+                    str += '<th>时间</th>';
+                    str += '</tr>';
+                    for (var i = 0; i < len; i++) {
+                        str += '<tr>';
+                        str += '<th>' + (i + 1) + '</th>';
+                        str += '<th>' + date[i].roomNumber + '</th>';
+                        str += '<th>' + date[i].typeName + '</th>';
+                        if (date[i].content==null){
+                            str += '<th></th>';
+                        }else{
+                            str += '<th>' + date[i].content + '</th>';
+                        }
+                        str += '<th>' + date[i].money + '</th>';
+                        str += '<th>' + timestampToTime(date[i].createTime) + '</th>';
+                        str += '</tr>';
+                    }
+                    $("#addtable").append(str);
+            }
+        })
+    }
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate() + ' ';
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D+h+m+s;
+    }
 </script>
 </body>
 <div id="add_apar" class="layui-fluid">
@@ -337,12 +410,14 @@
             data:"time="+time,
             async: false,
             success: function(res) {
+                var na=res.name;
                 var tableStr = '<table border="0" cellspacing="" cellpadding="">'
-                tableStr += '<tr>';
-                tableStr += '<th width="15%">' + '序号' + '</td>';
-                tableStr += '<th width="15%">' + '房间Room' + '</td>';
-                tableStr += '<th width="15%">' + '订单收入Order revenue（PHP）' + '</td>';
-                tableStr += '<th width="15%">' + '订单收入Order revenue（CNY）' + '</td>';
+                tableStr += '<tr style="font-size:16px;">';
+                for (var i = 0; i <na.length; i++){
+                    tableStr += '<th width="15%">' + na[i]+ '</th>';
+                }
+               /* tableStr += '<th width="15%">' + '订单收入Order revenue（PHP）' + '</td>';
+                tableStr += '<th width="15%">' + '订单收入Order revenue（RMB）' + '</td>';
                 tableStr += '<th width="15%">' + '房租rent（PHP）' + '</td>';
                 tableStr += '<th width="15%">' + '水费Charge for water' + '</td>';
                 tableStr += '<th width="15%">' + '电费Electricity fees' + '</td>';
@@ -352,14 +427,15 @@
                 tableStr += '<th width="15%">' + '被铺清洗费Linen Cleaning fee' + '</td>';
                 tableStr += '<th width="15%">' + '日常用品Daily supplies' + '</td>';
                 tableStr += '<th width="15%">' + '其他费用Other expenses' + '</td>';
-                tableStr += '<th width="15%">' + '小计Subtotal' + '</td>';
+                tableStr += '<th width="15%">' + '小计Subtotal' + '</td>';*/
                 tableStr += '</tr>';
                 var len = res.list.length;
                 var data = res;
                 var count=0;
+
                 for(var i = 0; i < len; i++) {
-                    tableStr += '<tr>';
-                    tableStr += '<td>' + i+1 + '</td>';
+                    tableStr += '<tr style="font-size:16px;">';
+                    tableStr += '<td>' + (i+1) + '</td>';
                     tableStr += '<td>' + res.list[i].roomNumber + '</td>';
                     tableStr += '<td>' + res.list[i].PHP + '</td>';
                     tableStr += '<td>' + res.list[i].RMB + '</td>';
@@ -369,70 +445,38 @@
                     tableStr += '<td>' + res.list[i].maintenanceCost + '</td>';
                     tableStr += '<td>' + res.list[i].network + '</td>';
                     tableStr += '<td>' + res.list[i].buildingManagementFee + '</td>';
-                    tableStr += '<td>' + res.list[i].linenCleaningfee + '</td>';
+                    for (var d=0;d<data.list[i].dlist.length;d++){
+                        tableStr += '<td>' + data.list[i].dlist[d].mm + '</td>';
+                    }
+                   /* tableStr += '<td>' + res.list[i].linenCleaningfee + '</td>';
                     tableStr += '<td>' + res.list[i].dailySupplies + '</td>';
-                    tableStr += '<td>' + res.list[i].otherExpenses + '</td>';
+                    tableStr += '<td>' + res.list[i].otherExpenses + '</td>';*/
                     tableStr += '<td>' + res.list[i].count+ '</td>';
                     tableStr += '</tr>';
                     count++;
                 }
+
                 if(len == count) {
-                    tableStr += '<tr>';
-                    tableStr += '<td>' + len+1 + '</td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td>接单提成walkinguestdapfasom</td>';
+                    tableStr += '<tr style="font-size:16px;">';
+                    tableStr += '<td>' + (len+1) + '</td>';
+                    tableStr += '<td colspan="11">接单提成walkinguestdapfasom</td>';
                     tableStr += '<td>' + res.booking + '</td>';
                     tableStr += '</tr>';
 
-                    tableStr += '<tr>';
-                    tableStr += '<td>' + len+2 + '</td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td>合计Total(PHP)</td>';
-                    tableStr += '<td>' + res.sumPHP + '</td>';
+                    tableStr += '<tr style="font-size:16px;">';
+                    tableStr += '<td>' + (len+2) + '</td>';
+                    tableStr += '<td colspan="11">合计Total(PHP)</td>';
+                    tableStr += '<td>' +  res.sumPHP + '</td>';
                     tableStr += '</tr>';
 
-                    tableStr += '<tr>';
-                    tableStr += '<td>' + len+3 + '</td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td></td>';
-                    tableStr += '<td>合计Total(CNY)</td>';
-                    tableStr += '<td>' + res.sumCNY + '</td>';
+                    tableStr += '<tr style="font-size:16px;">';
+                    tableStr += '<td>' + (len+3) + '</td>';
+                    tableStr += '<td colspan="11">合计Total(CNY)</td>';
+                    tableStr += '<td>' + res.sumCNY+ '</td>';
                     tableStr += '</tr>';
                 }
                 tableStr +='</table>';
-                //添加到div中
-               /* document.getElementById("exportBtn").onclick = function() {
-                    exporExcel(time+"财务报表", tableStr);
-                }*/
+
                 exporExcel(time+"财务报表", tableStr);
             }
         });
@@ -487,4 +531,10 @@
         document.body.removeChild(link);
     }
 </script>
+</c:if>
+<c:if test="${da==0}">
+    <body>
+    <div style="margin:0 auto">无数据</div>
+    </body>
+</c:if>
 </html>

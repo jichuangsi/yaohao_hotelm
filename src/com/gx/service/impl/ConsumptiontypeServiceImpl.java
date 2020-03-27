@@ -34,4 +34,19 @@ public class ConsumptiontypeServiceImpl implements ConsumptiontypeService {
     public int delete(int id) {
         return consumptiontypeDao.delete(id);
     }
+
+    @Override
+    public ConsumptiontypePo nameYZ(String name) {
+        return consumptiontypeDao.nameYZ(name);
+    }
+
+    @Override
+    public Integer updateStatus(Integer status, Integer id) {
+        return consumptiontypeDao.updateStatus(status, id);
+    }
+
+    @Override
+    public List<ConsumptiontypePo> listAll() {
+        return consumptiontypeDao.listAll();
+    }
 }

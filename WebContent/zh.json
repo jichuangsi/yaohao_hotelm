@@ -11,7 +11,7 @@
 	"roomset":"房间管理",
 	"platform":"平台信息",
 	"supplier":"酒店信息",
-	"consumption":"日常消费",
+	"consumptions":"日常消费",
 	"ticheng":"提成",
 	"contract":"合约公寓",
 	"order":"订单",
@@ -36,7 +36,7 @@
 	"checkout":"退房时间",
 	"name":"姓名",
 	"phone":"联系电话",
-	"checknumber":"入住人数",
+	"checknumber":"入住床数",
 	"account":"是否到账",
 	"accounts":"账户",
 	"Submission":"提交",
@@ -86,7 +86,14 @@
 	"password":"密码",
 	"rpassword":"确认密码",
 	"anser":"回答",
-	"question":"酒店问题"
+	"question":"酒店问题",
+	"checkinRoom":"入住人数",
+	"cocontent":"消费商品",
+	"addType":"新增消费类型",
+	"status":"状态",
+	"Enable":"启用",
+	"Prohibit":"禁用",
+	"upType":"消费类型列表"
 
 
 }

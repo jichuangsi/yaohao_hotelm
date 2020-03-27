@@ -40,7 +40,7 @@ public interface OrderService {
 
     public Page<OrderTimeVo> selectRoomByTime(Timestamp time, Page<OrderTimeVo> vo);
 
-    public List<IndayVo> checkinDay(String time, int roomId);
+    public List<IndayVo> checkinDay(String time, Integer roomId);
     @Transactional
     public int updateMoney(int id,Timestamp time);
 
@@ -50,7 +50,7 @@ public interface OrderService {
     public List<OrderTimeVo> selectRoomByTimes(Timestamp time,List<Integer> list);
     public List<OrderTimeVo> selectRoomByin(List<Integer> idList,List<Integer> list);
 
-    public List<DayRoomNumberVo> selectDayRoom(String time, int roomId);
+    public List<DayRoomNumberVo> selectDayRoom(String time, Integer roomId);
 
     public List<OrderTimeVo> selectRooms();
 
@@ -61,7 +61,7 @@ public interface OrderService {
 
     public Page<OrderDetailsVo> allContractOrder(String name,String orderNumber,Page<OrderDetailsVo> vo);
 
-
+     public List<OrderDetailsVo> fianceorder(Integer roomId);
 
 
 }

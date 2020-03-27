@@ -82,10 +82,10 @@ public interface OrderDao {
 
 
     public List<IndayVo> checkinDay(@Param("time")String time,
-                                    @Param("roomId")int roomId);
+                                    @Param("roomId")Integer roomId);
 
     public List<DayRoomNumberVo> selectDayRoom(@Param("time")String time,
-                                               @Param("roomId")int roomId);
+                                               @Param("roomId")Integer roomId);
 
     public List<OrderTimeVo> selectRooms();
 
@@ -102,4 +102,6 @@ public interface OrderDao {
     @Transactional
     public int updateMoney(@Param("id")int id,@Param("time")Timestamp time);
 
+
+    public List<OrderDetailsVo> fianceorder(@Param("roomId")Integer roomId);
 }

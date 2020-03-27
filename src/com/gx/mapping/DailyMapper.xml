@@ -15,20 +15,24 @@
             <arg column="money" jdbcType="DOUBLE" javaType="java.lang.Double"/>
             <arg column="time" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="cid" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="createTime" jdbcType="TIMESTAMP" javaType="java.sql.Timestamp" />
         </constructor>
     </resultMap>
 
     <!--   新增 -->
     <insert id="insertAll" parameterType="com.gx.po.DailyconsumptionPo" useGeneratedKeys="true"  keyProperty="id">
-     INSERT INTO `dailyconsumption` (supplierId,roomId,roomNumber,money,`time`,cid)
+     INSERT INTO `dailyconsumption` (supplierId,roomId,roomNumber,money,`time`,cid,content,createTime)
      values (#{supplierId,jdbcType=INTEGER}, #{roomId,jdbcType=INTEGER},
              #{roomNumber,jdbcType=VARCHAR}, #{money,jdbcType=DOUBLE}
-             , #{time,jdbcType=VARCHAR}, #{cid,jdbcType=INTEGER})
+             , #{time,jdbcType=VARCHAR}, #{cid,jdbcType=INTEGER}
+              , #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
 
     <!--   修改要用的精确查询 -->
     <select id="selectById" resultType="com.gx.po.DailyconsumptionPo" parameterType="java.lang.Integer">
-    select * from `dailyconsumption` where id=#{id,jdbcType=INTEGER}
+   SELECT *,c.name AS typeName FROM `dailyconsumption` d INNER JOIN`consumptiontype` c ON d.cid=c.id
+    where d.id=#{id,jdbcType=INTEGER}
    </select>
 
     <!--   修改要用的精确查询 -->
@@ -42,8 +46,9 @@
 <update id="updateTimeRoom" parameterType="com.gx.po.DailyconsumptionPo">
         UPDATE `dailyconsumption`
         SET
-          `money` =#{cid,jdbcType=DOUBLE}
-        WHERE `id` =#{cid,jdbcType=INTEGER};
+          `money` =#{money,jdbcType=DOUBLE},
+          content=#{content,jdbcType=VARCHAR}
+        WHERE `id` =#{cid,jdbcType=INTEGER}
 </update>
     <!--根据类型，酒店、房号、查询、月份消费-->
     <select id="selectSumMoney" resultType="java.lang.Double">
@@ -56,8 +61,8 @@
 
     <select id="list"  resultType="com.gx.po.DailyconsumptionPo">
         SELECT d.*,c.`name`,s.`supplierName`
-FROM `dailyconsumption` d INNER JOIN `consumptiontype` c ON d.`cid`=c.`id`
-INNER JOIN `supplier` s ON s.id=d.`supplierId`
+        FROM `dailyconsumption` d INNER JOIN `consumptiontype` c ON d.`cid`=c.`id`
+        INNER JOIN `supplier` s ON s.id=d.`supplierId`
     </select>
 
     <select id="updateNumberByRoomId" resultType="java.lang.Integer">
@@ -70,7 +75,7 @@ INNER JOIN `supplier` s ON s.id=d.`supplierId`
           ON d.cid=c.id INNER JOIN `supplier` s ON s.id=d.`supplierId`
           WHERE 1=1
           <if test="time!=null and time!=''">
-            AND  DATE_FORMAT(#{time,,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
+            AND  DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
           </if>
         ORDER BY `time`
         LIMIT #{start},#{pageSize}
@@ -82,7 +87,19 @@ INNER JOIN `supplier` s ON s.id=d.`supplierId`
         ON d.cid=c.id INNER JOIN `supplier` s ON s.id=d.`supplierId`
         WHERE 1=1
         <if test="time!=null and time!=''">
-            AND  DATE_FORMAT(#{time,,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
+            AND  DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
         </if>
+    </select>
+
+    <select id="financesum"  resultType="com.gx.po.DailyconsumptionPo">
+       SELECT *, SUM(`money`) mm FROM `dailyconsumption`
+       WHERE  DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
+       AND `roomId`=#{roomId,jdbcType=INTEGER} AND cid=#{cid,jdbcType=INTEGER}
+    </select>
+
+    <select id="dailydateil"  resultType="com.gx.po.DailyconsumptionPo">
+      SELECT *,cp.name AS typeName FROM `dailyconsumption` d INNER JOIN `consumptiontype` cp ON d.cid=cp.id
+       WHERE  `roomId`=#{roomId,jdbcType=INTEGER} AND cid=#{cid,jdbcType=INTEGER}
+       ORDER BY `time`
     </select>
 </mapper>

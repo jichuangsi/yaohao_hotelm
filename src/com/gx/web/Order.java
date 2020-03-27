@@ -29,7 +29,6 @@ import java.sql.Timestamp;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Order")
@@ -163,9 +162,10 @@ public class Order {
         mv.addObject("lista",alist);*/
         return mv;
     }
+
     //财务报表
     @RequestMapping("/myfinance")
-    public ModelAndView myfinance(String time,Integer currentPage) {
+    public ModelAndView myfinance(String time,Integer currentPage)throws Exception {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/finance2");
         if (currentPage==null) {
@@ -178,10 +178,13 @@ public class Order {
            Timestamp timestamp=new Timestamp(System.currentTimeMillis());
            time2= new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
        }else {//根据月查
-          time2 =time;
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");//注意月份是MM
+           Date date = simpleDateFormat.parse(time);
+           time2= simpleDateFormat.format(date).toString();
        }
       /*  Page<FinancePo> vo=new Page<FinancePo>();
         vo.setCurrentPage(currentPage);*/
+        List<Object> name=new ArrayList<Object>();
         FinancePo fp=new FinancePo();
         List<FinancePo> fpl=new ArrayList<FinancePo>();
         double sumPHP=0d;
@@ -189,23 +192,87 @@ public class Order {
         double booking=0d;
       /*  Page<FinancePo> list=financeService.list(time2,vo);*/
         List<FinancePo> list=financeService.list(time2);
+        if (list.size()==0){//无数据
+            mv.addObject("time",time2);
+            mv.addObject("da",0);
+            return mv;
+        }
         BookingcommissionPo book=bookingcommissionService.selectMoney(time2);//按月查
         if (book==null){
             booking=0d;
         }else {
             booking=book.getBooking();
         }
-
+        List<ConsumptiontypePo> type=consumptiontypeService.list();
+        Map<String,Double> day=new HashMap<String,Double>();
+        List<DailyconsumptionPo> dlist=null;
+        double dsum=0;
+        double dsums=0d;
         for (FinancePo f:list) {
-           sumPHP=sumPHP+f.getCount();
-           sumCNY=sumCNY+f.getRMB();
+            dsums=0d;
+            fp=new FinancePo();
+            dlist=  new ArrayList<DailyconsumptionPo>();
+            for (ConsumptiontypePo t:type) {
+                dsum=0;
+                DailyconsumptionPo po = dailyconsumptionService.financesum(f.getRoomId(), time2 + "-01",t.getId());
+                if (po!=null){
+                    dsums=dsums+po.getMm();
+                    dsum=dsum+po.getMm();
+                    day.put(t.getName(),po.getMm());
+                    DailyconsumptionPo d=new DailyconsumptionPo();
+                    d.setMm(dsum);
+                    d.setName(t.getName());
+                    d.setMoney(po.getMm());
+                    d.setCid(t.getId());
+                    dlist.add(d);
+                }else {
+                    day.put(t.getName(),0d);
+                    DailyconsumptionPo d=new DailyconsumptionPo();
+                    d.setMm(0);
+                    d.setName(t.getName());
+                    d.setMoney(0d);
+                    d.setCid(t.getId());
+                    dlist.add(d);
+                }
+            }
+            f.setCount(f.getCount()-dsums);
+            fp=f;
+            fp.setDlist(dlist);
+            fpl.add(fp);
+            sumPHP = sumPHP + f.getCount();
+            sumCNY = sumCNY + f.getRMB();
         }
+
+
         sumPHP=sumPHP-booking;
+
+        name.add("序号");
+        name.add("房号");
+        name.add("订单输入(PHP)");
+        name.add("订单输入(RMB)");
+        name.add("房租");
+        name.add("水费");
+        name.add("电费");
+        name.add("维修费");
+        name.add("网络");
+        name.add("大厦管理费");
+        if (list.size()!=0) {
+            for (DailyconsumptionPo d : list.get(0).getDlist()) {
+                name.add(d.getName());
+            }
+        }
+      /*  for (String key:day.keySet()){
+            name.add(key);
+        }*/
+        name.add("小计");
         mv.addObject("sumPHP",sumPHP);
         mv.addObject("sumCNY",sumCNY);
         mv.addObject("booking",booking);
         mv.addObject("time",time2);
         mv.addObject("list",list);
+        mv.addObject("name",name);
+        mv.addObject("size",name.size());
+        mv.addObject("da",1);
         return mv;
     }
 
@@ -245,6 +312,8 @@ public class Order {
             id.add(o.getRoomId());
         }
         List<OrderTimeVo> olist3=null;
+        List<OrderTimeVo> olist4=null;
+        OrderTimeVo orderTimeVo=null;
         if (id.size()==0){//判断入住是否为空
             olist3=orderService.selectRoomByins(allid);//全空房
         }else {
@@ -283,6 +352,15 @@ public class Order {
                 }
             }
         }
+        //根据roomID排序
+        Collections.sort(olist, new Comparator<OrderTimeVo>() {
+            @Override
+            public int compare(OrderTimeVo o1, OrderTimeVo o2) {
+                //升序
+                return o1.getRoomId().compareTo(o2.getRoomId());
+            }
+
+        });
         vo.setResult(olist);
         List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
         List<AccountPo> alist=accountService.getAccount();//账户
@@ -369,6 +447,15 @@ public class Order {
                 }
             }
         }
+        //根据roomID排序
+        Collections.sort(olist, new Comparator<OrderTimeVo>() {
+            @Override
+            public int compare(OrderTimeVo o1, OrderTimeVo o2) {
+                //升序
+                return o1.getRoomId().compareTo(o2.getRoomId());
+            }
+        });
+
         vo.setResult(olist);
         List<SupplierPo> slist=supplierService.listHaveAll();//自有酒店
         List<AccountPo> alist=accountService.getAccount();//账户
@@ -540,6 +627,7 @@ public class Order {
     public Object dailyconsumption(DailyconsumptionPo po){
         ModelAndView mv=null;
         mv=new ModelAndView();
+        Timestamp d = new Timestamp(System.currentTimeMillis());
         String y=po.getTime().substring(0,po.getTime().lastIndexOf('-'));
         RoomVo r=roomSetService.selectDetailByIds(po.getRoomId());
         if (r!=null){
@@ -550,14 +638,16 @@ public class Order {
         DailyconsumptionPo po1=dailyconsumptionService.selectByTimeAndRoom(po.getTime(),po.getRoomId(),po.getCid());
         Integer counst=0;
         if (po1==null){
+            po.setCreateTime(d);
             counst=dailyconsumptionService.insertAll(po);
         }else {
             po.setId(po1.getId());
+            po.setCreateTime(d);
             counst= dailyconsumptionService.updateTimeRoom(po);
         }
         double sum=dailyconsumptionService.selectSumMoney(po.getTime(),po.getCid(),po.getRoomId(),po.getSupplierId());
-        FinancePo po2=financeService.selectByyearM(y,po.getRoomId());
-        if (po2!=null) {
+       /* FinancePo po2=financeService.selectByyearM(y,po.getRoomId());*/
+       /* if (po2!=null) {
             po2.setYearM(y);
             if (po.getCid() == 1) {//被子清理费
                 po2.setLinenCleaningfee(sum);
@@ -583,7 +673,7 @@ public class Order {
                 ppo.setOtherExpenses(sum);
             }
             counst=financeService.insertAll(ppo);
-        }
+        }*/
         Gson gson=new Gson();
         return gson.toJson(counst);
     }
@@ -630,7 +720,7 @@ public class Order {
         return mv;
     }
 
-
+//日程消费列表
     @RequestMapping("todaily")
     public ModelAndView todaily(String time,Integer currentPage){
         ModelAndView mv=null;
@@ -649,12 +739,14 @@ public class Order {
         Page<DailyconsumptionPo> list=dailyconsumptionService.listpage(time,vo);
         List<SupplierPo> slist=supplierService.listHaveAll();
         List<RoomSetPo> rlist=roomSetService.selectHave();
+        List<ConsumptiontypePo> typelist=consumptiontypeService.listAll();
         mv.addObject("clist",clist);/*
         mv.addObject("po1",po1);*/
         mv.addObject("list",dlist);
         mv.addObject("lists",list);
         mv.addObject("slist",slist);
         mv.addObject("rlist",rlist);
+        mv.addObject("typelist",typelist);
         return mv;
     }
     //修改日常消费
@@ -672,6 +764,31 @@ public class Order {
         return mv;
     }
 
+    //新增消费类型
+    @ResponseBody
+    @RequestMapping("addType")
+    public Object addType(ConsumptiontypePo po){
+        ModelAndView mv=null;
+        mv=new ModelAndView();
+        Integer count=0;
+       ConsumptiontypePo c=consumptiontypeService.nameYZ(po.getName());
+       if (c==null){//新增
+           count= consumptiontypeService.inserAll(po);
+       }else {//不做处理
+           count=1;
+       }
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+
+    //新增消费类型
+    @ResponseBody
+    @RequestMapping("updateType")
+    public Object updateType(Integer id,Integer status){
+        Integer count=consumptiontypeService.updateStatus(status, id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
 
     //按月显示每天有几个人
     @ResponseBody
@@ -730,108 +847,6 @@ public class Order {
 
     //////////////////////////////////////////合约///////////////////////////////////////////////////////////////////////////////
 
-    //添加合约订单
-    @RequestMapping("/addContractOrder")
-    public ModelAndView addContract(OrderPo orderPo,String name,Integer genderName,String phoneNumber) {
-        ModelAndView mv = null;
-        mv = new ModelAndView("/public/accommodation");
-        int count=passengerService.selectYZ(name,phoneNumber);
-        int paId=1;
-        if (count>0){//有用户
-            PassengerPo po=new PassengerPo();
-            po.setName(name);
-            po.setGenderName(genderName);
-            po.setPhoneNumber(phoneNumber);
-            po.setTime(new Date().getTime());
-            passengerService.insertAll(po);
-            paId=po.getId();
-        }else {
-            PassengerPo po=passengerService.selectNameAndNumber(name,phoneNumber);
-            paId=po.getId();
-        }
-        orderPo.setPassengerId(paId);
-        Timestamp d = new Timestamp(System.currentTimeMillis());
-        orderPo.setStatus(1);//已确认
-        //自有房的订单
-        orderPo.setType(2);
-        //判断是否到账
-        if (orderPo.getIsdao()==1){
-            orderPo.setDaoTime(null);
-        }else if (orderPo.getIsdao()==2){
-            orderPo.setDaoTime(d);
-        }
-        //判断入住天数
-        String strn = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckinTime());
-        String strn2 = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckoutTime());
-        int day=TimeTransformation.nDaysBetweenTwoDate(strn,strn2);
-        orderPo.setCheckinDay(day);
-        orderService.inserAll(orderPo);
-        return mv;
-    }
-
-    //显示所有状态订单
-    @RequestMapping("/allContractOrder")
-    public ModelAndView allContractOrder(String name,String orderNumber,Integer currentPage){
-        ModelAndView mv=null;
-        mv=new ModelAndView("/public/accommodation2");
-        return mv;
-    }
-
-    //获取已确认订单，默认显示当天数据
-    @RequestMapping("checkin")
-    public ModelAndView listChekin(String orderNumber,Integer passengerId,long time,Integer currentPage){
-        ModelAndView mv=null;
-        mv=new ModelAndView("/order/accommodation2");
-        if (currentPage==null) {
-            currentPage=1;
-        }else if (currentPage==0) {
-            currentPage=1;
-        }
-        Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
-        vo.setCurrentPage(currentPage);
-        vo=this.orderService.selectCheckinList(orderNumber, passengerId,time,vo);
-        mv.addObject("list",vo);
-        return mv;
-    }
-
-    //获取订单明细
-    @RequestMapping("orderDetail")
-    public ModelAndView selectOrderDetail(String orderNumber,Integer currentPage){
-        ModelAndView mv=null;
-        mv=new ModelAndView("/order/finance1");
-        if (currentPage==null) {
-            currentPage=1;
-        }else if (currentPage==0) {
-            currentPage=1;
-        }
-       /* Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
-        vo.setCurrentPage(currentPage);
-        vo=this.orderService.selectOrderDetail(orderNumber,vo);*/
-       // mv.addObject("list",vo);
-        return mv;
-    }
-
-    //财务报表
-    @RequestMapping("financial")
-    public ModelAndView financial(String startTime, Integer currentPage){
-        ModelAndView mv=null;
-        mv=new ModelAndView("/order/finance2");
-        if (currentPage==null) {
-            currentPage=1;
-        }else if (currentPage==0) {
-            currentPage=1;
-        }
-        if (startTime==null){
-
-        }
-       // Timestamp time = Timestamp.valueOf(startTime);
-        Page<FinancePo> vo=new Page<FinancePo>();
-        vo.setCurrentPage(currentPage);
-        vo=this.financeService.list(startTime,vo);
-        mv.addObject("list",vo);
-        return mv;
-    }
-
     //查询问题
     @RequestMapping("question")
     public ModelAndView question(String name,Integer currentPage){
@@ -858,12 +873,38 @@ public class Order {
         questionPo.setTitle(title);
         questionPo.setCreateTime(System.currentTimeMillis());
         Integer count=0;
-        if (title!=null && title!=" " && title.length()==0){
+        if (title!=null && title!=" " && title.length()!=0){
             count=questionService.inserAll(questionPo);
         }
         Gson gson=new Gson();
         return gson.toJson(count);
        // return mv;
+    }
+
+
+    //点击消费显示消费详情(订单)
+    @ResponseBody
+    @RequestMapping("financeDatil")
+    public Object financeDatil(String time,Integer roomId){
+        List<OrderDetailsVo> list=orderService.fianceorder(roomId);
+        Gson gson=new Gson();
+        return gson.toJson(list);
+    }
+    //点击其他消费显示消费详情(订单)
+    @ResponseBody
+    @RequestMapping("otherDatil")
+    public Object financeDatil(Integer roomId,Integer cid){
+        List<DailyconsumptionPo> list=dailyconsumptionService.dailydateil(roomId,cid);
+        Gson gson=new Gson();
+        return gson.toJson(list);
+    }
+    //根据id查询消费
+    @ResponseBody
+    @RequestMapping("dayById")
+    public Object selelcDay(Integer id){
+        DailyconsumptionPo da=dailyconsumptionService.selectById(id);
+        Gson gson=new Gson();
+        return gson.toJson(da);
     }
 
     ////////////////////////////////////共有////////////////////////////////////////////////////////////////////////////
@@ -984,6 +1025,8 @@ public class Order {
         }else {//根据月查
             time2 = time;
         }
+
+        List<Object> name=new ArrayList<Object>();
         FinancePo fp=new FinancePo();
         List<FinancePo> fpl=new ArrayList<FinancePo>();
         FinanceVo financeVo=new FinanceVo();
@@ -992,6 +1035,10 @@ public class Order {
         double sumCNY=0d;//人民币
         double booking=0d;//提成
         List<FinancePo> list=financeService.list(time2);
+        if (list.size()==0){
+            Gson gson=new Gson();
+            return gson.toJson(financeVo);
+        }
      /*   financeVo.setList(list);*/
         BookingcommissionPo book=bookingcommissionService.selectMoney(time2);//按月查
         if (book==null){
@@ -1001,213 +1048,78 @@ public class Order {
             booking=book.getBooking();
             financeVo.setBooking(booking);
         }
-
+        List<ConsumptiontypePo> type=consumptiontypeService.list();
+        Map<String,Double> day=new HashMap<String,Double>();
+        List<DailyconsumptionPo> dlist=null;
+        double dsum=0;
+        double dsums=0d;
         for (FinancePo f:list) {
-            sumPHP=sumPHP+f.getCount();//合计php
-            sumCNY=sumCNY+f.getRMB();//总人名币
+            dsums=0d;
+            fp=new FinancePo();
+            dlist=  new ArrayList<DailyconsumptionPo>();
+            for (ConsumptiontypePo t:type) {
+                dsum=0;
+                DailyconsumptionPo po = dailyconsumptionService.financesum(f.getRoomId(), time2 + "-01",t.getId());
+                if (po!=null){
+                    dsums=dsums+po.getMm();
+                    dsum=dsum+po.getMm();
+                    day.put(t.getName(),po.getMm());
+                    DailyconsumptionPo d=new DailyconsumptionPo();
+                    d.setMm(dsum);
+                    d.setName(t.getName());
+                    d.setMoney(po.getMm());
+                    d.setCid(t.getId());
+                    dlist.add(d);
+                }else {
+                    day.put(t.getName(),0d);
+                    DailyconsumptionPo d=new DailyconsumptionPo();
+                    d.setMm(0);
+                    d.setName(t.getName());
+                    d.setMoney(0d);
+                    d.setCid(t.getId());
+                    dlist.add(d);
+                }
+            }
+            f.setCount(f.getCount()-dsums);
+            fp=f;
+            fp.setDlist(dlist);
+            fpl.add(fp);
+            sumPHP = sumPHP + f.getCount();
+            sumCNY = sumCNY + f.getRMB();
         }
+
+
         sumPHP=sumPHP-booking;
+
+        name.add("序号");
+        name.add("房号");
+        name.add("订单输入(PHP)");
+        name.add("订单输入(RMB)");
+        name.add("房租");
+        name.add("水费");
+        name.add("电费");
+        name.add("维修费");
+        name.add("网络");
+        name.add("大厦管理费");
+        if (list.size()!=0) {
+            for (DailyconsumptionPo d : list.get(0).getDlist()) {
+                name.add(d.getName());
+            }
+        }
+      /*  for (String key:day.keySet()){
+            name.add(key);
+        }*/
+        name.add("小计");
+
         financeVo.setSumPHP(sumPHP);
         financeVo.setSumCNY(sumCNY);
-        financeVo.setList(list);
+        financeVo.setList(fpl);
+        financeVo.setName(name);
       /*  lists.add(financeVo);*/
         Gson gson=new Gson();
         return gson.toJson(financeVo);
        /* return lists;*/
         }
-
-
-    //财务报表
-    @ResponseBody
-    @RequestMapping("/excel")
-    public void excel(String time) {
-        ModelAndView mv = null;
-        String time2=null;
-        if (time==null ||time==""){//默认当前月
-            Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-            time2= new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
-        }else {//根据月查
-            time2 = time;
-        }
-        FinancePo fp=new FinancePo();
-        List<FinancePo> fpl=new ArrayList<FinancePo>();
-        double sumPHP=0d;
-        double sumCNY=0d;
-        double booking=0d;
-        List<FinancePo> list=financeService.list(time2);
-        BookingcommissionPo book=bookingcommissionService.selectMoney(time2);//按月查
-        if (book==null){
-            booking=0d;
-        }else {
-            booking=book.getBooking();
-        }
-
-        for (FinancePo f:list) {
-            sumPHP=sumPHP+f.getCount();
-            sumCNY=sumCNY+f.getRMB();
-        }
-        sumPHP=sumPHP-booking;
-
-        /*Integer count=stayRegisterService.countAll();*/
-        //创建excel表的表头
-        String[] headers = {"序号", "房间Room", "订单收入Order revenue（PHP）", "订单收入Order revenue（CNY）",
-                "房租rent（PHP）", "水费Charge for water", "电费Electricity fees", "维修费maintenance cost"
-                , "网络network", "大厦管理费Building management fee", "被铺清洗费Linen Cleaning fee"
-                , "日常用品Daily supplies", "其他费用Other expenses", "小计Subtotal"};
-        //创建Excel工作簿
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        //创建一个工作表sheet
-        HSSFSheet sheet = workbook.createSheet();
-
-        //字体
-        // 1.生成字体对象
-        Font font = workbook.createFont();
-        font.setFontHeightInPoints((short) 11);
-        font.setFontName("宋体");
-
-        // 2.生成样式对象
-        CellStyle style = workbook.createCellStyle();
-        style.setFont(font); // 调用字体样式对象
-        style.setWrapText(true);//自动换行
-
-
-        //创建第一行
-        HSSFRow row = sheet.createRow(0);
-        //定义一个单元格,相当于在第一行插入了三个单元格值分别是
-
-        HSSFCell cell = null;
-        row.setHeightInPoints(40);//目的是想把行高设置成20px
-
-        //插入第一行数据
-        for (int i = 0; i < headers.length; i++) {
-            cell = row.createCell(i);
-            cell.setCellValue(headers[i]);
-            cell.setCellStyle(style);
-        }
-        int cou = 0;
-        //追加数据
-        HSSFRow nextrow = null;
-        for (int i = 1; i <= list.size(); i++) {
-            cou++;
-            nextrow = sheet.createRow(i);
-            nextrow.setHeightInPoints(40);
-          /*  nextrow.setHeight((short) 40);              //设置行高*/
-            HSSFCell cell2 = nextrow.createCell(0);
-            // 3.单元格应用样式
-            cell2.setCellStyle(style);
-            cell2.setCellValue(i);
-            cell2 = nextrow.createCell(1);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getRoomNumber());
-            cell2 = nextrow.createCell(2);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getPHP());
-            cell2 = nextrow.createCell(3);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getRMB());
-            cell2 = nextrow.createCell(4);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getRent());
-            cell2 = nextrow.createCell(5);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getWater());
-            cell2 = nextrow.createCell(6);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getElectricity());
-            cell2 = nextrow.createCell(7);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getMaintenanceCost());
-            cell2 = nextrow.createCell(8);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getNetwork());
-            cell2 = nextrow.createCell(9);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getBuildingManagementFee());
-            cell2 = nextrow.createCell(10);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getLinenCleaningfee());
-            cell2 = nextrow.createCell(11);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getDailySupplies());
-            cell2 = nextrow.createCell(12);
-            cell2.setCellStyle(style);
-            cell2.setCellValue(list.get(i - 1).getOtherExpenses());
-            cell2 = nextrow.createCell(13);
-            double summ=list.get(i - 1).getPHP()-list.get(i - 1).getRent()-list.get(i - 1).getWater()-list.get(i - 1).getElectricity()
-                    -list.get(i - 1).getMaintenanceCost()-list.get(i - 1).getNetwork()-list.get(i - 1).getBuildingManagementFee()
-                    -list.get(i - 1).getLinenCleaningfee()-list.get(i - 1).getDailySupplies()-list.get(i - 1).getOtherExpenses();
-            cell2.setCellStyle(style);
-            cell2.setCellValue(summ);
-            cell2 = nextrow.createCell(14);
-
-
-            sheet.setColumnWidth(i, 25 * 256);
-            if (cou == list.size()) {
-                nextrow = sheet.createRow(list.size()+1);
-                nextrow.setHeightInPoints(50);
-                cell2 = nextrow.createCell(12);
-                cell2.setCellStyle(style);
-                cell2.setCellValue("接单提成walk in guest dapfasom");
-                cell2 = nextrow.createCell(13);
-                cell2.setCellStyle(style);
-                cell2.setCellValue(booking);
-
-                nextrow = sheet.createRow(list.size()+2);
-                nextrow.setHeightInPoints(40);
-                cell2 = nextrow.createCell(1);
-                cell2.setCellStyle(style);
-                cell2.setCellValue("合计");
-                cell2 = nextrow.createCell(12);
-                cell2.setCellStyle(style);
-                cell2.setCellValue("合计Total（PHP）");
-                cell2 = nextrow.createCell(13);
-                cell2.setCellStyle(style);
-                cell2.setCellValue(sumPHP);
-
-                nextrow = sheet.createRow(list.size()+3);
-                nextrow.setHeightInPoints(40);
-                cell2 = nextrow.createCell(12);
-                cell2.setCellStyle(style);
-                cell2.setCellValue("合计Total（CNY）" );
-                cell2 = nextrow.createCell(13);
-                cell2.setCellStyle(style);
-                cell2.setCellValue(sumCNY);
-
-                sheet.setColumnWidth(cou+4, 20 * 256);
-                sheet.setColumnWidth(cou+5, 20 * 256);
-                sheet.setColumnWidth(cou+6, 20 * 256);
-            }
-
-        }
-
-        //创建一个文件
-        File file=null;
-            String name=getFileName("d:/hotelm/",time2+"财务报表.xls",0);
-            file = new File(name);
-
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            // TODO 自动生成的 catch 块
-            e.printStackTrace();
-        }
-        //将内容存盘
-        FileOutputStream stream;
-        try {
-            stream = FileUtils.openOutputStream(file);
-            workbook.write(stream);
-            stream.close();
-        } catch (IOException e) {
-            // TODO 自动生成的 catch 块
-            e.printStackTrace();
-        }
-       /* mv=new ModelAndView("redirect:/Order/financial.do");
-        return mv;*/
-      /*  Gson gson = new Gson();
-        return gson.toJson(1);*/
-    }
-
-
     /**
      * 如果某个路径下已经存在了与要保存的文件名重复了，则在新的文件后面加（1）。。。。
      * @param paths

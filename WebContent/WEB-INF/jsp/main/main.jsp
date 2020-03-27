@@ -11,7 +11,7 @@
 
 		<meta name="description" content="概述及统计" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+		<meta name="viewport" content="width=device-width,initial-scale=0.5,maximum-scale=1,minimum-scale=1,user-scalable=no">
 		<!--basic styles-->
 
 		<link href="${ctx}/assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -127,7 +127,7 @@
 							<li>
 								<a id="consumptionId" onclick="consumption()">
 									<i class="icon-double-angle-right"></i>
-									<span  lang>consumption</span>
+									<span  lang>consumptions</span>
 								</a>
 							</li>
 							<li>
@@ -252,15 +252,15 @@
 				</div>
 
 				<div style="width:100%;height:100%;">
-				  <iframe id="Mainid" src="${ctx}/Main/todata.do" name="main"style="width:100%;height:100%;"  frameBorder="0" scrolling="yes"></iframe>
+				  <iframe id="Mainid" src="${ctx}/Main/todata.do" name="main"style="width:100%;height:100%;white-space:nowrap;"  frameBorder="0" scrolling="yes"></iframe>
 				</div>
 
-				<div class="ace-settings-container" id="ace-settings-container">
-					<div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
+				<%--<div class="ace-settings-container" id="ace-settings-container">
+					&lt;%&ndash;<div class="btn btn-app btn-mini btn-warning ace-settings-btn" id="ace-settings-btn">
 						<i class="icon-cog bigger-150"></i>
-					</div>
+					</div>&ndash;%&gt;
 
-					<%--<div class="ace-settings-box" id="ace-settings-box">
+					&lt;%&ndash;<div class="ace-settings-box" id="ace-settings-box">
 						<div>
 							<div class="pull-left">
 								<select id="skin-colorpicker" class="hide">
@@ -292,8 +292,8 @@
 							<input type="checkbox" class="ace-checkbox-2" id="ace-settings-rtl" />
 							<label class="lbl" for="ace-settings-rtl">左右互换</label>
 						</div>
-					</div>--%>
-				</div><!--/#ace-settings-container-->
+					</div>&ndash;%&gt;
+				</div><!--/#ace-settings-container-->--%>
 			</div><!--/.main-content-->
 		</div><!--/.main-container-->
 

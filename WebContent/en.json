@@ -11,7 +11,7 @@
 	"roomset":"Room setup",
 	"platform":"Platform information",
 	"supplier":"Supplier information",
-	"consumption":"Records of consumption",
+	"consumptions":"Records of consumption",
 	"ticheng":"Royalty",
 	"contract":"Contract apartment",
 	"order":"order",
@@ -36,7 +36,7 @@
 	"checkout":"Check-out time",
 	"name":"UserName",
 	"phone":"telephone number",
-	"checknumber":"Check-in number",
+	"checknumber":"Number of beds",
 	"account":"Arrival account",
 	"accounts":"account",
 	"Submission":"Submission",
@@ -86,6 +86,13 @@
 	"password":"password",
 	"rpassword":"Confirm password",
 	"anser":"Answer",
-	"question":"Questions"
+	"question":"Questions",
+	"checkinRoom":"Check-in number",
+	"cocontent":"consumer goods",
+	"addType":"New consumption type",
+	"status":"status",
+	"Enable":"Enable",
+	"Prohibit":"Prohibit",
+	"upType":"Consumption type"
 
 }

@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<IndayVo> checkinDay(String time, int roomId) {
+    public List<IndayVo> checkinDay(String time, Integer roomId) {
         return orderDao.checkinDay(time, roomId);
     }
 
@@ -182,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<DayRoomNumberVo> selectDayRoom(String time, int roomId) {
+    public List<DayRoomNumberVo> selectDayRoom(String time, Integer roomId) {
         return orderDao.selectDayRoom(time, roomId);
     }
 
@@ -220,5 +220,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateMoney(int id, Timestamp time) {
         return orderDao.updateMoney(id, time);
+    }
+
+
+    @Override
+    public List<OrderDetailsVo> fianceorder(Integer roomId) {
+        return orderDao.fianceorder(roomId);
     }
 }

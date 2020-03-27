@@ -13,4 +13,9 @@ public interface ConsumptiontypeService {
     public int update(ConsumptiontypePo po);
 
     public int delete(int id);
+
+    public ConsumptiontypePo nameYZ(String name);
+
+    public Integer updateStatus(Integer status,Integer id);
+    public List<ConsumptiontypePo> listAll();
 }

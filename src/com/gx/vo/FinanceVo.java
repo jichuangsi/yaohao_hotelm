@@ -12,6 +12,24 @@ public class FinanceVo {
     public double sumPHP=0d;
     public double sumCNY=0d;
 
+    public List<Object> name=new ArrayList<Object>();
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public List<Object> getName() {
+        return name;
+    }
+
+    public void setName(List<Object> name) {
+        this.name = name;
+    }
+
     public List<FinancePo> getList() {
         return list;
     }

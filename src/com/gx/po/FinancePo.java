@@ -1,6 +1,8 @@
 package com.gx.po;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FinancePo {
 
@@ -29,6 +31,15 @@ public class FinancePo {
     private double sumCNY;
     private double booking;//接单提成
 
+    private List<DailyconsumptionPo> dlist=new ArrayList<DailyconsumptionPo>();
+
+    public List<DailyconsumptionPo> getDlist() {
+        return dlist;
+    }
+
+    public void setDlist(List<DailyconsumptionPo> dlist) {
+        this.dlist = dlist;
+    }
 
     public Timestamp getTime() {
         return time;

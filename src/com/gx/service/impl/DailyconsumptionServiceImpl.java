@@ -16,7 +16,7 @@ public class DailyconsumptionServiceImpl implements DailyconsumptionService {
 @Autowired
 private DailyconsumptionDao dailyconsumptionDao;
     @Override
-    public DailyconsumptionPo selectByTimeAndRoom(String time, int roomId,int cid) {
+    public DailyconsumptionPo selectByTimeAndRoom(String time, Integer roomId,Integer cid) {
         return dailyconsumptionDao.selectByTimeAndRoom(time, roomId,cid);
     }
 
@@ -31,7 +31,7 @@ private DailyconsumptionDao dailyconsumptionDao;
     }
 
     @Override
-    public DailyconsumptionPo selectById(int id) {
+    public DailyconsumptionPo selectById(Integer id) {
         return dailyconsumptionDao.selectById(id);
     }
 
@@ -61,5 +61,15 @@ private DailyconsumptionDao dailyconsumptionDao;
         int count=dailyconsumptionDao.countpage(time);
         vo.setTotal(count);
         return vo;
+    }
+
+    @Override
+    public DailyconsumptionPo financesum(Integer roomId, String time, Integer cid) {
+        return dailyconsumptionDao.financesum(roomId, time, cid);
+    }
+
+    @Override
+    public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid) {
+        return dailyconsumptionDao.dailydateil(roomId,cid);
     }
 }

@@ -236,8 +236,7 @@
             <label class="layui-form-label"><span lang>order</span>:</label>
             <div class="layui-input-block widths">
                 <input type="hidden" name="roomId"/>
-                <input type="text" name="orderNumber" id="order" class="layui-input " lay-verify="required"
-                       onblur="order()">
+                <input type="text" name="orderNumber" id="order" class="layui-input " lay-verify="required">
             </div>
         </div>
         <div class="layui-form-item">
@@ -317,6 +316,13 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label"><span lang>checkinRoom</span>:</label>
+            <div class="layui-input-block widths">
+                <input type="text" name="checkinRoom" id="checkinRoom" class="layui-input " lay-verify="required">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <label class="layui-form-label"><span lang>account</span>:</label>
             <div class="layui-input-block widths">
                 <input type="radio" name="isdao" value="2" title="是">
@@ -335,7 +341,7 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</button>
+                <div class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</div>
             </div>
         </div>
     </form>
@@ -343,9 +349,9 @@
 
 <script>
     function add() {
-        index = layer.open({
+        k = layer.open({
             type: 1,
-            area: ['80%', '100%'],
+            area: ['60%', '90%'],
             anim: 2,
             title: '添加订单',
             maxmin: true,
@@ -452,16 +458,7 @@
             var checkin=param.checkinTime;
                 var checkout=param.checkoutTime;
                 if(checkin>checkout){
-                alert('时间不正确');
-                return;
-            }
-            var phone= /^[1][3,4,5,7,8,9][0-9]{9}$/;//手机
-            var myreg = /^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/;
-             var phon2=param.phoneNumber;
-            if(phone.test(phon2) ||myreg.test(phon2)){
-                console.log('true');
-            }else{
-                alert('手机格式输入不正确');
+                    layer.msg('时间不正确!');
                 return;
             }
             var reg = new RegExp('^[1-9](\\d{1,9})((\\.\\d{1,3})?)$');
@@ -469,12 +466,10 @@
             if(reg.test(s)){
                 console.log('true');
             }else{
-                alert('价格输入不正确，不超过9位数');
+                layer.msg('价格输入不正确，不超过9位数!');
                 return;
             }
-            console.log(falg)
-            falg=day(param);
-            if (falg == true) {
+            if (day(param)) {
                 $.ajax({
                     cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                     type: "POST",                                           //上面3行都是必须要的
@@ -483,23 +478,21 @@
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {                          // 不出现异常 进行立面方
                         if (result != 1) {
-                            alert("新增订单失败，人数大于剩余床位数！" + ' \n ' + "Failed to add order");                     //提示框
+                            layer.msg('新增订单失败，人数大于剩余床位数');
+                                          //提示框
                             document.getElementById("order").value = "";     //这个id的文本框的值 将会清空
                             document.getElementById("order").focus();      // 给这个id的文本框提供焦点
-                            return false;
                         } else {
-                            alert("新增订单成功！" + ' \n ' + "New order succeeded");
-                            return true;
+                            layer.msg('新增订单成功！');
                         }
                     },
                     error: function (data) {
                     }
                 })
+                return false
+            }else {
+                console.log(123)
             }
-            /* var time=document.getElementById("checkinTime").value;
-             var number=document.getElementById("checkinNumber").value;
-             var roomId=document.getElementById("id").value;*/
-
         });
 
 
@@ -571,7 +564,7 @@
                             listStr += '<span lang>bed</span></span></div>';
                             if (item.remainingBeds != 0) {
                                 listStr += '<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">';
-                                listStr += '<div class="layui-btn layui-btn-sm  toadd" lang="add">add</div>';
+                                listStr += '<div class="layui-btn layui-btn-sm  toadd" lang>add</div>';
                                 listStr += '</div>';
                             }
                             listStr += ' </div></div></div> ';
@@ -593,6 +586,7 @@
 
     });
     function day(param) {
+        var bl=true
         $.ajax({
             cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
             type: "POST",                                           //上面3行都是必须要的
@@ -600,23 +594,17 @@
             data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
             async: false,                                          // 是否 异步 提交
             success: function (result) {                          // 不出现异常 进行立面方
+                console.log(result)
                 if (result != 1) {
-                    alert("入住失败，人数大于剩余床位数")
-                 /*   layer.msg('入住失败，人数大于剩余床位数！' + ' \n ' + 'Check in failed');             //提示框*/
-                    document.getElementById("order").value = "";     //这个id的文本框的值 将会清空
-                    document.getElementById("order").focus();      // 给这个id的文本框提供焦点
-                    falg = false;
-                    return false;
-                }else {
-                    falg = true;
-                    return false;
+                    layer.msg('入住失败，人数大于剩余床位数！' + ' \n ' + 'Check in failed');
+                    bl=false;
                 }
             },
             error: function (data) {
                 alert("请求失败")
             }
         })
-        return falg;
+        return bl;
     }
 
     function getNowFormatDate() {
