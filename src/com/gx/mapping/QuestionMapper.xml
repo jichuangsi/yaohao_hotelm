@@ -50,5 +50,8 @@
                    WHERE id = #{id,jdbcType=INTEGER}
    </update>
 
+    <select id="questionById" resultType="com.gx.po.QuestionPo">
+           SELECT * FROM question WHERE id = #{id,jdbcType=INTEGER}
+    </select>
 
 </mapper>

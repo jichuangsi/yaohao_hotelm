@@ -95,6 +95,33 @@ public class Order {
         mv.addObject("listd",vo3);
         return mv;
     }
+
+    //分页订单
+    @ResponseBody
+    @RequestMapping("/pageorder")
+    public Object pageorder(String orderNumber,Integer passengerId,Integer currentPage,Integer status) {
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
+        vo.setCurrentPage(currentPage);
+
+        if (status==2){//已确认
+            vo=this.orderService.list(orderNumber, passengerId,vo);
+        }else if (status==5){//已入住
+            vo=this.orderService.checkinorder(orderNumber, passengerId,vo);
+        }else if (status==6){//已退房
+            vo=this.orderService.checkoutorder(orderNumber, passengerId,vo);
+        }else if (status==7){//已到账
+            vo=this.orderService.myaccount(orderNumber, passengerId,vo);
+        }
+
+        Gson gson=new Gson();
+        return gson.toJson(vo);
+    }
+
     //已入住
     @RequestMapping("/checkinorder")
     public ModelAndView checkinorder(String orderNumber,Integer passengerId,Integer currentPage) {
@@ -253,7 +280,7 @@ public class Order {
         name.add("房租");
         name.add("水费");
         name.add("电费");
-        name.add("维修费");
+      /*  name.add("维修费");*/
         name.add("网络");
         name.add("大厦管理费");
         if (list.size()!=0) {
@@ -862,7 +889,7 @@ public class Order {
         return mv;
     }
 
-    //查询问题
+    //新增问题
     @ResponseBody
     @RequestMapping("addquestion")
     public Object addquestion(String title){
@@ -880,6 +907,29 @@ public class Order {
         return gson.toJson(count);
        // return mv;
     }
+    //根据id查询问题
+    @ResponseBody
+    @RequestMapping("getquestion")
+    public Object getquestion(Integer id){
+        QuestionPo questionPo=questionService.questionById(id);
+        Gson gson=new Gson();
+        return gson.toJson(questionPo);
+    }
+
+    //新增问题
+    @ResponseBody
+    @RequestMapping("upquestion")
+    public Object upquestion(QuestionPo po){
+        po.setCreateTime(System.currentTimeMillis());
+        Integer count=0;
+        if (po!=null){
+            count=questionService.updateById(po);
+        }
+        Gson gson=new Gson();
+        return gson.toJson(count);
+        // return mv;
+    }
+
 
 
     //点击消费显示消费详情(订单)
@@ -975,16 +1025,18 @@ public class Order {
         RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
         int t=0;
         int ok=0;
-        for (IndayVo i:count ) {
-            t=t+i.getNumber();//现有住宿人
+        for (IndayVo i:count ) {//入住时间到其他订单退房时间内的入住人数
+            if (i.getCount()>0){
+                t=t+i.getNumber();//现有住宿人
+            }
         }
         if (t==0){
             if (orderPo.getCheckinNumber()<=Integer.parseInt(roomSetPo.getRoomAmount())){//床位大于等于入住人数
                 ok=1;
             }
         }else {
-            if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位
-                if (orderPo.getCheckinNumber()<t){//床位大于等于入住人数
+            if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位  入住人====》床位
+                if (orderPo.getCheckinNumber()<=Integer.parseInt(roomSetPo.getRoomAmount())-t){//床位大于等于入住人数
                     ok=1;
                 }
             }
@@ -1098,7 +1150,7 @@ public class Order {
         name.add("房租");
         name.add("水费");
         name.add("电费");
-        name.add("维修费");
+     /*   name.add("维修费");*/
         name.add("网络");
         name.add("大厦管理费");
         if (list.size()!=0) {

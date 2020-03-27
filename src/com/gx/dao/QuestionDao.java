@@ -14,4 +14,6 @@ public interface QuestionDao {
 
     public Integer updateById(QuestionPo po);
 
+    public QuestionPo questionById(Integer id);
+
 }

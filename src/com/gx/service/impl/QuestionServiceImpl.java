@@ -44,4 +44,9 @@ public class QuestionServiceImpl implements QuestionService {
     public Integer updateById(QuestionPo po) {
         return questionDao.updateById(po);
     }
+
+    @Override
+    public QuestionPo questionById(Integer id) {
+        return questionDao.questionById(id);
+    }
 }

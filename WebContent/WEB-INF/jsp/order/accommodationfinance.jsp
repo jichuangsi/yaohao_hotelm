@@ -450,6 +450,7 @@
         var falg;
         form.on('submit(addMenu)', function (obj) {
             var param = obj.field;
+            console.log(param)
             //判断下拉框
             if (param.currency == -1) {
                 layer.msg('请选择币种!');
@@ -484,6 +485,7 @@
                             document.getElementById("order").focus();      // 给这个id的文本框提供焦点
                         } else {
                             layer.msg('新增订单成功！');
+                            location.href = "${ctx}/Order/occupancy.do";
                         }
                     },
                     error: function (data) {

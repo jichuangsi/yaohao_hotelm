@@ -25,26 +25,35 @@
 		    line-height: 30px;
 		    font-size: 16px;
 	}
+	p,.textarea{
+		white-space:normal;
+		word-wrap : break-word;
+		width:100%;
+	}
+		#addType_apar{
+			display: none;
+		}
+
+	.textarea{
+		font-size: 16px;
+		line-height: 24px;
+		padding: 2px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		width:90%;
+		height: 200px;
+	}
 	</style>
 	<body>
-		<div class="x-body">
-			<div class="layui-row">
-				<div class="layui-col-md6 gz layui-col-xs12 layui-col-md-offset1">
+		<div class="x-body ">
+			<div class="layui-row ">
+				<div class="layui-col-md6 gz layui-col-xs12 layui-col-md-offset1 ">
 					<h1 style="margin-bottom: 20px;">Hotel style apartment</h1>
-					<c:forEach items="${list}" var="item">
-						${item.id}.${item.title}</br>
-					</c:forEach>
-					<%--1. Address: Birch Tower, 1622 Jorge Bocobo Street, Malate, Manila </br>
-					2. SECURITY DEPOSIT of Php2,000.00 in CASH will be collected upon check-in. The deposit will be refunded upon check-out.</br>
-					3. Our mobile number is +639159，421460</br>
-					4. Upon arrival at the LOBBY AREA, please ask the LOBBY SECURITY to call our office at Unit 3308 via intercom.</br> 
-					Our office hours are from 9:00-18:00. After office hours, please call Unit 2811.
-					5. Our staff will meet you at the lobby for registration, where you will be given an ENTRANCE ACCESS CARD.</br>
-					6.The 9 level Pool is open from 9am-7pm</br>
-					Sauna is open from 4pm-7pm</br>
-					Gym is open from 7am-10pm</br>
-					7.Nearby shopping mall parking lot，60 yuan for three hours，Then 10 yuan an hour。</br>
-					Roadside parking space 40 yuan overnight</br>--%>
+						<c:forEach items="${list}" var="item">
+							<p class="divs "onclick="updates(${item.id})">
+								${item.id}.${item.title}</p>
+						</c:forEach>
+
 				</div>
 				<div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
 					<div class="layui-btn layui-btn-sm layui-btn-normal" onclick="addQuestion()" lang>add</div>
@@ -52,9 +61,30 @@
 			</div>
 			
 		</div>
+
+		<!--新增消费类型部分 -->
+		<div id="addType_apar" class="layui-fluid">
+			<form class="layui-form" autocomplete="off"  lay-filter="testss">
+				<div class="layui-form-item">
+					<label class="layui-form-label"><span lang>type</span>：</label>
+					<div class="layui-input-block widths">
+						<input type="hidden" name="id" value="">
+						<input type="hidden" name="hotelm" value="">
+						<textarea class="textarea" name="title" lay-verify="required"  autoHeight="true" ></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<div class="layui-btn" lay-submit lay-filter="addType_Pwd" lang>Submission</div>
+					</div>
+				</div>
+			</form>
+		</div>
 		<script>
-            layui.use('element',function(){
-                var element=layui.element;
+            layui.use(['form','element'],function(){
+                var form = layui.form,
+					element=layui.element;
+
 
                 element.render();
 			    window.addQuestion=function () {
@@ -82,8 +112,66 @@
 						})
                     })
                 }
+
+
+                function type() {
+                    index = layer.open({
+                        type: 1,
+                        area: ['40%', '50%'],
+                        anim: 2,
+                        title: '修改问题',
+                        maxmin: true,
+                        shadeClose: true,
+                        content: $("#addType_apar")
+                    });
+                }
+
+                window.updates=function (value) {
+                    var list;
+                    $.ajax({
+                        cache: false,
+                        type: "post",
+                        url: "${ctx}/Order/getquestion.do",
+                        data:"id="+value,
+                        async: false,
+                        success: function(res) {
+                            list=res;
+                            form.val('testss', {
+                                "id": list.id,
+                                "title": list.title,
+                                "hotelm": list.hotelm
+                            });
+                            type();
+                            form.render();
+
+                        }
+                    })
+                }
+
+                form.on('submit(addType_Pwd)', function (obj) {
+                    var param = obj.field;
+                    console.log(param);
+                    $.ajax({
+                        cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                        type: "POST",                                           //上面3行都是必须要的
+                        url: '${ctx}/Order/upquestion.do',       //地址 type 带参数
+                        data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                        async: false,                                          // 是否 异步 提交
+                        success: function (result) {                          // 不出现异常 进行立面方
+                            if (result != 1) {
+                                alert("失败！" + ' \n ' + "Failed");                     //提示框
+                            } else {
+                                alert("成功！" + ' \n ' + "succeeded");
+                                window.location="${ctx}/Order/question.do";
+                            }
+                        }
+                    })
+
+                });
             })
 
+			
+			
 		</script>
 	</body>
 	

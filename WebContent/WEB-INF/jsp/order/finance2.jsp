@@ -86,7 +86,7 @@
                 <th>${item.rent}(PHP)</th>
                 <th>${item.water}</th>
                 <th>${item.electricity}</th>
-                <th>${item.maintenanceCost}</th>
+               <%-- <th>${item.maintenanceCost}</th>--%>
                 <th>${item.network}</th>
                 <th>${item.buildingManagementFee}</th>
                 <c:forEach items="${item.dlist}" var="tem">
@@ -369,12 +369,12 @@
                 <input type="text" name="electricity" class="layui-input " lay-verify="required">
             </div>
         </div>
-        <div class="layui-form-item">
+        <%--<div class="layui-form-item">
             <label class="layui-form-label"><span lang>maintenance</span>：</label>
             <div class="layui-input-block widths">
                 <input type="text" name="maintenanceCost" class="layui-input " lay-verify="required">
             </div>
-        </div>
+        </div>--%>
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>network</span>：</label>
             <div class="layui-input-block widths">
@@ -442,7 +442,7 @@
                     tableStr += '<td>' + res.list[i].rent + '</td>';
                     tableStr += '<td>' + res.list[i].water + '</td>';
                     tableStr += '<td>' + res.list[i].electricity + '</td>';
-                    tableStr += '<td>' + res.list[i].maintenanceCost + '</td>';
+                   /* tableStr += '<td>' + res.list[i].maintenanceCost + '</td>';*/
                     tableStr += '<td>' + res.list[i].network + '</td>';
                     tableStr += '<td>' + res.list[i].buildingManagementFee + '</td>';
                     for (var d=0;d<data.list[i].dlist.length;d++){
