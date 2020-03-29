@@ -237,12 +237,13 @@
             <tr>
                 <th>${items.id}</th>
                 <th>${items.name}</th>
-                <c:if test="${items.status==1}">
+                <th lang style="color: #00be67" onclick="ustatus(${items.id})">delete</th>
+               <%-- <c:if test="${items.status==1}">
                     <th lang style="color: #00be67" onclick="ustatus(${items.id},2)">Prohibit</th>
                 </c:if>
                 <c:if test="${items.status==2}">
                     <th lang style="color: #8a3104" onclick="ustatus(${items.id},1)">Enable</th>
-                </c:if>
+                </c:if>--%>
                <%-- <th>
                     <div class="layui-btn layui-btn-sm" onclick="updates(${item.id})" lang>amended</div>
                 </th>--%>
@@ -444,12 +445,12 @@
         })
         
         //修改消费状态
-        window.ustatus=function (value,value2) {
+        window.ustatus=function (value) {
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
                 url: '${ctx}/Order/updateType.do',       //地址 type 带参数
-                data: "id="+value+"&status="+value2,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                data: "id="+value,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     if (result != 1) {

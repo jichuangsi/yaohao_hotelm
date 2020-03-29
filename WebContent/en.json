@@ -93,6 +93,7 @@
 	"status":"status",
 	"Enable":"Enable",
 	"Prohibit":"Prohibit",
-	"upType":"Consumption type"
+	"upType":"Consumption type",
+	"delete":"delete"
 
 }

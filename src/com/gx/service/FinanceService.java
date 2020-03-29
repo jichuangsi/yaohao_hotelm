@@ -20,7 +20,7 @@ public interface FinanceService {
     public int updateById(FinancePo po);
 
     public FinancePo selectById(int id);
-    public FinancePo selectByyearM(String yearM,int roomId);
+    public FinancePo selectByyearM(String yearM,Integer roomId);
 
     public int updatePHP(FinancePo po);
 

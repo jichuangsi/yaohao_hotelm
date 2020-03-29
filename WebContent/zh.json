@@ -93,7 +93,8 @@
 	"status":"状态",
 	"Enable":"启用",
 	"Prohibit":"禁用",
-	"upType":"消费类型列表"
+	"upType":"消费类型列表",
+	"delete":"删除"
 
 
 }

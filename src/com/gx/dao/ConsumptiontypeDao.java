@@ -11,7 +11,7 @@ public interface ConsumptiontypeDao {
     public int inserAll(ConsumptiontypePo po);
     public int update(ConsumptiontypePo po);
 
-    public int delete(int id);
+    public Integer delete(Integer id);
 
     public ConsumptiontypePo nameYZ(String name);
 

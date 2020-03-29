@@ -16,4 +16,6 @@ public interface QuestionService {
     public Integer updateById(QuestionPo po);
 
    public QuestionPo questionById(Integer id);
+
+    public Integer deleteById(Integer id);
 }

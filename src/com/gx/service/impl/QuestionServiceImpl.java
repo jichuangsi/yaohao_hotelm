@@ -49,4 +49,9 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionPo questionById(Integer id) {
         return questionDao.questionById(id);
     }
+
+    @Override
+    public Integer deleteById(Integer id) {
+        return questionDao.deleteById(id);
+    }
 }

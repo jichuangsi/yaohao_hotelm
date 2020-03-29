@@ -6,25 +6,15 @@ import com.gx.po.*;
 import com.gx.service.*;
 import com.gx.util.TimeTransformation;
 import com.gx.vo.*;
-import org.apache.commons.io.FileUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
+import org.aspectj.weaver.patterns.TypePatternQuestions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import  com.gx.service.PlatformService;
 
-import javax.jws.WebParam;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -59,6 +49,8 @@ public class Order {
     private BookingcommissionService bookingcommissionService;
     @Autowired
     private  QuestionService questionService;
+    @Autowired
+    private AnserService anserService;
 
 
     ///自有公寓
@@ -587,7 +579,7 @@ public class Order {
 
         /*  roomAndTimeService.deleteOrder(orderPo.getId());*/
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-            String time2 = new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
+            String time2 = new SimpleDateFormat("yyyy-MM").format(orderPo.getOrderTime()).toString();
             int count=financeService.countFinanceM(time2,orderPo.getRoomId());
             if (count>=1){//修改
                 FinancePo po=new FinancePo();
@@ -672,36 +664,15 @@ public class Order {
             po.setCreateTime(d);
             counst= dailyconsumptionService.updateTimeRoom(po);
         }
-        double sum=dailyconsumptionService.selectSumMoney(po.getTime(),po.getCid(),po.getRoomId(),po.getSupplierId());
-       /* FinancePo po2=financeService.selectByyearM(y,po.getRoomId());*/
-       /* if (po2!=null) {
+        FinancePo financePo=financeService.selectByyearM(y,po.getRoomId());
+        if (financePo==null){
+            FinancePo po2=new FinancePo();
             po2.setYearM(y);
-            if (po.getCid() == 1) {//被子清理费
-                po2.setLinenCleaningfee(sum);
-
-            } else if (po.getCid() == 2) {//日常
-                po2.setDailySupplies(sum);
-            } else if (po.getCid() == 3) {//其他
-                po2.setOtherExpenses(sum);
-            }
-            counst = financeService.updateOtherById(po2);
-        }else {//添加
-            FinancePo ppo=new FinancePo();
-            ppo.setYearM(y);
-            ppo.setRoomId(po.getRoomId());
-            ppo.setSupplierId(po.getSupplierId());
-            ppo.setRoomNumber(r.getRoomNumber());
-            if (po.getCid() == 1) {//被子清理费
-                ppo.setLinenCleaningfee(sum);
-
-            } else if (po.getCid() == 2) {//日常
-                ppo.setDailySupplies(sum);
-            } else if (po.getCid() == 3) {//其他
-                ppo.setOtherExpenses(sum);
-            }
-            counst=financeService.insertAll(ppo);
-        }*/
-        Gson gson=new Gson();
+            po2.setRoomId(po.getRoomId());
+            po2.setRoomNumber(r.getRoomNumber());
+            financeService.insertAll(po2);
+        }
+      Gson gson=new Gson();
         return gson.toJson(counst);
     }
 
@@ -812,7 +783,8 @@ public class Order {
     @ResponseBody
     @RequestMapping("updateType")
     public Object updateType(Integer id,Integer status){
-        Integer count=consumptiontypeService.updateStatus(status, id);
+        /*Integer count=consumptiontypeService.updateStatus(status, id);*/
+        Integer count=consumptiontypeService.delete(id);
         Gson gson=new Gson();
         return gson.toJson(count);
     }
@@ -884,8 +856,21 @@ public class Order {
         }else if (currentPage==0) {
             currentPage=1;
         }
+        List<QuestionAnserVo> lists=new ArrayList<QuestionAnserVo>();
+        QuestionAnserVo questionPo=null;
+        List<AnserPo> alist=new ArrayList<AnserPo>();
+        AnserPo anserPo=null;
         List<QuestionPo> list=questionService.listall(name);
-        mv.addObject("list",list);
+        for (QuestionPo p:list){
+            questionPo.setQid(p.getId());
+            questionPo.setHotelm(p.getHotelm());
+            questionPo.setTitle(p.getTitle());
+            questionPo.setTime(p.getCreateTime());
+            List<AnserPo> alists=anserService.listall(p.getId());
+            questionPo.setAlist(alists);
+            lists.add(questionPo);
+        }
+        mv.addObject("list",lists);
         return mv;
     }
 
@@ -916,20 +901,55 @@ public class Order {
         return gson.toJson(questionPo);
     }
 
-    //新增问题
+    //修改问题
     @ResponseBody
     @RequestMapping("upquestion")
     public Object upquestion(QuestionPo po){
         po.setCreateTime(System.currentTimeMillis());
         Integer count=0;
-        if (po!=null){
+        if (po.getId()!=null){
             count=questionService.updateById(po);
         }
         Gson gson=new Gson();
         return gson.toJson(count);
         // return mv;
     }
+    //删除问题
+    @ResponseBody
+    @RequestMapping("deleteQuestions")
+    public Object deleteQuestions(Integer id){
+        Integer count=0;
+        count=questionService.deleteById(id);
+        count=anserService.delByquestionId(id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
 
+    //新增/修改问题回答
+    @ResponseBody
+    @RequestMapping("addAnser")
+    public Object addAnser(AnserPo po){
+        po.setTime(System.currentTimeMillis());
+        Integer count=0;
+        if (po.getId()==null){
+            count=anserService.insertAll(po);
+        }else {
+            count=anserService.updateById(po);
+        }
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+
+    //删除问题回答
+    @ResponseBody
+    @RequestMapping("deleteAnser")
+    public Object deleteAnser(Integer id){
+        Integer count=0;
+        count=questionService.deleteById(id);
+        count=anserService.delByquestionId(id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
 
 
     //点击消费显示消费详情(订单)

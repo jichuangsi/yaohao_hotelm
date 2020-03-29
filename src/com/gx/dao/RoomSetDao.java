@@ -67,4 +67,7 @@ public interface RoomSetDao {
     public OrderTimeVo selectRoomByRoomId(Integer roomId);
 
     public List<RoomSetPo> selectHave();
+
+
+    public Integer roomAcountById(@Param("id")Integer id,@Param("roomAcount")Integer roomAcount);
 }

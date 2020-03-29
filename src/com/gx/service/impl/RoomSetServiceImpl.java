@@ -87,4 +87,10 @@ public class RoomSetServiceImpl implements RoomSetService {
 	public List<RoomSetPo> selectHave() {
 		return roomSetDao.selectHave();
 	}
+
+
+	@Override
+	public Integer roomAcountById(Integer id, Integer roomAcount) {
+		return roomSetDao.roomAcountById(id, roomAcount);
+	}
 }

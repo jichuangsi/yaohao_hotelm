@@ -12,7 +12,7 @@ public interface FinanceDao {
     public List<FinancePo> pageFinance(@Param("yearM") String yearM,@Param("start")  int start,@Param("pageSize")  int pageSize);
 
     public int countFinance(@Param("yearM")String yearM);
-    public int countFinanceM(@Param("yearM")String yearM,@Param("roomId")int roomId);
+    public int countFinanceM(@Param("yearM")String yearM,@Param("roomId")Integer roomId);
 
     public int updateOtherById(FinancePo po);
 

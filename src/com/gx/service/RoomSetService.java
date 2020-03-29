@@ -33,7 +33,7 @@ public interface RoomSetService {
 
     public List<RoomSetPo> selectHave();
 
-
+    public Integer roomAcountById(Integer id,Integer roomAcount);
 
 
 }

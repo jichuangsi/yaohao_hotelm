@@ -55,7 +55,7 @@ public class FinanceServiceImpl implements FinanceService {
     }
 
     @Override
-    public FinancePo selectByyearM(String yearM,int roomId) {
+    public FinancePo selectByyearM(String yearM,Integer roomId) {
         return financeDao.selectByyearM(yearM,roomId);
     }
 

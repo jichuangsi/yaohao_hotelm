@@ -54,4 +54,7 @@
            SELECT * FROM question WHERE id = #{id,jdbcType=INTEGER}
     </select>
 
+    <delete id="deleteById">
+        DELETE FROM `question` WHERE id=#{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

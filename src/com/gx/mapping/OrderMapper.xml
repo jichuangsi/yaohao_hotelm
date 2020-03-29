@@ -407,5 +407,17 @@
     WHERE `roomId`=#{roomId,jdbcType=INTEGER}
     ORDER BY `orderTime`
 </select>
-
+  <select id="fianceordertime" resultType="com.gx.vo.OrderDetailsVo">
+  SELECT o.*,
+    p.`name` AS platformName,s.`supplierName`AS supplierName,r.`roomNumber` AS roomNumber,
+    a.`name` AS accountName,
+    pa.`name`AS `name` ,pa.`phoneNumber` AS phoneNumber
+    FROM `order` o INNER JOIN `platform` p ON o.`platformId`=p.`id`
+    INNER JOIN `supplier` s ON o.`hotelmId`=s.`id` INNER JOIN `passenger` pa
+    ON o.`passengerId`=pa.`id` INNER JOIN `room` r ON r.`id`=o.`roomId`
+    INNER JOIN `account` a ON a.`id`=o.`account`
+    WHERE `roomId`=#{roomId,jdbcType=INTEGER}
+    AND DATE_FORMAT(`orderTime`, '%Y-%m')=DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')
+    ORDER BY `orderTime`
+</select>
 </mapper>

@@ -104,4 +104,6 @@ public interface OrderDao {
 
 
     public List<OrderDetailsVo> fianceorder(@Param("roomId")Integer roomId);
+
+    public List<OrderDetailsVo> fianceordertime(@Param("roomId")Integer roomId,@Param("time")String time);
 }

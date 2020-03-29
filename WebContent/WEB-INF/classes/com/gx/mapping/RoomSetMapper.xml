@@ -155,4 +155,8 @@
     </select>
 
 
+    <update id="roomAcountById">
+         UPDATE `room` SET `roomAmount`=#{roomAcount,jdbcType=INTEGER} WHERE `id` =#{id,jdbcType=INTEGER}
+    </update>
+
 </mapper>

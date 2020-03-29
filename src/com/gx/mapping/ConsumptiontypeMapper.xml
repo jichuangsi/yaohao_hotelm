@@ -33,4 +33,7 @@
     <select id="listAll" resultType="com.gx.po.ConsumptiontypePo">
           SELECT * FROM `consumptiontype`
     </select>
+    <delete id="delete">
+         DELETE FROM `consumptiontype` WHERE `id`=#{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

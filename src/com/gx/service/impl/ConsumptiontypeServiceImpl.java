@@ -31,7 +31,7 @@ public class ConsumptiontypeServiceImpl implements ConsumptiontypeService {
     }
 
     @Override
-    public int delete(int id) {
+    public Integer delete(Integer id) {
         return consumptiontypeDao.delete(id);
     }
 

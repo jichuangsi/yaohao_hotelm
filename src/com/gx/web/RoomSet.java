@@ -149,5 +149,19 @@ public class RoomSet {
 		return mv;
 	}
 
+	/**
+	 * 修改房量
+	 * @param
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/updateAcount")
+	public Object updateAcount(Integer id,Integer roomAcount){
+		ModelAndView mv=null;
+		Integer count=0;
+		count=roomSetService.roomAcountById(id, roomAcount);
+		Gson gson=new Gson();
+		return gson.toJson(count);
+	}
 
 }
