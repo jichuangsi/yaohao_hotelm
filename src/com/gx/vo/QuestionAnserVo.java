@@ -9,9 +9,18 @@ public class QuestionAnserVo {
     private Integer qid;
     private String title;
     private Integer hotelm;
+    private String hotelmName;
     private long time;
     private List<AnserPo> alist=new ArrayList<AnserPo>();
 
+
+    public String getHotelmName() {
+        return hotelmName;
+    }
+
+    public void setHotelmName(String hotelmName) {
+        this.hotelmName = hotelmName;
+    }
 
     public Integer getHotelm() {
         return hotelm;

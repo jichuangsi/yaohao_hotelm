@@ -94,6 +94,9 @@
 	"Enable":"Enable",
 	"Prohibit":"Prohibit",
 	"upType":"Consumption type",
-	"delete":"delete"
+	"delete":"delete",
+	"anser":"Hotelm Questions Answer",
+	"dao":"Arrival account"
+
 
 }

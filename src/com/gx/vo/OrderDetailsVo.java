@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 public class OrderDetailsVo {
+    private Integer id;
     private Integer platformId;//平台
     private String platformName;
     private Integer orderID;//订单
@@ -31,6 +32,14 @@ public class OrderDetailsVo {
     private String in;
     private String out;
 
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getIn() {
         return in;

@@ -37,6 +37,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setResult(list);
         int count=orderDao.countList(orderNumber,passengerId);
         vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
         return vo;
     }
 
@@ -50,6 +51,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setResult(list);
         int count=orderDao.countcheckinorder(orderNumber,passengerId);
         vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
         return vo;
     }
 
@@ -63,6 +65,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setResult(list);
         int count=orderDao.countcheckoutorder(orderNumber,passengerId);
         vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
         return vo;
     }
 
@@ -76,6 +79,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setResult(list);
         int count=orderDao.countmyaccount(orderNumber,passengerId);
         vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
         return vo;
     }
 
@@ -218,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int updateMoney(int id, Timestamp time) {
+    public int updateMoney(Integer id, Timestamp time) {
         return orderDao.updateMoney(id, time);
     }
 

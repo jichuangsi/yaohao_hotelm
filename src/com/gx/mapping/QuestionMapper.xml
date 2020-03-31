@@ -17,7 +17,8 @@
 
 <!--   查看客房等级 -->
   <select id="listall" resultType="com.gx.po.QuestionPo">
-    SELECT * FROM question WHERE 1=1
+    SELECT * FROM question q  INNER JOIN `supplier` s ON q.`hotelm`=s.id
+      WHERE 1=1
     <if test="title==null and title==''">
     title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
     </if>
@@ -25,7 +26,8 @@
   </select>
     <!--   查看客房等级 -->
     <select id="list" resultType="com.gx.po.QuestionPo">
-        SELECT * FROM question WHERE 1=1
+        SELECT * FROM question  q  INNER JOIN `supplier` s ON q.`hotelm`=s.id
+        WHERE 1=1
         <if test="title==null and title==''">
             title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
         </if>

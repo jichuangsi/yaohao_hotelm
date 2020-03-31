@@ -140,12 +140,15 @@
     }
 
     .weeklyCanlendarBox li.active a {
-        background: #0d87ea;
-        color: #fff;
+       /* background: #0d87ea;*/
+        border: 1px solid #0d87ea;
+        color: #2c2c2c;
     }
 
     .weeklyCanlendarBox li.clickActive a {
-        border: 1px solid #0d87ea
+        border: 1px solid #0d87ea;
+        background: #0d87ea;
+        color: #fff;
     }
 
     .weeklyCanlendarBox li a.disabled {
@@ -344,6 +347,7 @@
                 <div class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</div>
             </div>
         </div>
+
     </form>
 </div>
 
@@ -549,10 +553,10 @@
                             listStr += '<div class="layui-colla-item">';
                             listStr += '<h2 class="layui-colla-title" style="font-size: 10px;">';
                             listStr += '<div class="layui-col-xs4 " style="padding-left: 15px;">';
-                            listStr += '<h2 style="font-size:10px;">' + item.roomNumber + '</h2>\n' + '</div>';
+                            listStr += '<h2 style="font-size:10px;">' + item.roomNumber + '</h2>' + '</div>';
                             listStr += ' <div class="layui-btn layui-btn-normal " style="float: right;margin-top: 5px;font-size: 10px;" onclick="date(' + item.roomNumber + ',' + item.roomId + ')" lang>check</div>';
                             listStr += '</h2>';
-                            listStr += '<div class="layui-colla-content"><div class="layui-row">';
+                            listStr += '<div class="layui-colla-content layui-show"><div class="layui-row">';
                             listStr += '<input type="hidden" name="roomNumber" value="'+item.roomNumber+'">';
                             listStr += '<input type="hidden" name="roomId" value="'+item.roomId+'">';
                             listStr += '<div class="">' + item.supplierName + '-' + item.roomNumber + '</div></div>';

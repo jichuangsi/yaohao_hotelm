@@ -94,7 +94,9 @@
 	"Enable":"启用",
 	"Prohibit":"禁用",
 	"upType":"消费类型列表",
-	"delete":"删除"
+	"delete":"删除",
+	"anser":"酒店问题回答",
+	"dao":"到账"
 
 
 }

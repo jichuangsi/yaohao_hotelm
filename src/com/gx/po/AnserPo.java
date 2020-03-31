@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 
 public class AnserPo {
     private Integer id;
-    private String questionId;
-    private String anser;
-    private long time;
+    private Integer questionId;
+    private String answer;
+    private Timestamp time;
 
     public Integer getId() {
         return id;
@@ -16,27 +16,27 @@ public class AnserPo {
         this.id = id;
     }
 
-    public String getQuestionId() {
+    public Integer getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
 
-    public String getAnser() {
-        return anser;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setAnser(String anser) {
-        this.anser = anser;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
-    public long getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 }

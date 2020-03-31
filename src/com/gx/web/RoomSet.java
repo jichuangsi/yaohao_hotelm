@@ -163,5 +163,12 @@ public class RoomSet {
 		Gson gson=new Gson();
 		return gson.toJson(count);
 	}
-
+	/*@RequestMapping("/updateAcount")
+	public ModelAndView updateAcount(Integer id,Integer roomAcount){
+		ModelAndView mv=null;
+		mv=new ModelAndView("redirect:/Order/monthRoom.do");
+		Integer count=roomSetService.roomAcountById(id, roomAcount);
+		mv.addObject("roomId",id);
+		return mv;
+	}*/
 }

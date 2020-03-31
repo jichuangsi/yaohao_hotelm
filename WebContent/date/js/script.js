@@ -53,18 +53,7 @@ $(document).ready(function(){
 				center: 'title',
 				right: 'month'
 			},
-           /* buttonText: {
-                prev: "上月",
-                next: "下月",
-                today: "今天",
-                month: "月"
-            },*/
             code: "zh-cn",
-			/*buttonText:{
-				today:'跳转到当天'
-			},*/
-            //这里是设置标题自定义的，我设置为“个人日程安排”了
-           /* titleFormat:'酒店日程',*/
             locale:'zh-cn',
             editable: true,
             themeSystem:'bootstrap3',
@@ -89,17 +78,15 @@ $(document).ready(function(){
                             // 数据处理，将返回的数据添加到events中
                             if (item.roomAmount ==0) {
                                 events.push({
-                                    id: item.id,
+                                    id: item.roomId,
                                     // 标题，即你想展示的内容
-                                    title: '',
+                                    title:item.roomNumber + "\n 剩"+item.roomAmount,
                                     start:date,
                                     end: date
-
-
                                 });
                             } else if (item.roomAmount !=0) {
                                 events.push({
-                                    id: item.id,
+                                    id: item.roomId,
                                     // 标题，即你想展示的内容
                                     title: item.roomNumber + "\n 剩"+item.roomAmount,
                                     start: date,
@@ -114,8 +101,44 @@ $(document).ready(function(){
                     }
                 });
             },
+            /*eventClick: function(event) {
+                var id=event.id;//id
+                console.log(id);
+            },*/
+            dayClick: function(date, jsEvent, view) {//日程区块，单击时触发
+                var id=UrlSearch();
+                console.log(id);
+                opens(id);
+            }
 
 		});
 	}
-	
+	window.opens=function (id) {
+        layer.prompt({
+            formType: 2,
+            value: '',
+            title: '房间床位数',
+            area: ['50px', '40px'] //自定义文本域宽高
+        }, function (value, index, elem) {
+            if (value==null || value.trim().length==0){
+                alert("格式不正确")
+                return;
+            }
+           /* window.location="/hotelm/RoomSet/updateAcount.do?id="+id+"&roomAcount="+value;*/
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "/hotelm/RoomSet/updateAcount.do",
+                data:"id="+id+"&roomAcount="+value,
+                async: false,
+                success: function(res) {
+                    //加载刷新父类页面并关闭弹窗
+                    window.parent.location.reload();
+                    parent.layer.closeAll(); //关闭弹窗
+
+                }
+            })
+        })
+    }
+
 });

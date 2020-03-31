@@ -560,7 +560,7 @@
 				document.getElementById("bigGuide").innerHTML=a+"";
 				var s=document.getElementById("myorderId").getElementsByTagName('span')[0].innerHTML;
 				document.getElementById("smallGuide").innerHTML=s+"";
-			   document.getElementById('Mainid').src='${ctx}/Order/myorder.do';
+			   document.getElementById('Mainid').src='${ctx}/Order/pageorders.do?status=0';
 			}
         //已入住
             function checkinorder() {

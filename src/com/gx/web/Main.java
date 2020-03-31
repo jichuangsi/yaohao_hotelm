@@ -10,7 +10,7 @@ public class Main {
 	@RequestMapping("/todata")
 	public String tologin(){
 		//return "redirect:/DateView/tolist.do";
-		return "redirect:/Order/myorder.do";
+		return "redirect:/Order/pageorders.do?status=0";
 	}
 
 }

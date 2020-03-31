@@ -99,14 +99,13 @@ public class Order {
         }
         Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
         vo.setCurrentPage(currentPage);
-
-        if (status==2){//已确认
+        if (status==0){//已确认
             vo=this.orderService.list(orderNumber, passengerId,vo);
-        }else if (status==5){//已入住
+        }else if (status==1){//已入住
             vo=this.orderService.checkinorder(orderNumber, passengerId,vo);
-        }else if (status==6){//已退房
+        }else if (status==2){//已退房
             vo=this.orderService.checkoutorder(orderNumber, passengerId,vo);
-        }else if (status==7){//已到账
+        }else if (status==3){//已到账
             vo=this.orderService.myaccount(orderNumber, passengerId,vo);
         }
 
@@ -114,6 +113,34 @@ public class Order {
         return gson.toJson(vo);
     }
 
+
+    @RequestMapping("/pageorders")
+    public ModelAndView pageorders(String orderNumber,Integer passengerId,Integer currentPage,Integer status) {
+        ModelAndView mv = null;
+        mv = new ModelAndView("/order/accommodation");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
+        vo.setCurrentPage(currentPage);
+        if (status==0){//已确认
+            vo=this.orderService.list(orderNumber, passengerId,vo);
+            mv.addObject("status",0);
+        }else if (status==1){//已入住
+            vo=this.orderService.checkinorder(orderNumber, passengerId,vo);
+            mv.addObject("status",1);
+        }else if (status==2){//已退房
+            vo=this.orderService.checkoutorder(orderNumber, passengerId,vo);
+            mv.addObject("status",2);
+        }else if (status==3){//已到账
+            vo=this.orderService.myaccount(orderNumber, passengerId,vo);
+            mv.addObject("status",3);
+        }
+        mv.addObject("lists",vo);
+        return mv;
+    }
     //已入住
     @RequestMapping("/checkinorder")
     public ModelAndView checkinorder(String orderNumber,Integer passengerId,Integer currentPage) {
@@ -798,7 +825,8 @@ public class Order {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH) + 1;
-            time= year + "-" + ( month<10 ? "0" + month : month);
+            int day = calendar.get(Calendar.DATE) ;
+            time= year + "-" + ( month<10 ? "0" + month : month)+"-"+day;
         }
         List<DayRoomNumberVo> dayList=new ArrayList<DayRoomNumberVo>();
         DayRoomNumberVo vo=new DayRoomNumberVo();
@@ -857,11 +885,12 @@ public class Order {
             currentPage=1;
         }
         List<QuestionAnserVo> lists=new ArrayList<QuestionAnserVo>();
-        QuestionAnserVo questionPo=null;
+        QuestionAnserVo questionPo=new QuestionAnserVo();
         List<AnserPo> alist=new ArrayList<AnserPo>();
-        AnserPo anserPo=null;
+        AnserPo anserPo=new AnserPo();
         List<QuestionPo> list=questionService.listall(name);
         for (QuestionPo p:list){
+            questionPo=new QuestionAnserVo();
             questionPo.setQid(p.getId());
             questionPo.setHotelm(p.getHotelm());
             questionPo.setTitle(p.getTitle());
@@ -925,17 +954,34 @@ public class Order {
         return gson.toJson(count);
     }
 
+
     //新增/修改问题回答
     @ResponseBody
+    @RequestMapping("getAnser")
+    public Object getAnser(Integer id){
+        AnserPo po=anserService.questionById(id);
+        Gson gson=new Gson();
+        return gson.toJson(po);
+    }
+
+    //新增问题回答
+    @ResponseBody
     @RequestMapping("addAnser")
-    public Object addAnser(AnserPo po){
-        po.setTime(System.currentTimeMillis());
-        Integer count=0;
-        if (po.getId()==null){
-            count=anserService.insertAll(po);
-        }else {
-            count=anserService.updateById(po);
-        }
+    public Object addAnser(String title,Integer questionId){
+        AnserPo po=new AnserPo();
+        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+        po.setTime(timestamp);
+        po.setAnswer(title);
+        po.setQuestionId(questionId);
+        Integer count=anserService.insertAll(po);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+    //修改问题回答
+    @ResponseBody
+    @RequestMapping("upanser")
+    public Object upanser(AnserPo po){
+        Integer count=anserService.updateById(po);
         Gson gson=new Gson();
         return gson.toJson(count);
     }
@@ -944,9 +990,7 @@ public class Order {
     @ResponseBody
     @RequestMapping("deleteAnser")
     public Object deleteAnser(Integer id){
-        Integer count=0;
-        count=questionService.deleteById(id);
-        count=anserService.delByquestionId(id);
+        Integer count=anserService.delById(id);
         Gson gson=new Gson();
         return gson.toJson(count);
     }
@@ -1023,11 +1067,11 @@ public class Order {
     //到账
     @ResponseBody
     @RequestMapping("isdao")
-    public Object isdao(int id){
+    public Object isdao(Integer id){
         Timestamp d = new Timestamp(System.currentTimeMillis());
-        orderService.updateMoney(id,d);
+       Integer count= orderService.updateMoney(id,d);
         Gson gson = new Gson();
-        return gson.toJson(1);
+        return gson.toJson(count);
     }
 
 
