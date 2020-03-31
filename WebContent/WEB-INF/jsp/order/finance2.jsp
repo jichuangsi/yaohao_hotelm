@@ -277,10 +277,10 @@
                     str+='<th>'+date[i].roomNumber+'</th>';
                     str+='<th>'+date[i].name+'</th>';
                     str+='<th>'+date[i].phoneNumber+'</th>';
-                    if (date[i].currency==1){
+                    if (date[i].currency==2){
                         str+='<th>(PHP)'+date[i].money+'</th>';
                     }
-                    if (date[i].currency==2){
+                    if (date[i].currency==1){
                         str+='<th>(RMB)'+date[i].money+'</th>';
                     }
                     str+='<th>'+timestampToTime(date[i].orderTime)+'</th>';/*
@@ -396,12 +396,7 @@
 </div>
 <script>
     function setExcel() {
-      /*  var data = {
-            dpid: getUser().deptId,
-            openid: getUser().wechat,
-            timeStart: dateStart,
-            timeEnd: dateEnd
-        }*/
+
         var time = document.getElementById("excel").value;
         $.ajax({
             cache: false,
@@ -416,18 +411,6 @@
                 for (var i = 0; i <na.length; i++){
                     tableStr += '<th width="15%">' + na[i]+ '</th>';
                 }
-               /* tableStr += '<th width="15%">' + '订单收入Order revenue（PHP）' + '</td>';
-                tableStr += '<th width="15%">' + '订单收入Order revenue（RMB）' + '</td>';
-                tableStr += '<th width="15%">' + '房租rent（PHP）' + '</td>';
-                tableStr += '<th width="15%">' + '水费Charge for water' + '</td>';
-                tableStr += '<th width="15%">' + '电费Electricity fees' + '</td>';
-                tableStr += '<th width="15%">' + '维修费maintenance cost' + '</td>';
-                tableStr += '<th width="15%">' + '网络network' + '</td>';
-                tableStr += '<th width="15%">' + '大厦管理费Building management fee' + '</td>';
-                tableStr += '<th width="15%">' + '被铺清洗费Linen Cleaning fee' + '</td>';
-                tableStr += '<th width="15%">' + '日常用品Daily supplies' + '</td>';
-                tableStr += '<th width="15%">' + '其他费用Other expenses' + '</td>';
-                tableStr += '<th width="15%">' + '小计Subtotal' + '</td>';*/
                 tableStr += '</tr>';
                 var len = res.list.length;
                 var data = res;

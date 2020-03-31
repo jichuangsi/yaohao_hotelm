@@ -6,7 +6,6 @@ import com.gx.po.*;
 import com.gx.service.*;
 import com.gx.util.TimeTransformation;
 import com.gx.vo.*;
-import org.aspectj.weaver.patterns.TypePatternQuestions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -583,30 +582,27 @@ public class Order {
     @ResponseBody
     @RequestMapping("updateStatus")
     public Object updateStatus(String orderNumber,Integer status,String time){
-        ModelAndView mv=null;
         Integer counts=0;
-        if (status==5){//入住
-            mv=new ModelAndView("redirect:/Order/myorder.do");
-        }else if (status==6){//退房
-            mv=new ModelAndView("redirect:/Order/checkinorder.do");
-        }
         counts= orderService.updateStatus(orderNumber, status);
         OrderPo orderPo=orderService.selectByOrderNumber(orderNumber);//根据订单号查询订单
         RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
         if (status==6){//退房
             String satrt=time.substring(0,time.lastIndexOf("-"));
             String end=time.substring(time.lastIndexOf("-")+1,time.length());
-            if (satrt!=null && satrt!="" ||end!=null && end!=""){
+            if (satrt.trim().length()>0 && end.trim().length()>0){
                 counts=orderService.updateInEnd(satrt,end,orderPo.getId());
             }
-
             //退房就到账
             Timestamp d = new Timestamp(System.currentTimeMillis());
             counts=orderService.updateMoney(orderPo.getId(),d);
-
-        /*  roomAndTimeService.deleteOrder(orderPo.getId());*/
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-            String time2 = new SimpleDateFormat("yyyy-MM").format(orderPo.getOrderTime()).toString();
+            String time2=null;
+            if (orderPo.getOrderTime()==null){
+               time2 = new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
+            }else {
+             time2 = new SimpleDateFormat("yyyy-MM").format(orderPo.getOrderTime()).toString();
+            }
+
             int count=financeService.countFinanceM(time2,orderPo.getRoomId());
             if (count>=1){//修改
                 FinancePo po=new FinancePo();
