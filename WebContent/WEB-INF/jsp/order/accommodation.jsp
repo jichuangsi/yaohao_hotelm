@@ -113,7 +113,6 @@
                                                                                  pattern="yyyy-MM-dd"/>
 						</span> <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}"
                                                                            pattern="yyyy-MM-dd"/></span></div>
-                                    <%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
                                 <div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span
                                         lang>to</span> <span>${item.out}</span></div>
                             </div>
@@ -134,21 +133,20 @@
                                         lang>name</span>:${item.name}</span></div>
                             </div>
                             <div class="rmb-title layui-row">
-                                <div class="layui-col-xs2 layui-col-xs-offset8">
-                                        <%--	onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=5')"--%>
+                                <div class="layui-col-xs2 layui-col-xs-offset6">
                                     <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                          onclick="checkin(${item.orderNumber})" lang>ins</span></div>
-                                <c:if test="${item.daoTime==null}">
-                                <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                      onclick="daoacount(${item.id})" lang>dao</span></div>
-                            </c:if>
+                                          onclick="checkin(${item.orderNumber})" lang>ins</span>
+                                    <c:if test="${item.daoTime==null}">
+                                       <span class="layui-btn layui-btn-normal layui-btn-sm"  onclick="daoacount(${item.id})" lang>dao</span>
+                                    </c:if>
+                                </div>
+
                         </div>
                     </div>
+                    </div>
                     </c:forEach>
-                </div>
-
             </div>
-        </div>
+            </div>
                 <%--2已入住--%>
              <div class="layui-tab-item">
                     <div class="layui-row" id="list1">
@@ -199,16 +197,14 @@
                                             lang>name</span>:${item.name}</span></div>
                                 </div>
                                 <div class="rmb-title layui-row">
-                                    <div class="layui-col-xs2 layui-col-xs-offset8">
+                                    <div class="layui-col-xs2 layui-col-xs-offset4"><span class="layui-btn layui-btn-normal layui-btn-sm"
+                                              onclick="checkout(${item.orderNumber})" lang>out</span>
+                                        <c:if test="${item.isdao==1}">
+                                        <span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(${item.id})" lang>ins</span>
+                                        </c:if>
+                                    </div>
 
-                                            <%--onclick="javascript:window.open('${ctx}/Order/updateStatus.do?orderNumber=${item.orderNumber}&status=6')"--%>
-                                        <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                              onclick="checkout(${item.orderNumber})" lang>out</span></div>
-                                        <%--<div class="layui-col-xs2 "><span class="layui-btn layui-btn-normal layui-btn-sm">撤销</span></div>--%>
-                                    <c:if test="${item.daoTime==null}">
-                                    <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                          onclick="daoacount(${item.id})" lang>ins</span></div>
-                                </c:if>
+                                </div>
                             </div>
 
                         </div>
@@ -245,7 +241,6 @@
                                                                                      pattern="yyyy-MM-dd"/>
 						</span> <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}"
                                                                            pattern="yyyy-MM-dd"/></span></div>
-                                        <%--<div class="layui-col-xs7"><span></span> 至 <span> </span></div>--%>
                                     <div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span
                                             lang>to</span> <span>${item.out}</span></div>
                                 </div>
@@ -266,14 +261,15 @@
                                             lang>name</span>:${item.name}</span></div>
                                 </div>
                                 <c:if test="${item.daoTime==null}">
-                                <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                    <div class="layui-col-xs2 layui-col-xs-offset8"><span class="layui-btn layui-btn-normal layui-btn-sm"
                                       onclick="daoacount(${item.id})" lang>ins</span></div>
                             </c:if>
                         </div>
-                        </c:forEach>
-                    </div>
 
+                    </div>
+                        </c:forEach>
                 </div>
+             </div>
                 <%--已到账--%>
              <div class="layui-tab-item">
                     <div class="layui-row" id="list3">
@@ -324,23 +320,23 @@
                                             lang>name</span>:${item.name}</span></div>
                                 </div>
                                 <c:if test="${item.daoTime==null}">
-                                <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                    <div class="layui-col-xs2 layui-col-xs-offset8"><span class="layui-btn layui-btn-normal layui-btn-sm"
                                       onclick="daoacount(${item.id})" lang>ins</span></div>
                             </c:if>
                         </div>
+                         </div>
                         </c:forEach>
-                    </div>
-
                 </div>
-        </div>
+            </div>
 
     </div>
 
-
+</div>
 <div class="span11" id="pages">
     <div class="row-fluid">
         <div class="tcdPageCode" style="text-align:center;"></div>
     </div>
+</div>
 </div>
 </div>
 </body>
@@ -471,7 +467,9 @@
                         listStr += '</div><div class="layui-col-xs6"><span>';
                         listStr+=formateDate(item.checkintime);
                         listStr += '</span> <span lang>to</span> <span>'+formateDate(item.checkouttime)+'</span></div>';
-                        listStr += ' <div class="layui-col-xs4 layui-col-md3"><span>'+item.in+'</span> <span lang>to</span> <span>'+item.out+'</span></div>';
+                        if (item.in!=null && item.out!=null) {
+                            listStr += ' <div class="layui-col-xs4 layui-col-md3"><span></span>'+item.in+'<span lang>to</span>'+item.out +'<span></span></div>';
+                        }
                         listStr += ' </div>';
                         listStr += ' <div class="rmb-title layui-row">';
                         listStr += '<div class="layui-col-xs4"><span><span lang>total</span>:';
@@ -492,20 +490,24 @@
                         listStr += '</div>';
                         if (status==0){//确认
                             listStr += '<div class="rmb-title layui-row">';
-                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
-                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin('+item.orderNumber+')" lang>ins</span></div>';
+                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset4">';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin('+item.orderNumber+')" lang>ins</span>';
                             if (item.isdao==1) {
-                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span></div>';
+                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
+                            listStr+='</div>';
+
                             listStr += '</div>';
                         }else if (status==1) {//入住
                             listStr += '<div class="rmb-title layui-row">';
                             listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
-                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin('+item.orderNumber+')" lang>ins</span></div>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkout('+item.orderNumber+')" lang>out</span>';
                             if (item.isdao==1) {
-                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span></div>';
+                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
-                            listStr += '</div>';
+                            listStr+='</div>';
+
+                            listStr += '</div>'
                         }else if (status==2) {//退房
                             if (item.isdao==1) {
                                 listStr += '<div class="rmb-title layui-row">';
@@ -579,9 +581,6 @@
                 success: function (result) {
                     /* window.location.reload();*/
                     funpage(ss,ps);
-                    console.log(111111111)
-                    console.log(ss)
-                    console.log(ps)
                 }
             })
         }

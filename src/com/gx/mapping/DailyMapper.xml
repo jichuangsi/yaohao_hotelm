@@ -77,7 +77,7 @@
           <if test="time!=null and time!=''">
             AND  DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')=DATE_FORMAT(`time`, '%Y-%m')
           </if>
-        ORDER BY `time`
+        ORDER BY `createTime` DESC
         LIMIT #{start},#{pageSize}
     </select>
 

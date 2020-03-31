@@ -354,12 +354,8 @@
                     data: "id="+question,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {                          // 不出现异常 进行立面方
-                        if (result != 1) {
-                            alert("失败！" + ' \n ' + "Failed");                     //提示框
-                        } else {
-                            alert("成功！" + ' \n ' + "succeeded");
+
                             window.location="${ctx}/Order/question.do";
-                        }
                     }
                 })
             }

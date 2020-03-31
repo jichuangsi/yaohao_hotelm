@@ -62,6 +62,16 @@
             简体中文
         </button>
     </div>
+    <div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
+        <form class="layui-form layui-col-md12" >
+            <div class="layui-input-inline">
+                <input type="text" name="time" id="time" placeholder="消费时间(月)" autocomplete="off" class="layui-input time" style="width: 200px;">
+            </div>
+
+            <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
+        </form>
+
+    </div>
     <table class="layui-table">
         <thead>
         <%--<input type="hidden" id="excel" value="${time}">
@@ -388,12 +398,11 @@
                         alert("新增失败！" + ' \n ' + "Failed to add");                     //提示框
                         document.getElementById("money").value = "";     //这个id的文本框的值 将会清空
                         document.getElementById("money").focus();      // 给这个id的文本框提供焦点
-                        return false;
+
                     } else {
                         alert("新增成功！" + ' \n ' + "succeeded");
                         var time = getNowFormatDate();
-                        location.href = '${ctx}/Order/todaily.do?time=' + time;
-                        return true;
+                        location.href = '${ctx}/Order/todaily.do';
                     }
                 }
             })
@@ -414,12 +423,12 @@
                 success: function (result) {                          // 不出现异常 进行立面方
                     if (result != 1) {
                         alert("新增失败！" + ' \n ' + "Failed to add");                     //提示框
-                        return false;
+
                     } else {
                         alert("新增成功！" + ' \n ' + "succeeded");
                         var time = getNowFormatDate();
-                        location.href = '${ctx}/Order/todaily.do?time=' + time;
-                        return true;
+                        location.href = '${ctx}/Order/todaily.do';
+
                     }
                 }
             });
@@ -439,11 +448,17 @@
                         alert("新增失败！" + ' \n ' + "Failed to add");                     //提示框
                     } else {
                         alert("新增成功！" + ' \n ' + "succeeded");
+                        location.href = '${ctx}/Order/todaily.do';
                     }
                 }
             });
         })
-        
+
+        form.on('submit(search)',function () {
+            var time=document.getElementById("time").value;
+            location.href="${ctx}/Order/todaily.do?time="+time;
+        });
+
         //修改消费状态
         window.ustatus=function (value) {
             $.ajax({

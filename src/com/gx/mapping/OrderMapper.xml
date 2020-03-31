@@ -62,7 +62,7 @@
       AND `passengerId`= #{passengerId,jdbcType=INTEGER}
     </if>
     AND--> `type`=1 AND o.status=2
-    ORDER BY `checkinTime`
+    ORDER BY `checkinTime`  DESC
     LIMIT #{start},#{size}
   </select>
 
@@ -101,7 +101,7 @@
       AND `passengerId`= #{passengerId,jdbcType=INTEGER}
     </if>
     AND--> `type`=1 AND o.status=5
-    ORDER BY `checkinTime`
+    ORDER BY `orderTime` DESC
     LIMIT #{start},#{size}
   </select>
 
@@ -139,7 +139,7 @@
       AND `passengerId`= #{passengerId,jdbcType=INTEGER}
     </if>
     AND--> `type`=1 AND o.status=6
-    ORDER BY `checkinTime`
+    ORDER BY `orderTime` DESC
     LIMIT #{start},#{size}
   </select>
 
@@ -177,7 +177,7 @@
       AND `passengerId`= #{passengerId,jdbcType=INTEGER}
     </if>
     AND--> `type`=1 AND o.isdao=2
-    ORDER BY `checkinTime`
+    ORDER BY `orderTime`  DESC
     LIMIT #{start},#{size}
   </select>
 
