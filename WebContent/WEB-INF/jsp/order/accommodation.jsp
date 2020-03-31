@@ -375,7 +375,7 @@
                         document.getElementById("room").focus();      // 给这个id的文本框提供焦点
                         return false;
                     } else {
-                        location.href = '${ctx}/Order/myorder.do';
+                        location.href = '${ctx}/Order/pageorders.do?status=0';
                         return true;
                     }
                 }
@@ -407,10 +407,10 @@
                             /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
                             document.getElementById("room").value = "";     //这个id的文本框的值 将会清空
                             document.getElementById("room").focus();      // 给这个id的文本框提供焦点
-                            return false;
+
                         } else {
-                            location.href = '${ctx}/Order/myorder.do';
-                            return true;
+                            location.href = '${ctx}/Order/pageorders.do?status=0';
+
                         }
                     }
                 })
@@ -579,7 +579,6 @@
                 data: "id=" + value,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {
-                    /* window.location.reload();*/
                     funpage(ss,ps);
                 }
             })

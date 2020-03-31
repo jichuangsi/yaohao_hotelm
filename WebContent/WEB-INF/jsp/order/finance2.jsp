@@ -395,7 +395,9 @@
     </form>
 </div>
 <script>
-    function setExcel() {
+
+
+        function setExcel() {
 
         var time = document.getElementById("excel").value;
         $.ajax({
@@ -518,6 +520,21 @@
 <c:if test="${da==0}">
     <body>
     <div style="margin:0 auto">无数据</div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var time;
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${ctx}/Order/testf.do",
+                data:"time="+time,
+                async: false,
+                success: function(res) {
+                    console.log(res)
+                }
+            })
+        })
+    </script>
     </body>
 </c:if>
 </html>

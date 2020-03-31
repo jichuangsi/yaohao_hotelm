@@ -100,7 +100,7 @@ public interface OrderDao {
 
    public int countallContractOrder(@Param("name")String name,@Param("orderNumber")String orderNumber);
     @Transactional
-    public int updateMoney(@Param("id")Integer id,@Param("time")Timestamp time);
+    public Integer updateMoney(@Param("id")Integer id,@Param("time")Timestamp time);
 
 
     public List<OrderDetailsVo> fianceorder(@Param("roomId")Integer roomId);

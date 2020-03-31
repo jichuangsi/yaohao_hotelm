@@ -42,7 +42,7 @@ public interface OrderService {
 
     public List<IndayVo> checkinDay(String time, Integer roomId);
     @Transactional
-    public int updateMoney(Integer id,Timestamp time);
+    public Integer updateMoney(Integer id,Timestamp time);
 
 
     public Page<OrderTimeVo> selectRoomPage( Page<OrderTimeVo> vo);

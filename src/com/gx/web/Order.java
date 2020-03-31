@@ -754,7 +754,7 @@ public class Order {
         Page<DailyconsumptionPo> vo=new Page<DailyconsumptionPo>();
         vo.setCurrentPage(currentPage);
 
-        List<ConsumptiontypePo> clist=consumptiontypeService.list();
+        List<ConsumptiontypePo> clist=consumptiontypeService.listAll();
         /*DailyconsumptionPo po1=dailyconsumptionService.selectById(id);*/
         List<DailyconsumptionPo> dlist=dailyconsumptionService.list();
         Page<DailyconsumptionPo> list=dailyconsumptionService.listpage(time,vo);
@@ -1105,6 +1105,8 @@ public class Order {
         Gson gson = new Gson();
         return gson.toJson(ok);
     }
+
+
   @RequestMapping("test")
     public ModelAndView test(){
         ModelAndView mv=null;
@@ -1273,6 +1275,15 @@ public class Order {
      Date s=TimeTransformation.getDate(date,19);
         return null;
     }*/
+    @ResponseBody
+    @RequestMapping("testf")
+    public Object testf(){
+        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+        String time2= new SimpleDateFormat("yyyy-MM").format(timestamp).toString();
+        List<FinancePo> p=financeService.list(time2);
+        Gson gson=new Gson();
+        return gson.toJson(p);
+    }
 
 
 }

@@ -222,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public int updateMoney(Integer id, Timestamp time) {
+    public Integer updateMoney(Integer id, Timestamp time) {
         return orderDao.updateMoney(id, time);
     }
 
