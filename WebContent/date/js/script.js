@@ -133,9 +133,12 @@ $(document).ready(function(){
                 async: false,
                 success: function(res) {
                     //加载刷新父类页面并关闭弹窗
-                    window.parent.location.reload();
-                    parent.layer.closeAll(); //关闭弹窗
-
+                    /*window.parent.location.reload();*/
+                  /*  parent.layer.closeAll(); //关闭弹窗*/
+                    if (res==0){//修改失败
+                    alert("修改失败，请查看入住人数是否大于您本次修改床位数")
+                    }
+                    window.location.reload();
                 }
             })
         })

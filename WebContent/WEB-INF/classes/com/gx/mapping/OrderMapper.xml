@@ -420,4 +420,9 @@
     AND DATE_FORMAT(`orderTime`, '%Y-%m')=DATE_FORMAT(#{time,jdbcType=VARCHAR}, '%Y-%m')
     ORDER BY `orderTime`
 </select>
+
+  <select id="roomAcountu" resultType="java.lang.Integer">
+     SELECT SUM(`checkinNumber`) FROM `order`
+        WHERE `roomId`=#{roomId,jdbcType=INTEGER} AND `status`!=6
+  </select>
 </mapper>

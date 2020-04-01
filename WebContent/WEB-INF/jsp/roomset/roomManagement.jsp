@@ -289,6 +289,9 @@
                     data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {
+                        if (result==0){
+                            alert("修改失败，请查看入住人数是否小于您本次修改床位数")
+                        }
                         location.href = '${ctx}/RoomSet/tolist.do';// 不出现异常 进行立面方
                         /*if (result != 1) {
                             /!*alert("新增失败"+' \n '+"Failed to add");        *!/             //提示框

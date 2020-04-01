@@ -65,5 +65,5 @@ public interface OrderService {
 
     public List<OrderDetailsVo> fianceordertime(Integer roomId,String time);
 
-
+    public Integer roomAcountu(Integer roomId);
 }

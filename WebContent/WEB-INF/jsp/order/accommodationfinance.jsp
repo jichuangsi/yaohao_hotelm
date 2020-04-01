@@ -362,6 +362,7 @@
            /* shadeClose: true, //点击遮罩关闭*/
             content: $('#add'),
             cancel:function () {
+             window.location.reload();
                 $("#add").css('display','none');
             }
         });
@@ -380,7 +381,10 @@
             title: value+'房',
             maxmin: true,
             shadeClose: true, //点击遮罩关闭
-            content:'../date/date.html?roomId='+value2
+            content:'../date/date.html?roomId='+value2,
+            cancel:function () {
+                window.location.reload();
+            }
         });
     }
     /* 分页要用的 */
@@ -511,6 +515,7 @@
                 var moth = dateTime.month;
                 var day = dateTime.date;
                 var time = year + "-" + moth + "-" + day;//joccupancy
+
                 //location.href='${ctx}/Order/occupancy.do?time='+time;
                 $.ajax({
                     cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交

@@ -593,8 +593,8 @@ public class Order {
                 counts=orderService.updateInEnd(satrt,end,orderPo.getId());
             }
             //退房就到账
-            Timestamp d = new Timestamp(System.currentTimeMillis());
-            counts=orderService.updateMoney(orderPo.getId(),d);
+         /*   Timestamp d = new Timestamp(System.currentTimeMillis());
+            counts=orderService.updateMoney(orderPo.getId(),d);*/
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
             String time2=null;
             if (orderPo.getOrderTime()==null){

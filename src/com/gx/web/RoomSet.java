@@ -33,9 +33,11 @@ public class RoomSet {
 	private DailyconsumptionService dailyconsumptionService;
 	@Autowired
 	private FinanceService financeService;
+	@Autowired
+	private OrderService orderService;
 
 ///////////////////////////////////自有///////////////////////////////////////////////////
-	
+
 	//分页和模糊查询
 	@RequestMapping("/tolist")
 	public ModelAndView list(Integer currentPage, String txtname,Integer guestRoomLevelID){
@@ -111,9 +113,17 @@ public class RoomSet {
 	public Object update(RoomSetPo roomSetPo){
 		ModelAndView mv=null;
 		Integer count=0;
-		count=roomSetService.updateById(roomSetPo);
-		count=financeService.updateRoomNuberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
-		count=dailyconsumptionService.updateNumberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
+		Integer roomA=orderService.roomAcountu(roomSetPo.getId());
+		if (roomA==null){
+			roomA=0;
+		}
+		if (roomA>Integer.parseInt(roomSetPo.getRoomAmount())){//入住人数小于修改床位数
+			count=0;
+		}else {
+			count=roomSetService.updateById(roomSetPo);
+			count=financeService.updateRoomNuberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
+			count=dailyconsumptionService.updateNumberByRoomId(roomSetPo.getId(),roomSetPo.getRoomNumber());
+		}
 		Gson gson=new Gson();
 		return gson.toJson(count);
 	}
@@ -156,19 +166,20 @@ public class RoomSet {
 	 */
 	@ResponseBody
 	@RequestMapping("/updateAcount")
-	public Object updateAcount(Integer id,Integer roomAcount){
+	public Object updateAcount(int id,Integer roomAcount){
 		ModelAndView mv=null;
 		Integer count=0;
-		count=roomSetService.roomAcountById(id, roomAcount);
+		Integer roomA=orderService.roomAcountu(id);
+		if (roomA==null){
+			roomA=0;
+		}
+		/*RoomSetPo roomSetPo=roomSetService.selectById(id);*/
+		if (roomA>roomAcount){//入住人数小于修改床位数
+			count=0;
+		}else {
+			count=roomSetService.roomAcountById(id, roomAcount);
+		}
 		Gson gson=new Gson();
 		return gson.toJson(count);
 	}
-	/*@RequestMapping("/updateAcount")
-	public ModelAndView updateAcount(Integer id,Integer roomAcount){
-		ModelAndView mv=null;
-		mv=new ModelAndView("redirect:/Order/monthRoom.do");
-		Integer count=roomSetService.roomAcountById(id, roomAcount);
-		mv.addObject("roomId",id);
-		return mv;
-	}*/
 }
