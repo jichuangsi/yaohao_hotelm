@@ -228,8 +228,8 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<OrderDetailsVo> fianceorder(Integer roomId) {
-        return orderDao.fianceorder(roomId);
+    public List<OrderDetailsVo> fianceorder(Integer roomId,String time) {
+        return orderDao.fianceorder(roomId,time);
     }
 
     @Override

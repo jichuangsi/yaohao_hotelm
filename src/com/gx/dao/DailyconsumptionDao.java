@@ -27,5 +27,7 @@ public interface DailyconsumptionDao {
     public DailyconsumptionPo financesum(@Param("roomId")Integer roomId,@Param("time")String time,
                                          @Param("cid")Integer cid);
 
-    public List<DailyconsumptionPo> dailydateil(@Param("roomId")Integer roomId, @Param("cid")Integer cid);
+    public List<DailyconsumptionPo> dailydateil(@Param("roomId")Integer roomId, @Param("cid")Integer cid,@Param("time")String time);
+
+    public Integer updateAll(DailyconsumptionPo po);
 }

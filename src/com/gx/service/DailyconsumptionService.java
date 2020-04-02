@@ -28,5 +28,7 @@ public interface DailyconsumptionService {
 
     public DailyconsumptionPo financesum(Integer roomId,String time,Integer cid);
 
-    public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid);
+    public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid,String time);
+
+    public Integer updateAll(DailyconsumptionPo po);
 }

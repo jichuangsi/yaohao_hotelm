@@ -61,7 +61,7 @@ public interface OrderService {
 
     public Page<OrderDetailsVo> allContractOrder(String name,String orderNumber,Page<OrderDetailsVo> vo);
 
-     public List<OrderDetailsVo> fianceorder(Integer roomId);
+     public List<OrderDetailsVo> fianceorder(Integer roomId,String time);
 
     public List<OrderDetailsVo> fianceordertime(Integer roomId,String time);
 

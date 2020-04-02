@@ -50,6 +50,16 @@
           content=#{content,jdbcType=VARCHAR}
         WHERE `id` =#{cid,jdbcType=INTEGER}
 </update>
+    <update id="updateAll" parameterType="com.gx.po.DailyconsumptionPo">
+        UPDATE `dailyconsumption`
+        SET
+          `roomId` =#{roomId,jdbcType=INTEGER},
+          `roomNumber` =#{roomNumber,jdbcType=INTEGER},
+          `cid` = #{cid,jdbcType=INTEGER},
+          `money` =#{money,jdbcType=DOUBLE},
+          content=#{content,jdbcType=VARCHAR}
+        WHERE `id` =#{cid,jdbcType=INTEGER}
+</update>
     <!--根据类型，酒店、房号、查询、月份消费-->
     <select id="selectSumMoney" resultType="java.lang.Double">
     SELECT SUM(`money`)
@@ -100,6 +110,7 @@
     <select id="dailydateil"  resultType="com.gx.po.DailyconsumptionPo">
       SELECT *,cp.name AS typeName FROM `dailyconsumption` d INNER JOIN `consumptiontype` cp ON d.cid=cp.id
        WHERE  `roomId`=#{roomId,jdbcType=INTEGER} AND cid=#{cid,jdbcType=INTEGER}
+       AND  DATE_FORMAT(`time`, '%Y-%m')=#{time,jdbcType=VARCHAR}
        ORDER BY `time`
     </select>
 </mapper>

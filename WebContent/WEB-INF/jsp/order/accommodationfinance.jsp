@@ -10,7 +10,8 @@
     <title>房型列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <%--<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>--%>
 
     <link rel="stylesheet" href="${ctx}/js/layui/css/layui.css" media="all"/>
@@ -29,15 +30,17 @@
 </head>
 <style>
     /*.widths{*/
-        /*width: 80%;*/
+    /*width: 80%;*/
     /*}*/
 
     body {
         font-size: 62.5%;
     }
-    body span{
-       font-size: 1rem;
+
+    body span {
+        font-size: 1rem;
     }
+
     .layui-unselect {
         margin-bottom: 0.5rem;
     }
@@ -48,9 +51,11 @@
     .layui-collapse {
         margin-bottom: 1.25rem;
     }
+
     .layui-form-item {
         margin-right: 1rem;
     }
+
     #add {
         display: none;
         margin-top: 10px;
@@ -140,7 +145,7 @@
     }
 
     .weeklyCanlendarBox li.active a {
-       /* background: #0d87ea;*/
+        /* background: #0d87ea;*/
         border: 1px solid #0d87ea;
         color: #2c2c2c;
     }
@@ -155,7 +160,8 @@
         color: #ccc;
         pointer-events: none
     }
-    .layui-form .layui-form-label{
+
+    .layui-form .layui-form-label {
         font-size: 1rem;
     }
 </style>
@@ -163,10 +169,10 @@
 
 <div class="layui-row">
     <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
-        <button class="btn btn-small btn-success"id="enBtn">
+        <button class="btn btn-small btn-success" id="enBtn">
             English
         </button>
-        <button class="btn btn-small btn-success"id="zhBtn">
+        <button class="btn btn-small btn-success" id="zhBtn">
             简体中文
         </button>
     </div>
@@ -175,7 +181,7 @@
             <div id="j_weeklyCalendar" class="myWeeklyCanlendar">
                 <div class="datetime_header">
                     <a href="javascript:;" title="上一周" class="prev_icon" role="prev_week"></a>
-                    <span><b role="year_selector"></b >年<b role="month_selector"></b>月</span><span
+                    <span><b role="year_selector"></b>年<b role="month_selector"></b>月</span><span
                         style="margin-left: 20px;display: none">第<b
                         role="week_selector"></b>周</span>
                     <a href="javascript:;" title="下一周" class="next_icon" role="next_week"></a>
@@ -185,7 +191,7 @@
             </div>
         </div>
 
-        <div class=" layui-row ht-box"  >
+        <div class=" layui-row ht-box">
             <div class="layui-row layui-form">
                 <div class="layui-collapse" id="list">
                     <%--<div class="layui-row layui-tab-content teacherClass" style="margin: 0 auto 20px 20px;">--%>
@@ -195,7 +201,10 @@
                                 <div class="layui-col-xs4 " style="padding-left: 15px;">
                                     <h2 style="font-size: 1rem;">${item.roomNumber}</h2>
                                 </div>
-                                <div class="layui-btn layui-btn-normal layui-btn-sm" style="float: right;margin-top: 5px;font-size:10px;" onclick="date(${item.roomNumber},${item.roomId})" lang>check</div>
+                                <div class="layui-btn layui-btn-normal layui-btn-sm"
+                                     style="float: right;margin-top: 5px;font-size:10px;"
+                                     onclick="date(${item.roomNumber},${item.roomId})" lang>check
+                                </div>
                             </h4>
                             <div class="layui-colla-content layui-show">
                                 <div class="layui-row">
@@ -210,7 +219,7 @@
 											<span lang>bed</span></span></div>
                                     <c:if test="${item.remainingBeds!=0}">
                                         <div class="layui-col-xs2  layui-col-md-offset6 layui-col-xs-offset6">
-                                            <div class="layui-btn layui-btn-sm toadd "  lang>add</div>
+                                            <div class="layui-btn layui-btn-sm toadd " lang>add</div>
                                         </div>
                                     </c:if>
                                 </div>
@@ -226,7 +235,6 @@
             </div>
 
         </div>
-
 
 
     </div>
@@ -359,47 +367,48 @@
             anim: 2,
             title: '添加订单',
             maxmin: true,
-           /* shadeClose: true, //点击遮罩关闭*/
+            /* shadeClose: true, //点击遮罩关闭*/
             content: $('#add'),
-            cancel:function () {
-             window.location.reload();
-                $("#add").css('display','none');
+            cancel: function () {
+                window.location.reload();
+                $("#add").css('display', 'none');
             }
         });
         registerWords();
         setLanguage(getCookieVal("lang"));
     }
 
-   /* $(".layui-layer-close").on('click',function () {
+    /* $(".layui-layer-close").on('click',function () {
 
-    })*/
-    function date(value,value2){
+     })*/
+    function date(value, value2) {
         index = layer.open({
             type: 2,
             area: ['90%', '90%'],
             anim: 2,
-            title: value+'房',
+            title: value + '房',
             maxmin: true,
             shadeClose: true, //点击遮罩关闭
-            content:'../date/date.html?roomId='+value2,
-            cancel:function () {
+            content: '../date/date.html?roomId=' + value2,
+            cancel: function () {
                 window.location.reload();
             }
         });
     }
+
     /* 分页要用的 */
     $(".tcdPageCode").createPage({
         pageCount:${list.totalPage},
         current:${list.currentPage},
-        backFn:function(p){
-            location.href="${ctx}/Order/occupancy.do?currentPage="+p;
+        backFn: function (p) {
+            location.href = "${ctx}/Order/occupancy.do?currentPage=" + p;
         }
     });
 </script>
 <script>
-    layui.use(['element', 'form', 'laydate','laypage'], function () {
+    layui.use(['element', 'form', 'laydate', 'laypage'], function () {
         var element = layui.element,
-            laypage=layui.laypage,
+            laypage = layui.laypage,
             laydate = layui.laydate,
             form = layui.form;
 
@@ -429,7 +438,7 @@
             form.val('test', {
                 "roomNumber": roomNumber,
                 "roomId": id
-              /*  "checkinTime": time + " 00:00:00"*/
+                /*  "checkinTime": time + " 00:00:00"*/
             });
         }
 
@@ -464,17 +473,17 @@
                 layer.msg('请选择币种!');
                 return false;
             }
-            var checkin=param.checkinTime;
-                var checkout=param.checkoutTime;
-                if(checkin>checkout){
-                    layer.msg('时间不正确!');
+            var checkin = param.checkinTime;
+            var checkout = param.checkoutTime;
+            if (checkin > checkout) {
+                layer.msg('时间不正确!');
                 return;
             }
             var reg = new RegExp('^[1-9](\\d{1,9})((\\.\\d{1,3})?)$');
-            var s=param.money;
-            if(reg.test(s)){
+            var s = param.money;
+            if (reg.test(s)) {
                 console.log('true');
-            }else{
+            } else {
                 layer.msg('价格输入不正确，不超过9位数!');
                 return;
             }
@@ -487,8 +496,8 @@
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {                          // 不出现异常 进行立面方
                         if (result != 1) {
-                            layer.msg('新增订单失败，人数大于剩余床位数');
-                                          //提示框
+                            layer.msg('新增订单失败，入住时间段内无足够空床');
+                            //提示框
                             document.getElementById("order").value = "";     //这个id的文本框的值 将会清空
                             document.getElementById("order").focus();      // 给这个id的文本框提供焦点
                         } else {
@@ -500,7 +509,7 @@
                     }
                 })
                 return false
-            }else {
+            } else {
                 console.log(123)
             }
         });
@@ -521,7 +530,7 @@
                     cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                     type: "POST",                                           //上面3行都是必须要的
                     url: '${ctx}/Order/joccupancy.do',       //地址 type 带参数
-                    data: "time="+time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                    data: "time=" + time,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                     async: false,                                          // 是否 异步 提交
                     success: function (result) {
                         // 不出现异常 进行立面方
@@ -534,24 +543,24 @@
                         var gysStr = '';
 
                         $.each(slist, function (index, item) {
-                            gysStr += '<option value="' + 'item.id+">'+item.supplierName+'</option>';
+                            gysStr += '<option value="' + item.id + '">' + item.supplierName + '</option>';
                         });
                         $('#pt').empty();
                         var ptStr = '';
                         $.each(pList, function (index, item) {
-                            ptStr += '<option value="' + 'item.id+">'+item.name+'</option>';
+                            ptStr += '<option value="' + item.id + '">' + item.name + '</option>';
                         });
                         $('#zh').empty();
                         var zhStr = '';
                         $.each(alist, function (index, item) {
-                            zhStr += '<option value="' + 'item.id+">'+item.name+'</option>';
+                            zhStr += '<option value="' + item.id + '">' + item.name + '</option>';
                         });
                         $('#gys').append(gysStr);
                         $('#zh').append(zhStr);
                         $('#pt').append(ptStr);
                         $('#list').empty()
                         var listStr = '';
-                        var count=0;
+                        var count = 0;
 
                         $.each(list, function (index, item) {
                             count++;
@@ -562,8 +571,8 @@
                             listStr += ' <div class="layui-btn layui-btn-normal " style="float: right;margin-top: 5px;font-size: 10px;" onclick="date(' + item.roomNumber + ',' + item.roomId + ')" lang>check</div>';
                             listStr += '</h2>';
                             listStr += '<div class="layui-colla-content layui-show"><div class="layui-row">';
-                            listStr += '<input type="hidden" name="roomNumber" value="'+item.roomNumber+'">';
-                            listStr += '<input type="hidden" name="roomId" value="'+item.roomId+'">';
+                            listStr += '<input type="hidden" name="roomNumber" value="' + item.roomNumber + '">';
+                            listStr += '<input type="hidden" name="roomId" value="' + item.roomId + '">';
                             listStr += '<div class="">' + item.supplierName + '-' + item.roomNumber + '</div></div>';
                             listStr += '<div class="layui-row">';
                             listStr += '<div class="layui-col-xs4"><span class="layui-badge layui-bg-gray"><span lang>surplus</span>';
@@ -579,9 +588,9 @@
                                 listStr += '</div>';
                             }
                             listStr += ' </div></div></div> ';
-                          ;
+                            ;
                         });
-                        listStr+='<div id="testPage"></div>'
+                        listStr += '<div id="testPage"></div>'
                         $('#list').append(listStr);
                         element.render();
                         form.render();
@@ -596,8 +605,9 @@
         });
 
     });
+
     function day(param) {
-        var bl=true
+        var bl = true
         $.ajax({
             cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
             type: "POST",                                           //上面3行都是必须要的
@@ -607,8 +617,8 @@
             success: function (result) {                          // 不出现异常 进行立面方
                 console.log(result)
                 if (result != 1) {
-                    layer.msg('入住失败，人数大于剩余床位数！' + ' \n ' + 'Check in failed');
-                    bl=false;
+                    layer.msg('入住失败，入住时间段内无足够空床！' + ' \n ' + 'Check in failed');
+                    bl = false;
                 }
             },
             error: function (data) {
@@ -633,7 +643,6 @@
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
     }
-
 
 
 </script>

@@ -69,7 +69,12 @@ private DailyconsumptionDao dailyconsumptionDao;
     }
 
     @Override
-    public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid) {
-        return dailyconsumptionDao.dailydateil(roomId,cid);
+    public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid,String time) {
+        return dailyconsumptionDao.dailydateil(roomId,cid,time);
+    }
+
+    @Override
+    public Integer updateAll(DailyconsumptionPo po) {
+        return dailyconsumptionDao.updateAll(po);
     }
 }

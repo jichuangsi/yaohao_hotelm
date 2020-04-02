@@ -559,11 +559,11 @@ public class Order {
         int day=TimeTransformation.nDaysBetweenTwoDate(strn,strn2);
         orderPo.setCheckinDay(day);
         orderPo.setOrderTime(d);
-        orderService.inserAll(orderPo);
-        int oid=orderPo.getId();
+        Integer counts=orderService.inserAll(orderPo);
+        /*int oid=orderPo.getId();
         //int oid=
-        RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
-        //添加住房明细
+        RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());*/
+        /*//添加住房明细
         RoomAndTime roomAndTime=new RoomAndTime();
         roomAndTime.setOrderId(oid);
         roomAndTime.setRoomId(orderPo.getRoomId());
@@ -572,7 +572,7 @@ public class Order {
         roomAndTime.setIntime(orderPo.getCheckinTime());
         roomAndTime.setOuttime(orderPo.getCheckoutTime());
         roomAndTime.setIsout(1);//未退房
-        Integer counts=  roomAndTimeService.inserAll(roomAndTime);
+        Integer counts=  roomAndTimeService.inserAll(roomAndTime);*/
         //return mv;
         Gson gson = new Gson();
         return gson.toJson(counts);
@@ -677,16 +677,25 @@ public class Order {
             po.setSupplierName(r.getSupplierName());
             po.setRoomNumber(r.getRoomNumber());
         }
-        DailyconsumptionPo po1=dailyconsumptionService.selectByTimeAndRoom(po.getTime(),po.getRoomId(),po.getCid());
         Integer counst=0;
-        if (po1==null){
-            po.setCreateTime(d);
-            counst=dailyconsumptionService.insertAll(po);
+        DailyconsumptionPo po1=dailyconsumptionService.selectByTimeAndRoom(po.getTime(),po.getRoomId(),po.getCid());
+        if (po.getId()==null){
+            if (po1==null){
+                po.setCreateTime(d);
+                counst=dailyconsumptionService.insertAll(po);
+            }/*else {
+                po.setCreateTime(d);
+                po.setRoomNumber(r.getRoomNumber());
+                *//* counst= dailyconsumptionService.updateTimeRoom(po);*//*
+                counst= dailyconsumptionService.updateAll(po);
+            }*/
         }else {
-            po.setId(po1.getId());
             po.setCreateTime(d);
-            counst= dailyconsumptionService.updateTimeRoom(po);
+            po.setRoomNumber(r.getRoomNumber());
+            /* counst= dailyconsumptionService.updateTimeRoom(po);*/
+            counst= dailyconsumptionService.updateAll(po);
         }
+
         FinancePo financePo=financeService.selectByyearM(y,po.getRoomId());
         if (financePo==null){
             FinancePo po2=new FinancePo();
@@ -779,7 +788,10 @@ public class Order {
         if (po1==null){
             dailyconsumptionService.insertAll(po);
         }else {
-            dailyconsumptionService.updateTimeRoom(po);
+            RoomSetPo roomSetPo=roomSetService.selectById(po.getRoomId());
+           po.setRoomNumber(roomSetPo.getRoomNumber());
+            /*dailyconsumptionService.updateTimeRoom(po);*/
+            dailyconsumptionService.updateAll(po);
         }
 
         return mv;
@@ -996,15 +1008,15 @@ public class Order {
     @ResponseBody
     @RequestMapping("financeDatil")
     public Object financeDatil(String time,Integer roomId){
-        List<OrderDetailsVo> list=orderService.fianceorder(roomId);
+        List<OrderDetailsVo> list=orderService.fianceorder(roomId,time);
         Gson gson=new Gson();
         return gson.toJson(list);
     }
     //点击其他消费显示消费详情(订单)
     @ResponseBody
     @RequestMapping("otherDatil")
-    public Object financeDatil(Integer roomId,Integer cid){
-        List<DailyconsumptionPo> list=dailyconsumptionService.dailydateil(roomId,cid);
+    public Object financeDatil(Integer roomId,Integer cid,String time){
+        List<DailyconsumptionPo> list=dailyconsumptionService.dailydateil(roomId,cid,time);
         Gson gson=new Gson();
         return gson.toJson(list);
     }

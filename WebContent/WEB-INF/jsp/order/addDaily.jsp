@@ -40,7 +40,7 @@
         width: 300px;
     }
 
-    #update_apar,#addType_apar,#updateType_apar {
+    #update_apar, #addType_apar, #updateType_apar {
         display: none;
         margin-top: 10px;
     }
@@ -63,9 +63,10 @@
         </button>
     </div>
     <div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
-        <form class="layui-form layui-col-md12" >
+        <form class="layui-form layui-col-md12">
             <div class="layui-input-inline">
-                <input type="text" name="time" id="time" placeholder="消费时间(月)" autocomplete="off" class="layui-input time" style="width: 200px;">
+                <input type="text" name="time" id="time" placeholder="消费时间(月)" autocomplete="off"
+                       class="layui-input time" style="width: 200px;">
             </div>
 
             <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i></div>
@@ -179,15 +180,31 @@
     <form class="layui-form" autocomplete="off" lay-filter="testss">
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>roomNumber</span>：</label>
+            <%-- <div class="layui-input-block widths">
+                 <input type="hidden" name="id" id="id" value="" class="layui-input " readonly>
+                &lt;%&ndash; <input type="text" name="roomNumber" value="" class="layui-input " readonly>&ndash;%&gt;
+
+             </div>--%>
+            <input type="hidden" name="id" id="id" value="" class="layui-input " readonly>
             <div class="layui-input-block widths">
-                <input type="hidden" name="id" id="id" value="" class="layui-input " readonly>
-                <input type="text" name="roomNumber" value="" class="layui-input " readonly>
+                <select name="roomId" lay-verify="required">
+                    <c:forEach items="${rlist}" var="item">
+                        <option value="${item.id}">${item.roomNumber}</option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>type</span>：</label>
+            <%-- <div class="layui-input-block widths">
+                 <input type="text" name="typeName" value="" class="layui-input " readonly>
+             </div>--%>
             <div class="layui-input-block widths">
-                <input type="text" name="typeName" value="" class="layui-input " readonly>
+                <select name="cid" lay-verify="required">
+                    <c:forEach items="${clist}" var="item">
+                        <option value="${item.id}">${item.name}</option>
+                    </c:forEach>
+                </select>
             </div>
         </div>
         <div class="layui-form-item">
@@ -204,9 +221,9 @@
         </div>
         <div class="layui-form-item">
             <div class="layui-input-block widths">
-                <input type="hidden" name="time" class="layui-input time" lay-verify="required" readonly>
-                <input type="hidden" name="roomId" class="layui-input" lay-verify="required" readonly>
-                <input type="hidden" name="cid" class="layui-input" lay-verify="required" readonly>
+                <input type="hidden" name="time" class="layui-input time" readonly>
+                <%--  <input type="hidden" name="roomId" class="layui-input"  readonly>
+                  <input type="hidden" name="cid" class="layui-input"  readonly>--%>
             </div>
         </div>
         <div class="layui-form-item">
@@ -223,7 +240,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>type</span>：</label>
             <div class="layui-input-block widths">
-                <input type="text" name="name" value="" class="layui-input "  lay-verify="required" style="width: 70%">
+                <input type="text" name="name" value="" class="layui-input " lay-verify="required" style="width: 70%">
             </div>
         </div>
         <div class="layui-form-item">
@@ -241,22 +258,22 @@
             <th lang>serial</th>
             <th lang>name</th>
             <th lang>status</th>
-           <%-- <th lang>operation</th>--%>
+            <%-- <th lang>operation</th>--%>
         </tr>
         <c:forEach items="${typelist}" var="items">
             <tr>
                 <th>${items.id}</th>
                 <th>${items.name}</th>
                 <th lang style="color: #00be67" onclick="ustatus(${items.id})">delete</th>
-               <%-- <c:if test="${items.status==1}">
-                    <th lang style="color: #00be67" onclick="ustatus(${items.id},2)">Prohibit</th>
-                </c:if>
-                <c:if test="${items.status==2}">
-                    <th lang style="color: #8a3104" onclick="ustatus(${items.id},1)">Enable</th>
-                </c:if>--%>
-               <%-- <th>
-                    <div class="layui-btn layui-btn-sm" onclick="updates(${item.id})" lang>amended</div>
-                </th>--%>
+                    <%-- <c:if test="${items.status==1}">
+                         <th lang style="color: #00be67" onclick="ustatus(${items.id},2)">Prohibit</th>
+                     </c:if>
+                     <c:if test="${items.status==2}">
+                         <th lang style="color: #8a3104" onclick="ustatus(${items.id},1)">Enable</th>
+                     </c:if>--%>
+                    <%-- <th>
+                         <div class="layui-btn layui-btn-sm" onclick="updates(${item.id})" lang>amended</div>
+                     </th>--%>
             </tr>
         </c:forEach>
     </table>
@@ -319,6 +336,7 @@
                 content: $("#update_apar")
             });
         }
+
         function type() {
             index = layer.open({
                 type: 1,
@@ -371,9 +389,9 @@
                 "typeName": list.typeName,
                 "money": list.money,
                 "content": list.content,
-                "time":list.time,
-                "roomId":list.roomId,
-                "cid":list.cid
+                "time": list.time
+                /* "roomId":list.roomId,
+                 "cid":list.cid*/
             });
             add();
             form.render();
@@ -412,7 +430,7 @@
 
         });
 
-        form.on('submit(update_Pwd)',function (obj) {
+        form.on('submit(update_Pwd)', function (obj) {
             var param = obj.field;
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -435,7 +453,7 @@
         });
 
 
-        form.on('submit(addType_Pwd)',function (obj) {
+        form.on('submit(addType_Pwd)', function (obj) {
             var param = obj.field;
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
@@ -454,29 +472,30 @@
             });
         })
 
-        form.on('submit(search)',function () {
-            var time=document.getElementById("time").value;
-            location.href="${ctx}/Order/todaily.do?time="+time;
+        form.on('submit(search)', function () {
+            var time = document.getElementById("time").value;
+            location.href = "${ctx}/Order/todaily.do?time=" + time;
         });
 
         //修改消费状态
-        window.ustatus=function (value) {
+        window.ustatus = function (value) {
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
                 url: '${ctx}/Order/updateType.do',       //地址 type 带参数
-                data: "id="+value,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                data: "id=" + value,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     if (result != 1) {
                         alert("操作失败！" + ' \n ' + "Failed");                     //提示框
                     } else {
                         alert("操作成功！");
-                        window.location='${ctx}/Order/todaily.do';
+                        window.location = '${ctx}/Order/todaily.do';
                     }
                 }
             });
         }
+
         function getNowFormatDate() {
             var date = new Date();
             var seperator1 = "-";

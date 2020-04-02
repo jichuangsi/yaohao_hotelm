@@ -103,7 +103,7 @@ public interface OrderDao {
     public Integer updateMoney(@Param("id")Integer id,@Param("time")Timestamp time);
 
 
-    public List<OrderDetailsVo> fianceorder(@Param("roomId")Integer roomId);
+    public List<OrderDetailsVo> fianceorder(@Param("roomId")Integer roomId,@Param("time")String time);
 
     public List<OrderDetailsVo> fianceordertime(@Param("roomId")Integer roomId,@Param("time")String time);
 
