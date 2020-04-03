@@ -3,6 +3,8 @@ package com.gx.service;
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
 import com.gx.vo.*;
+import com.gx.web.Order;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
@@ -22,11 +24,17 @@ public interface OrderService {
     //已到款
     public Page<OrderDetailsVo> myaccount(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
 
-    //修改订单状态
+    /*//修改订单状态
     @Transactional
     public Integer updateStatus(String orderNumber, Integer status);
    //根据订单号查询订单
+    public OrderPo selectByOrderNumber(String orderNumber);*/
+    //根据订单号查询订单
     public OrderPo selectByOrderNumber(String orderNumber);
+    //修改订单状态
+    @Transactional
+    public Integer updateStatus(Integer id, Integer status);
+  public OrderDetailsVo selectById(Integer id);
     //查询已确认订单
     public Page<OrderDetailsVo> selectCheckinList(String orderNumber, Integer passengerId,long time, Page<OrderDetailsVo> vo);
 
@@ -66,4 +74,8 @@ public interface OrderService {
     public List<OrderDetailsVo> fianceordertime(Integer roomId,String time);
 
     public Integer roomAcountu(Integer roomId);
+
+    public List<IndayVo> updateCheckDay(String time,Integer roomId,Integer id);
+
+    public Integer updateAll(OrderPo po);
 }

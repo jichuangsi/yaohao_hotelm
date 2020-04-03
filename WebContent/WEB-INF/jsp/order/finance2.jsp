@@ -38,7 +38,6 @@
         margin-top: 10px;
     }
 </style>
-<c:if test="${da!=0}">
     <body>
     <div class="x-body">
         <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large" style="display: none">
@@ -60,64 +59,67 @@
             </form>
 
         </div>
-        <table class="layui-table">
-            <input type="hidden" id="excel" value="${time}">
-            <thead>
-            <tr>
-                <th colspan="6" lang>date:${time}</th>
-                <th colspan="${size-5}" id="exc" onclick="setExcel()" lang>excel</th>
-            </tr>
+        <c:if test="${list.size()>0}">
+            <table class="layui-table">
+                <input type="hidden" id="excel" value="${time}">
+                <thead>
+                <tr>
+                    <th colspan="6" lang>date:${time}</th>
+                    <th colspan="${size-5}" id="exc" onclick="setExcel()" lang>excel</th>
+                </tr>
 
 
-            <tr>
-                <c:forEach items="${name}" var="item">
-                    <th>${item}</th>
+                <tr>
+                    <c:forEach items="${name}" var="item">
+                        <th>${item}</th>
+                    </c:forEach>
+
+                    <th>操作</th>
+                </tr>
+                <c:forEach items="${list}" var="item">
+                    <tr>
+                        <input type="hidden" name="idstr" value="${item.id}">
+                        <th>${item.id}</th>
+                        <th>${item.roomNumber}</th>
+                        <th onclick="orders(${item.roomId})">${item.PHP}(PHP)</th>
+                        <th onclick="orders(${item.roomId})">${item.RMB}(RMB)</th>
+                        <th>${item.rent}(PHP)</th>
+                        <th>${item.water}</th>
+                        <th>${item.electricity}</th>
+                            <%-- <th>${item.maintenanceCost}</th>--%>
+                        <th>${item.network}</th>
+                        <th>${item.buildingManagementFee}</th>
+                        <c:forEach items="${item.dlist}" var="tem">
+                            <th onclick="ctype(${item.roomId},${tem.cid})">${tem.mm}</th>
+                        </c:forEach>
+                        <th>${item.count}</th>
+                        <th>
+                            <div class=" layui-btn layui-btn-normal layui-btn-sm toadd"
+                                 onclick="add(${item.id},${item.yearM})">添加消费
+                            </div>
+                        </th>
+                    </tr>
                 </c:forEach>
 
-                <th>操作</th>
-            </tr>
-            <c:forEach items="${list}" var="item">
                 <tr>
-                    <input type="hidden" name="idstr" value="${item.id}">
-                    <th>${item.id}</th>
-                    <th>${item.roomNumber}</th>
-                    <th onclick="orders(${item.roomId})">${item.PHP}(PHP)</th>
-                    <th onclick="orders(${item.roomId})">${item.RMB}(RMB)</th>
-                    <th>${item.rent}(PHP)</th>
-                    <th>${item.water}</th>
-                    <th>${item.electricity}</th>
-                        <%-- <th>${item.maintenanceCost}</th>--%>
-                    <th>${item.network}</th>
-                    <th>${item.buildingManagementFee}</th>
-                    <c:forEach items="${item.dlist}" var="tem">
-                        <th onclick="ctype(${item.roomId},${tem.cid})">${tem.mm}</th>
-                    </c:forEach>
-                    <th>${item.count}</th>
-                    <th>
-                        <div class=" layui-btn layui-btn-normal layui-btn-sm toadd"
-                             onclick="add(${item.id},${item.yearM})">添加消费
-                        </div>
-                    </th>
+                    <th colspan="${name.size()-1}">提成</th>
+                    <th>${booking}</th>
+                    <th></th>
                 </tr>
-            </c:forEach>
+                <tr>
+                    <th colspan="${name.size()-1}">PHP</th>
+                    <th>${sumPHP}</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="${name.size()-1}">(RMB)</th>
+                    <th>${sumCNY}</th>
+                    <th></th>
+                </tr>
+                </thead>
+            </table>
+        </c:if>
 
-            <tr>
-                <th colspan="${name.size()-1}">提成</th>
-                <th>${booking}</th>
-                <th></th>
-            </tr>
-            <tr>
-                <th colspan="${name.size()-1}">PHP</th>
-                <th>${sumPHP}</th>
-                <th></th>
-            </tr>
-            <tr>
-                <th colspan="${name.size()-1}">(RMB)</th>
-                <th>${sumCNY}</th>
-                <th></th>
-            </tr>
-            </thead>
-        </table>
 
     </div>
     <div>
@@ -268,6 +270,7 @@
                     str += '<th>姓名</th>';
                     str += '<th>电话</th>';
                     str += '<th>价格</th>';
+                    str += '<th>到账否</th>';
                     str += '<th>订单时间</th>';
                     str += '</tr>';
                     for (var i = 0; i < len; i++) {
@@ -284,6 +287,11 @@
                         }
                         if (date[i].currency == 1) {
                             str += '<th>(RMB)' + date[i].money + '</th>';
+                        }
+                        if (date[i].isdao == 1) {
+                            str += '<th  style="color: #880000">未到账</th>';
+                        }else {
+                            str += '<th>已到账</th>';
                         }
                         str += '<th>' + timestampToTime(date[i].orderTime) + '</th>';
                         /*
@@ -372,12 +380,6 @@
                     <input type="text" name="electricity" class="layui-input " lay-verify="required">
                 </div>
             </div>
-                <%--<div class="layui-form-item">
-                    <label class="layui-form-label"><span lang>maintenance</span>：</label>
-                    <div class="layui-input-block widths">
-                        <input type="text" name="maintenanceCost" class="layui-input " lay-verify="required">
-                    </div>
-                </div>--%>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>network</span>：</label>
                 <div class="layui-input-block widths">
@@ -520,25 +522,4 @@
             document.body.removeChild(link);
         }
     </script>
-</c:if>
-<c:if test="${da==0}">
-    <body>
-    <div style="margin:0 auto">无数据</div>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var time;
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${ctx}/Order/testf.do",
-                data: "time=" + time,
-                async: false,
-                success: function (res) {
-                    console.log(res)
-                }
-            })
-        })
-    </script>
-    </body>
-</c:if>
 </html>

@@ -39,9 +39,9 @@ public interface OrderDao {
 
 
 
-    //修改订单状态
+   /* //修改订单状态
     @Transactional
-    public Integer updateStatus(@Param("orderNumber")String orderNumber, @Param("status")Integer status);
+    public Integer updateStatus(@Param("orderNumber")String orderNumber, @Param("status")Integer status);*/
     //根据订单号查询订单
     public OrderPo selectByOrderNumber(@Param("orderNumber")String orderNumber);
 
@@ -108,4 +108,14 @@ public interface OrderDao {
     public List<OrderDetailsVo> fianceordertime(@Param("roomId")Integer roomId,@Param("time")String time);
 
     public Integer roomAcountu(@Param("roomId")Integer roomId);
+
+    @Transactional
+    public Integer updateStatus( @Param("id")Integer id,  @Param("status")Integer status);
+    public OrderDetailsVo selectById(Integer id);
+
+
+    public List<IndayVo> updateCheckDay(@Param("time")String time,
+                                    @Param("roomId")Integer roomId,@Param("id")Integer id);
+
+    public Integer updateAll(OrderPo po);
 }

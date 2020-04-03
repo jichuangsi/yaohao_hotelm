@@ -35,5 +35,5 @@ public interface RoomSetService {
 
     public Integer roomAcountById(Integer id,Integer roomAcount);
 
-
+    public List<RoomSetPo> roomByHotelm(Integer id);
 }

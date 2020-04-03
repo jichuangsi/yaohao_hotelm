@@ -140,7 +140,9 @@
                                     <div class="rmb-title layui-row">
                                         <div class="layui-col-xs2 layui-col-xs-offset6">
                                     <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                          onclick="checkin(${item.orderNumber})" lang>ins</span>
+                                          onclick="checkin(${item.id})" lang>ins</span>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm toupdate"
+                                                  onclick="updateOrder(${item.id},0)" lang>amended</span>
                                             <c:if test="${item.daoTime==null}">
                                                 <span class="layui-btn layui-btn-normal layui-btn-sm"
                                                       onclick="daoacount(${item.id})" lang>dao</span>
@@ -210,7 +212,9 @@
                                     <div class="rmb-title layui-row">
                                         <div class="layui-col-xs2 layui-col-xs-offset4"><span
                                                 class="layui-btn layui-btn-normal layui-btn-sm"
-                                                onclick="checkout(${item.orderNumber})" lang>out</span>
+                                                onclick="checkout(${item.id})" lang>out</span>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm toupdate"
+                                                  onclick="updateOrder(${item.id},1)" lang>amended</span>
                                             <c:if test="${item.isdao==1}">
                                                 <span class="layui-btn layui-btn-normal layui-btn-sm"
                                                       onclick="daoacount(${item.id})" lang>ins</span>
@@ -363,6 +367,123 @@
             </div>
         </div>
     </div>
+
+    <div id="updateorder" class="layui-fluid" style="display: none">
+        <form class="layui-form" autocomplete="off" lay-filter="test">
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>order</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="hidden" id="statuss" value="${status}"/>
+                    <input type="hidden" name="id" value="${vo.id}"/>
+                    <input type="text" name="orderNumber" id="order" class="layui-input " value="${vo.orderNumber}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>patform</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="platformId" value="${vo.platformId}">
+                    <input type="text" name="platform" value="${vo.platformName}" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>supplier</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="hotelmId" value="${vo.supplierId}">
+                    <input type="text" name="hotelm" value="${vo.supplierName}" readonly>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>roomNumber</span>:</label>
+                <div class="layui-input-block widths">
+                    <select name="roomId" lay-verify="required" >
+                        <c:forEach items="${list}" var="item">
+                            <option value="${item.id}" <c:if test="${item.id==vo.roomid}">selected </c:if>>${item.roomNumber}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>currency</span>:</label>
+                <div class="layui-input-block widths">
+                    <select name="currency" lay-verify="required">
+                        <option value="-1"></option>
+                        <option value="1" <c:if test="${1==vo.currency}">selected </c:if> lang>RMB</option>
+                        <option value="2" <c:if test="${2==vo.currency}">selected </c:if> lang>PHP</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>Price</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="money" class="layui-input "  value="${vo.money}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>checkin</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="checkinTime" id="checkinTime" class="layui-input time"
+                           lay-verify="required"  value="${vo.checkintime}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>checkout</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="checkoutTime" class="layui-input time" id="checkoutTime" lay-verify="required"  value="${vo.checkouttime}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>name</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="pId" class="layui-input " lay-verify="required"  value="${vo.pId}">
+                    <input type="text" name="name" class="layui-input " lay-verify="required"  value="${vo.name}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>phone</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="phoneNumber" class="layui-input " lay-verify="required"  value="${vo.phoneNumber}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>checknumber</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input " lay-verify="required"  value="${vo.checkinNumber}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>checkinRoom</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="text" name="checkinRoom" id="checkinRoom" class="layui-input " lay-verify="required"  value="${vo.checkinRoom}">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>account</span>:</label>
+                <div class="layui-input-block widths">
+                    <input type="radio" name="isdao" value="2" title="是"<c:if test="${2==vo.isdao}">checked </c:if>>
+                    <input type="radio" name="isdao" value="1" title="否"<c:if test="${1==vo.isdao}">checked </c:if>>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span lang>accounts</span>:</label>
+                <div class="layui-input-block widths">
+                    <select name="account" lay-verify="required">
+                        <c:forEach items="${alist}" var="items">
+                            <option value="${items.id}" <c:if test="${items.id==vo.aid}">selected </c:if>>${items.name}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <div class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</div>
+                </div>
+            </div>
+
+        </form>
+    </div>
 </div>
 </body>
 
@@ -445,7 +566,7 @@
 
         element.on('tab(docDemoTabBrief)', function (data) {
             console.log(data.index);
-            funpage(data.index, ps);
+            funpage(data.index, 1);
             ss = data.index;
         });
 
@@ -515,22 +636,22 @@
                         if (status == 0) {//确认
                             listStr += '<div class="rmb-title layui-row">';
                             listStr += ' <div class="layui-col-xs2 layui-col-xs-offset4">';
-                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(' + item.orderNumber + ')" lang>ins</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin('+ item.id + ')" lang>ins</span>';
                             if (item.isdao == 1) {
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
+                            listStr+='<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder('+item.id+',status)" lang>amended</span>';
                             listStr += '</div>';
-
                             listStr += '</div>';
                         } else if (status == 1) {//入住
                             listStr += '<div class="rmb-title layui-row">';
                             listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
-                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkout(' + item.orderNumber + ')" lang>out</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkout(' + item.id + ')" lang>out</span>';
                             if (item.isdao == 1) {
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
+                            listStr+='<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder('+item.id+',status)" lang>amended</span>';
                             listStr += '</div>';
-
                             listStr += '</div>'
                         } else if (status == 2) {//退房
                             if (item.isdao == 1) {
@@ -539,6 +660,7 @@
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span></div>';
                                 listStr += '</div>';
                             }
+
                         } else if (status == 3) {
                             if (item.isdao == 1) {
                                 listStr += '<div class="rmb-title layui-row">';
@@ -565,14 +687,14 @@
                     pageStr += ' </div>';
                     $("#pages").append(pageStr);
 
-                    ps = result.currentPage;
+                  /*  ps = result.currentPage;*/
                     /* 分页要用的 */
                     $(".tcdPageCode").createPage({
                         pageCount: result.totalPage,
                         current: result.currentPage,
                         backFn: function (p) {
                             funpage(status, p)
-                            ps = result.currentPage;
+                            ps = p;
                         }
                     });
 
@@ -607,6 +729,32 @@
                 }
             })
         }
+
+
+        window.updateOrder=function (value,value2) {
+            window.location='${ctx}/Order/toupdate.do?id='+value+'&status='+value2;
+
+        }
+
+
+
+
+        /*$(document).on('click', '.updateOrder', function () {
+            getData($(this))
+        });
+
+        function getData(obj) {
+
+
+            form.val('test', {
+                "roomNumber": roomNumber,
+                "roomId": id
+                /!*  "checkinTime": time + " 00:00:00"*!/
+            });
+            add();
+        }*/
+
+
 
 
     });

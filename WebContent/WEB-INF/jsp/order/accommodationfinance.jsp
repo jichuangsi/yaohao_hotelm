@@ -210,6 +210,8 @@
                                 <div class="layui-row">
                                     <input type="hidden" name="roomNumber" value="${item.roomNumber}">
                                     <input type="hidden" name="roomId" value="${item.roomId}">
+                                    <input type="hidden" name="supplierName" value="${item.supplierName}">
+                                    <input type="hidden" name="supplierId" value="${item.supplierId}">
                                     <div class="">${item.supplierName}-${item.roomNumber}</div>
                                 </div>
                                 <div class="layui-row">
@@ -254,20 +256,23 @@
             <label class="layui-form-label"><span lang>patform</span>:</label>
             <div class="layui-input-block widths">
                 <select name="platformId" lay-verify="required" id="pt">
-                    <c:forEach items="${slist}" var="item">
-                        <option value="${item.id}">${item.supplierName}</option>
+                    <c:forEach items="${plist}" var="item">
+                        <option value="${item.id}">${item.name}</option>
                     </c:forEach>
+
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label"><span lang>supplier</span>:</label>
             <div class="layui-input-block widths">
-                <select name="hotelmId" lay-verify="required" id="gys">
-                    <c:forEach items="${plist}" var="item">
-                        <option value="${item.id}">${item.name}</option>
+                <input type="text" name="hotelmName" value="" readonly  class="layui-input">
+                <input type="text" name="hotelmId" class="layui-input" value="" readonly>
+               <%-- <select name="hotelmId" lay-verify="required" id="gys">
+                    <c:forEach items="${slist}" var="item">
+                        <option value="${item.id}">${item.supplierName}</option>
                     </c:forEach>
-                </select>
+                </select>--%>
             </div>
         </div>
         <div class="layui-form-item">
@@ -434,10 +439,14 @@
             add();
             var id = $(obj).parent().parent().parent().find('input[name=roomId]').val();
             var roomNumber = $(obj).parent().parent().parent().find('input[name=roomNumber]').val();
+            var hotelmId = $(obj).parent().parent().parent().find('input[name=supplierId]').val();
+            var hotelmName = $(obj).parent().parent().parent().find('input[name=supplierName]').val();
             var time = getNowFormatDate();
             form.val('test', {
                 "roomNumber": roomNumber,
-                "roomId": id
+                "roomId": id,
+                "hotelmId":hotelmId,
+                "hotelmName":hotelmName
                 /*  "checkinTime": time + " 00:00:00"*/
             });
         }
@@ -627,6 +636,7 @@
         })
         return bl;
     }
+
 
     function getNowFormatDate() {
         var date = new Date();

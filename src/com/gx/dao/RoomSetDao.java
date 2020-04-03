@@ -70,4 +70,6 @@ public interface RoomSetDao {
 
 
     public Integer roomAcountById(@Param("id")Integer id,@Param("roomAcount")Integer roomAcount);
+
+    public List<RoomSetPo> roomByHotelm(@Param("id")Integer id);
 }

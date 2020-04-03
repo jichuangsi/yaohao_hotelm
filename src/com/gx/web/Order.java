@@ -107,7 +107,6 @@ public class Order {
         }else if (status==3){//已到账
             vo=this.orderService.myaccount(orderNumber, passengerId,vo);
         }
-
         Gson gson=new Gson();
         return gson.toJson(vo);
     }
@@ -369,6 +368,7 @@ public class Order {
             ov.setRoomId(v.getRoomId());
             ov.setRoomNumber(v.getRoomNumber());
             ov.setSupplierName(v.getSupplierName());
+            ov.setSupplierId(v.getSupplierId());
             ov.setRemainingBeds(v.getRoomAmount());
             olist.add(ov);
         }
@@ -390,6 +390,7 @@ public class Order {
                     ov.setOrderId(o.getOrderId());
                     ov.setRoomId(o.getRoomId());
                     ov.setSupplierName(o.getSupplierName());
+                    ov.setSupplierId(o.getSupplierId());
                     ov.setRoomNumber(o.getRoomNumber());
                     ov.setRoomAmount(o.getRoomAmount());
                     olist.add(ov);
@@ -559,6 +560,14 @@ public class Order {
         int day=TimeTransformation.nDaysBetweenTwoDate(strn,strn2);
         orderPo.setCheckinDay(day);
         orderPo.setOrderTime(d);
+        if (orderPo.getHotelmId()==null){
+            RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
+            if (roomSetPo.getSupplierID()==null){
+                orderPo.setHotelmId(roomSetPo.getSupplierId());
+            }else {
+                orderPo.setHotelmId(roomSetPo.getSupplierID());
+            }
+        }
         Integer counts=orderService.inserAll(orderPo);
         /*int oid=orderPo.getId();
         //int oid=
@@ -581,11 +590,11 @@ public class Order {
     //修改订单状态
     @ResponseBody
     @RequestMapping("updateStatus")
-    public Object updateStatus(String orderNumber,Integer status,String time){
+    public Object updateStatus(Integer orderNumber,Integer status,String time){
         Integer counts=0;
         counts= orderService.updateStatus(orderNumber, status);
-        OrderPo orderPo=orderService.selectByOrderNumber(orderNumber);//根据订单号查询订单
-        RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
+        OrderDetailsVo orderPo=orderService.selectById(orderNumber);//根据订单号查询订单
+        RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomid());
         if (status==6){//退房
             String satrt=time.substring(0,time.lastIndexOf("-"));
             String end=time.substring(time.lastIndexOf("-")+1,time.length());
@@ -603,10 +612,10 @@ public class Order {
              time2 = new SimpleDateFormat("yyyy-MM").format(orderPo.getOrderTime()).toString();
             }
 
-            int count=financeService.countFinanceM(time2,orderPo.getRoomId());
+            int count=financeService.countFinanceM(time2,orderPo.getRoomid());
             if (count>=1){//修改
                 FinancePo po=new FinancePo();
-                FinancePo financePo=financeService.selectByyearM(time2,orderPo.getRoomId());
+                FinancePo financePo=financeService.selectByyearM(time2,orderPo.getRoomid());
               if (orderPo.getCurrency()==1){//RMB
                   po.setRMB(financePo.getRMB()+orderPo.getMoney());
                 po.setId(financePo.getId());
@@ -618,7 +627,7 @@ public class Order {
               }
             }else {//新增
             FinancePo financePo=new FinancePo();
-            financePo.setRoomId(orderPo.getRoomId());
+            financePo.setRoomId(orderPo.getRoomid());
             financePo.setRoomNumber(roomSetPo.getRoomNumber());
             if (roomSetPo.getSupplierID()==null) {
                 financePo.setSupplierId(roomSetPo.getSupplierId());
@@ -1027,6 +1036,109 @@ public class Order {
         DailyconsumptionPo da=dailyconsumptionService.selectById(id);
         Gson gson=new Gson();
         return gson.toJson(da);
+    }
+
+
+    @RequestMapping("toupdate")
+    public ModelAndView toupdate(Integer id,Integer status){
+        ModelAndView mv=null;
+       OrderDetailsVo vo=orderService.selectById(id);
+       List<RoomSetPo> roomSetPo=roomSetService.roomByHotelm(vo.getSupplierId());
+       List<AccountPo> alist=accountService.getAccount();
+        mv=new ModelAndView("/order/updateOrder");
+       mv.addObject("vo",vo);
+       mv.addObject("list",roomSetPo);
+        mv.addObject("alist",alist);
+        mv.addObject("status",status);
+       return mv;
+    }
+    @ResponseBody
+    @RequestMapping("update")
+    public Object update(OrderPo orderPo,String name,Integer genderName,String phoneNumber){
+        PassengerPo passengerPo=new PassengerPo();
+        passengerPo.setId(orderPo.getPassengerId());
+        passengerPo.setName(name);
+        passengerPo.setPhoneNumber(phoneNumber);
+        passengerPo.setGenderName(genderName);
+        passengerService.updateById(passengerPo);
+
+        OrderDetailsVo orderPo1=orderService.selectById(orderPo.getId());//原来的order
+        //自有房的订单
+        orderPo.setType(1);
+        //判断是否到账
+        if (orderPo.getIsdao()==1){
+            orderPo.setDaoTime(null);
+        }else if (orderPo.getIsdao()==2){
+            if (orderPo.getDaoTime()==null){
+                Timestamp d = new Timestamp(System.currentTimeMillis());
+                orderPo.setDaoTime(d);
+            }
+        }
+        Timestamp d = new Timestamp(System.currentTimeMillis());
+        //判断入住天数
+        String strn = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckinTime());
+        String strn2 = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckoutTime());
+        int day=TimeTransformation.nDaysBetweenTwoDate(strn,strn2);
+        orderPo.setCheckinDay(day);
+        orderPo.setOrderTime(d);
+        orderPo.setIn(orderPo1.getIn());
+        orderPo.setOut(orderPo1.getOut());
+        orderPo.setStatus(orderPo1.getStatus());
+        Integer count=orderService.updateAll(orderPo);
+        Gson gson = new Gson();
+        return gson.toJson(count);
+    }
+
+
+    @ResponseBody
+    @RequestMapping("updateCheckinDay")
+    public Object updateCheckinDay(OrderPo orderPo){
+        int t=0;
+        int ok=0;
+        Gson gson = new Gson();
+        OrderDetailsVo orderPo1=orderService.selectById(orderPo.getId());//原来的order
+        if (orderPo1==null){
+            ok=0;
+            return gson.toJson(ok);
+        }
+        Date date1=TimeTransformation.dateToTimestamp(orderPo.getCheckinTime());//新入
+        Date date2=TimeTransformation.dateToTimestamp(orderPo1.getCheckintime());//原入
+
+        Date date3=TimeTransformation.dateToTimestamp(orderPo.getCheckoutTime());//新退
+        Date date4=TimeTransformation.dateToTimestamp(orderPo1.getCheckouttime());//原退
+
+        Boolean in=TimeTransformation.isSameDay(date1,date2);
+        Boolean out=TimeTransformation.isSameDay(date3,date4);
+        if (in==true && out==true){//没有更改入住时间
+            if (orderPo.getRoomId()==orderPo1.getRoomid()){//房号不变
+              if (orderPo.getCheckinNumber()==orderPo1.getCheckinNumber()){//入住床位不变
+                  ok=1;
+                  return gson.toJson(ok);
+              }
+            }
+        }
+            String strn = new SimpleDateFormat("yyyy-MM-dd").format(orderPo.getCheckinTime());
+            List<IndayVo> count=orderService.updateCheckDay(strn, orderPo.getRoomId(),orderPo.getId());//查询是否有人住
+            RoomSetPo roomSetPo=roomSetService.selectById(orderPo.getRoomId());
+            for (IndayVo i:count ) {//入住时间到其他订单退房时间内的入住人数
+                if (i.getCount()>0){
+                    t=t+i.getNumber();//现有住宿人
+                }
+            }
+            if (t==0){
+                if (orderPo.getCheckinNumber()<=Integer.parseInt(roomSetPo.getRoomAmount())){//床位大于等于入住人数
+                    ok=1;
+                }
+            }else {
+                if (t<Integer.parseInt(roomSetPo.getRoomAmount())){//有床位  入住人====》床位
+                    if (orderPo.getCheckinNumber()<=Integer.parseInt(roomSetPo.getRoomAmount())-t){//床位大于等于入住人数
+                        ok=1;
+                    }
+                }
+            }
+
+
+        return gson.toJson(ok);
     }
 
     ////////////////////////////////////共有////////////////////////////////////////////////////////////////////////////

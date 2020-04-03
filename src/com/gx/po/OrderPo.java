@@ -23,7 +23,24 @@ public class OrderPo {
     private Integer account;//账户
     private Integer checkinDay;//入住天数
     private Integer type;//类型 1自己 2合约
+    private String in;
+    private String out;
 
+    public String getIn() {
+        return in;
+    }
+
+    public void setIn(String in) {
+        this.in = in;
+    }
+
+    public String getOut() {
+        return out;
+    }
+
+    public void setOut(String out) {
+        this.out = out;
+    }
 
     public Integer getCheckinRoom() {
         return checkinRoom;

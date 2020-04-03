@@ -10,6 +10,15 @@ public class OrderTimeVo {
     private Integer number;//入住人数
     private Integer roomAmount;
     private Integer checkinNumber;
+    private Integer supplierId;
+
+    public Integer getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Integer supplierId) {
+        this.supplierId = supplierId;
+    }
 
     public Integer getCheckinNumber() {
         return checkinNumber;

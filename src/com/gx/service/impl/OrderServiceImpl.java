@@ -83,10 +83,10 @@ public class OrderServiceImpl implements OrderService {
         return vo;
     }
 
-    @Override
+   /* @Override
     public Integer updateStatus(String orderNumber, Integer status) {
         return orderDao.updateStatus(orderNumber, status);
-    }
+    }*/
 
     @Override
     public OrderPo selectByOrderNumber(String orderNumber) {
@@ -240,5 +240,26 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer roomAcountu(Integer roomId) {
         return orderDao.roomAcountu(roomId);
+    }
+
+
+    @Override
+    public Integer updateStatus(Integer id, Integer status) {
+        return orderDao.updateStatus(id,status);
+    }
+
+    @Override
+    public OrderDetailsVo selectById(Integer id) {
+        return orderDao.selectById(id);
+    }
+
+    @Override
+    public List<IndayVo> updateCheckDay(String time, Integer roomId, Integer id) {
+        return orderDao.updateCheckDay(time, roomId, id);
+    }
+
+    @Override
+    public Integer updateAll(OrderPo po) {
+        return orderDao.updateAll(po);
     }
 }

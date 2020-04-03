@@ -93,4 +93,9 @@ public class RoomSetServiceImpl implements RoomSetService {
 	public Integer roomAcountById(Integer id, Integer roomAcount) {
 		return roomSetDao.roomAcountById(id, roomAcount);
 	}
+
+	@Override
+	public List<RoomSetPo> roomByHotelm(Integer id) {
+		return roomSetDao.roomByHotelm(id);
+	}
 }

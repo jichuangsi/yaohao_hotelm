@@ -26,12 +26,29 @@ public class OrderDetailsVo {
     private Timestamp checkouttime;
     private Timestamp orderTime;//订单时间
     private int checkinDay;//入住天数
-    private int checkinNumber;//入住人数
+    private int checkinNumber;//入住床位
+    private int checkinRoom;//入住人数
+    private Integer aid;
     private String accountName;//账户
     private int type; //1自有 2合约
     private String in;
     private String out;
 
+    public int getCheckinRoom() {
+        return checkinRoom;
+    }
+
+    public void setCheckinRoom(int checkinRoom) {
+        this.checkinRoom = checkinRoom;
+    }
+
+    public Integer getAid() {
+        return aid;
+    }
+
+    public void setAid(Integer aid) {
+        this.aid = aid;
+    }
 
     public Integer getId() {
         return id;
