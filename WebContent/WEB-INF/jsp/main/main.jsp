@@ -107,6 +107,18 @@
 								</a>
 							</li>
 							<li>
+								<a id="consumptionId" onclick="consumption()">
+									<i class="icon-double-angle-right"></i>
+									<span  lang>consumptions</span>
+								</a>
+							</li>
+							<li>
+								<a id="bookingId" onclick="booking()">
+									<i class="icon-double-angle-right"></i>
+									<span lang>ticheng</span>
+								</a>
+							</li>
+							<li>
 								<a id="roomSetId" onclick="roomSet()">
 									<i class="icon-double-angle-right"></i>
 									<span lang>roomset</span>
@@ -122,18 +134,6 @@
 								<a id="suppliermanager" onclick="suppliermanager()">
 									<i class="icon-double-angle-right"></i>
 									<span lang>supplier</span>
-								</a>
-							</li>
-							<li>
-								<a id="consumptionId" onclick="consumption()">
-									<i class="icon-double-angle-right"></i>
-									<span  lang>consumptions</span>
-								</a>
-							</li>
-							<li>
-								<a id="bookingId" onclick="booking()">
-									<i class="icon-double-angle-right"></i>
-									<span lang>ticheng</span>
 								</a>
 							</li>
 							<li>
