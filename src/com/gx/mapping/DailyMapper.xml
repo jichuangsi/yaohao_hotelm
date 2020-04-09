@@ -113,4 +113,8 @@
        AND  DATE_FORMAT(`time`, '%Y-%m')=#{time,jdbcType=VARCHAR}
        ORDER BY `time`
     </select>
+
+    <delete id="delById">
+         DELETE FROM `dailyconsumption` WHERE id=#{id,jdbcType=INTEGER}
+    </delete>
 </mapper>

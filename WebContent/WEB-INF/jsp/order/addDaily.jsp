@@ -229,6 +229,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <div class="layui-btn" lay-submit lay-filter="update_Pwd" lang>Submission</div>
+                <div class="layui-btn" onclick="delanser()" lang>delete</div>
             </div>
         </div>
     </form>
@@ -495,6 +496,26 @@
                 }
             });
         }
+
+
+        window.delanser=function () {
+            /*  var questionId=document.getElementById("anserId").val();*/
+            var question=$("#id").val();
+            if (question.trim().length!=0) {
+                $.ajax({
+                    cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                    type: "POST",                                           //上面3行都是必须要的
+                    url: '${ctx}/Order/deletedaily.do',       //地址 type 带参数
+                    data: "id="+question,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                    async: false,                                          // 是否 异步 提交
+                    success: function (result) {                          // 不出现异常 进行立面方
+
+                        window.location="${ctx}/Order/todaily.do";
+                    }
+                })
+            }
+        }
+
 
         function getNowFormatDate() {
             var date = new Date();

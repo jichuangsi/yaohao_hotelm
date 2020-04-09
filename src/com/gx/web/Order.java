@@ -6,14 +6,20 @@ import com.gx.po.*;
 import com.gx.service.*;
 import com.gx.util.TimeTransformation;
 import com.gx.vo.*;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import  com.gx.service.PlatformService;
 
+import javax.servlet.ServletContext;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -759,7 +765,7 @@ public class Order {
         return mv;
     }
 
-//日程消费列表
+        //日程消费列表
     @RequestMapping("todaily")
     public ModelAndView todaily(String time,Integer currentPage){
         ModelAndView mv=null;
@@ -804,6 +810,15 @@ public class Order {
         }
 
         return mv;
+    }
+
+    //删除日常消费
+    @ResponseBody
+    @RequestMapping("deletedaily")
+    public Object deletedaily(Integer id){
+        Integer count=dailyconsumptionService.delByid(id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
     }
 
     //新增消费类型
@@ -901,7 +916,25 @@ public class Order {
         }else if (currentPage==0) {
             currentPage=1;
         }
-        List<QuestionAnserVo> lists=new ArrayList<QuestionAnserVo>();
+        Page<QuestionAnserVo> vos=new Page<QuestionAnserVo>();
+        QuestionAnserVo questionAnserVo=new QuestionAnserVo();
+        Page<QuestionAnserVo> vo=new Page<QuestionAnserVo>();
+        List<QuestionAnserVo> vlist=new ArrayList<QuestionAnserVo>();
+        vo.setCurrentPage(currentPage);
+        vo=questionService.listoage(name,vo);
+        for (QuestionAnserVo p:vo.getResult()){
+            questionAnserVo=new QuestionAnserVo();
+            List<AnserPo> alists=anserService.listall(p.getQid());
+            questionAnserVo=p;
+            questionAnserVo.setAlist(alists);
+            vlist.add(questionAnserVo);
+        }
+        vos.setCurrentPage(currentPage);
+        vos.setResult(vlist);
+        vos.setTotalPage(vo.getTotalPage());
+        vos.setTotal(vo.getTotal());
+        vos.setPageSize(vo.getPageSize());
+        /*List<QuestionAnserVo> lists=new ArrayList<QuestionAnserVo>();
         QuestionAnserVo questionPo=new QuestionAnserVo();
         List<AnserPo> alist=new ArrayList<AnserPo>();
         AnserPo anserPo=new AnserPo();
@@ -914,10 +947,99 @@ public class Order {
             questionPo.setTime(p.getCreateTime());
             List<AnserPo> alists=anserService.listall(p.getId());
             questionPo.setAlist(alists);
+          *//*  List<QuestionImgPo> img=questionService.imgByQid(p.getId());
+            List<QuestionVideoPo> video=questionService.videoByQid(p.getId());
+            questionPo.setImg(img);
+            questionPo.setVideo(video);*//*
             lists.add(questionPo);
-        }
-        mv.addObject("list",lists);
+        }*/
+        mv.addObject("list",vos);
         return mv;
+    }
+
+    @RequestMapping("anserByQid")
+    public ModelAndView anserByQid(Integer qid,Integer currentPage){
+        ModelAndView mv=null;
+        mv=new ModelAndView("/order/questionsanser");
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<AnserPo> vos=new Page<AnserPo>();
+        vos.setCurrentPage(currentPage);
+        vos=questionService.listanser(qid,vos);
+        QuestionPo questionPo=questionService.questionById(qid);
+
+        List<QuestionImgPo> img=questionService.imgByQid(qid);
+        List<QuestionVideoPo> video=questionService.videoByQid(qid);
+       mv.addObject("list",vos);
+        mv.addObject("name",questionPo.getTitle());
+        mv.addObject("qid",questionPo.getId());
+        mv.addObject("img",img);
+        mv.addObject("video",video);
+       return mv;
+    }
+    @ResponseBody
+    @RequestMapping("janserByQid")
+    public Object janserByQid(Integer qid,Integer currentPage){
+        if (currentPage==null) {
+            currentPage=1;
+        }else if (currentPage==0) {
+            currentPage=1;
+        }
+        Page<AnserPo> vos=new Page<AnserPo>();
+        vos.setCurrentPage(currentPage);
+        vos=questionService.listanser(qid,vos);
+        Gson gson=new Gson();
+        return gson.toJson(vos);
+    }
+
+    @ResponseBody
+    @RequestMapping("delimg")
+    public Object delimg(Integer id){
+       QuestionImgPo img=questionService.selectImgByid(id);
+        String pathUrl=System.getProperty("bookdir");
+            String url=pathUrl.substring(0,pathUrl.length()-1)+img.getQimg();
+            String path=url.toString().replace("/","\\");
+            File file=new File(path);
+            if (file.exists()){
+                file.delete();
+            }
+      Integer count=questionService.delImg(id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+    @ResponseBody
+    @RequestMapping("delvideo")
+    public Object delvideo(Integer id){
+        QuestionVideoPo questionVideoPo=questionService.selectVideoByid(id);
+            String pathUrl=System.getProperty("bookdir");
+                String url=pathUrl.substring(0,pathUrl.length()-1)+questionVideoPo.getUpload();
+                String path=url.toString().replace("/","\\");
+                File file=new File(path);
+                if (file.exists()){
+                    file.delete();
+                }
+        Integer count=questionService.delVideo(id);
+        Gson gson=new Gson();
+        return gson.toJson(count);
+    }
+
+    @ResponseBody
+    @RequestMapping("imgByQid")
+    public Object imgByQid(Integer qid){
+        List<QuestionImgPo> img=questionService.imgByQid(qid);
+        List<QuestionVideoPo> video=questionService.videoByQid(qid);
+        Gson gson=new Gson();
+        return gson.toJson(img);
+    }
+    @ResponseBody
+    @RequestMapping("videoByQid")
+    public Object videoByQid(Integer qid){
+        List<QuestionVideoPo> video=questionService.videoByQid(qid);
+        Gson gson=new Gson();
+        return gson.toJson(video);
     }
 
     //新增问题
@@ -967,6 +1089,32 @@ public class Order {
         Integer count=0;
         count=questionService.deleteById(id);
         count=anserService.delByquestionId(id);
+        List<QuestionVideoPo> video=questionService.videoByQid(id);
+        List<QuestionImgPo> img=questionService.imgByQid(id);
+        if (video.size()>0){
+            String pathUrl=System.getProperty("bookdir");
+            for (QuestionVideoPo p:video) {
+                String url=pathUrl.substring(0,pathUrl.length()-1)+p.getUpload();
+                String path=url.toString().replace("/","\\");
+              File file=new File(path);
+              if (file.exists()){
+                  file.delete();
+              }
+            }
+        }
+        if (img.size()>0){
+            String pathUrl=System.getProperty("bookdir");
+            for (QuestionImgPo p:img) {
+                String url=pathUrl.substring(0,pathUrl.length()-1)+p.getQimg();
+                String path=url.toString().replace("/","\\");
+                File file=new File(path);
+                if (file.exists()){
+                    file.delete();
+                }
+            }
+        }
+       questionService.delImgQid(id);
+        questionService.delVideoQid(id);
         Gson gson=new Gson();
         return gson.toJson(count);
     }
@@ -1011,6 +1159,123 @@ public class Order {
         Gson gson=new Gson();
         return gson.toJson(count);
     }
+
+
+    //上传问题视频
+   /* @ResponseBody*/
+    @RequestMapping(value = "uploadVideo")
+    public ModelAndView uploadVideo(@RequestParam(value = "titles")String titles, @RequestParam(value = "qqId")Integer qqId,@RequestParam(value = "img")MultipartFile[] img,@RequestParam(value = "video") MultipartFile[] video) throws IOException {
+        ModelAndView mv=null;
+        mv=new ModelAndView("redirect:/Order/anserByQid.do");
+        mv.addObject("qid",qqId);
+        Integer count=1;
+        if (titles!=null && titles!=" " && titles.length()!=0){
+        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+        AnserPo anserPo=new AnserPo();
+        anserPo.setQuestionId(qqId);
+        anserPo.setAnswer(titles);
+        anserPo.setTime(timestamp);
+
+            count=anserService.insertAll(anserPo);
+        }
+        if (count>0){
+         /*   Integer qid=1;*/
+                for (MultipartFile f : img) {
+                    System.out.println(f.isEmpty());
+                    if (!f.isEmpty()) {// 判断上传的文件是否为空
+                    String upload = "";
+                    String fileName = f.getOriginalFilename();// 文件原名称
+                    //获取扩展名称
+                    String ext = fileName.substring(fileName.lastIndexOf("."));
+                    String newName = UUID.randomUUID().toString().replace("-", "") + ext;
+                    System.out.println("上传的文件原名称:" + fileName);
+                    // 判断文件类型
+                    String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()) : null;
+                    if (type != null) {// 判断文件类型是否为空
+                        if (imgs().contains(type.toLowerCase())) {
+                            double fileSize = (double) f.getSize() / 1024 / 1024;//MB
+                            if (fileSize <= Double.valueOf(5)) {//判断资源是否小于5mb
+                                String pathUrl = System.getProperty("bookdir");
+                                String url = pathUrl + "images";
+                                //要上传的路径（包括存储的绝对路径和文件名.后缀）
+                                File file1 = new File(url + "\\" + newName);
+                                File file2 = new File(url);
+                                upload = "/images/" + newName;
+                                judeDirExists(file2);
+                                try {
+                                    f.transferTo(file1);//上传到服务器
+                                } catch (Exception e) {
+                                }
+                                QuestionImgPo imgs = new QuestionImgPo();
+                                imgs.setQid(qqId);
+                                imgs.setQimg(upload);
+                                count = questionService.inserImg(imgs);
+                            }
+                        }
+                    }
+                }
+            }
+                for (MultipartFile v : video) {
+                    if (!v .isEmpty()) {//视频
+                    String upload = "";
+                    String fileName = v.getOriginalFilename();// 文件原名称
+                    System.out.println("上传的文件原名称:" + fileName);
+                    //获取扩展名称
+                    String ext = fileName.substring(fileName.lastIndexOf("."));
+                    //拼接文件保存的名称
+                    String newName = UUID.randomUUID().toString().replace("-", "") + ext;
+                    System.out.println("上传的文件新名称:" + newName);
+                    // 判断文件类型
+                    String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()) : null;
+                    if (type != null) {// 判断文件类型是否为空
+                        if (imgs().contains(type.toLowerCase())) {
+                            double fileSize = (double) v.getSize() / 1024 / 1024;//MB
+                            if (fileSize <= Double.valueOf(15)) {//判断资源是否小于15mbcopyInputStreamToFile
+                                String pathUrl = System.getProperty("bookdir");
+                                String url = pathUrl + "upload";
+                                //要上传的路径（包括存储的绝对路径和文件名.后缀）
+                                File file3 = new File(url + "\\" + newName);
+                                upload = "/upload/" + newName;
+                                File file2 = new File(url);
+                                judeDirExists(file2);
+                                try {
+                                    v.transferTo(file3);//上传到服务器
+                                } catch (Exception e) {
+                                }
+                                QuestionVideoPo videos = new QuestionVideoPo();
+                                videos.setQid(qqId);
+                                videos.setUpload(upload);
+                                count = questionService.inserVideo(videos);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+       return mv;
+    }
+
+    public static Set<String> imgs(){
+        Set<String> mFileTypes=new HashSet<String>();
+        // images
+        mFileTypes.add("jpg");
+        mFileTypes.add("png");
+        mFileTypes.add("gif");
+        mFileTypes.add("tif");
+        mFileTypes.add("bmp");
+        //视频或音频类
+       /* mFileTypes.add("wma");*/
+      /*  mFileTypes.add("wav");*/
+        mFileTypes.add("avi");
+      /*  mFileTypes.add("mid");*/
+       /* mFileTypes.add("rm");*/
+        mFileTypes.add("mpg");
+        mFileTypes.add("mov");
+       /* mFileTypes.add("asf");*/
+        mFileTypes.add("mp4");
+        return mFileTypes;
+    }
+
 
 
     //点击消费显示消费详情(订单)
@@ -1399,6 +1664,22 @@ public class Order {
      Date s=TimeTransformation.getDate(date,19);
         return null;
     }*/
+
+    // 判断文件夹是否存在
+    public static void judeDirExists(File file) {
+       if (file.exists()) {
+              if (file.isDirectory()) {
+              System.out.println("dir exists");
+             } else {
+           System.out.println("the same name file exists, can not create dir");
+               }
+            } else {
+             System.out.println("dir not exists, create it ...");
+           file.mkdir();
+          }
+    }
+
+
     @ResponseBody
     @RequestMapping("testf")
     public Object testf(){

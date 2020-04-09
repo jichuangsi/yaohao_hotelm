@@ -31,4 +31,6 @@ public interface DailyconsumptionService {
     public List<DailyconsumptionPo> dailydateil(Integer roomId,Integer cid,String time);
 
     public Integer updateAll(DailyconsumptionPo po);
+
+    public Integer delByid(Integer id);
 }

@@ -59,4 +59,78 @@
     <delete id="deleteById">
         DELETE FROM `question` WHERE id=#{id,jdbcType=INTEGER}
     </delete>
+
+    <insert id="inserImg" parameterType="com.gx.po.QuestionImgPo">
+        INSERT INTO `questionimg` (`qid`, `qimg`)
+        VALUES (#{qid,jdbcType=INTEGER},#{qimg,jdbcType=BLOB}) ;
+    </insert>
+    <insert id="inserVideo" parameterType="com.gx.po.QuestionVideoPo">
+        INSERT INTO `questionvideo` (`qid`, `upload`)
+        VALUES (#{qid,jdbcType=INTEGER},#{upload,jdbcType=VARCHAR}) ;
+    </insert>
+    <select id="imgByQid" resultType="com.gx.po.QuestionImgPo">
+      SELECT * FROM questionimg WHERE `qid`=#{qid,jdbcType=INTEGER}
+    </select>
+    <delete id="delImg">
+    DELETE  FROM `questionimg`
+        WHERE `id` = #{id,jdbcType=INTEGER} ;
+    </delete>
+    <update id="updateImg" parameterType="com.gx.po.QuestionImgPo">
+        UPDATE `questionimg`
+        SET
+          `qid` =#{qid,jdbcType=INTEGER},
+          `qimg` = #{qimg,jdbcType=BLOB}
+        WHERE `id` = #{id,jdbcType=INTEGER};
+    </update>
+    <select id="videoByQid" resultType="com.gx.po.QuestionVideoPo">
+      SELECT * FROM questionvideo WHERE `qid`=#{qid,jdbcType=INTEGER}
+    </select>
+
+    <delete id="delVideo">
+        DELETE  FROM `questionvideo`
+        WHERE `id` = #{id,jdbcType=INTEGER} ;
+    </delete>
+
+    <update id="updateVideo" parameterType="com.gx.po.QuestionVideoPo">
+        UPDATE `questionvideo`
+        SET
+          `qid` =#{qid,jdbcType=INTEGER},
+          upload=#{upload,jdbcType=VARCHAR}
+        WHERE `id` = #{id,jdbcType=INTEGER};
+    </update>
+
+    <delete id="delImgQid">
+         DELETE  FROM `questionimg`
+        WHERE `qid` = #{qid,jdbcType=INTEGER} ;
+    </delete>
+    <delete id="delVideoQid">
+         DELETE  FROM `questionvideo`
+        WHERE `qid` = #{qid,jdbcType=INTEGER} ;
+    </delete>
+
+    <select id="listoage" resultType="com.gx.vo.QuestionAnserVo">
+        SELECT *,q.`id` AS qid,q.`hotelm` ashotelm,q.`title` AS title,q.`createTime` AS `time`,s.`supplierName` AS hotelmName
+         FROM question  q  INNER JOIN `supplier` s ON q.`hotelm`=s.id
+        WHERE 1=1
+        <if test="name==null and name==''">
+            title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+        ORDER BY q.`id`
+        LIMIT #{start},#{pageSize}
+    </select>
+
+    <select id="listanser" resultType="com.gx.po.AnserPo">
+        SELECT * FROM `anser` WHERE `questionId`= #{qid,jdbcType=INTEGER}
+        LIMIT #{start},#{pageSize}
+    </select>
+    <select id="listansercount" resultType="java.lang.Integer">
+      SELECT COUNT(*) FROM `anser` WHERE `questionId`= #{qid,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectImgByid" resultType="com.gx.po.QuestionImgPo">
+          SELECT * FROM `questionimg` WHERE `id`= #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectVideoByid" resultType="com.gx.po.QuestionVideoPo">
+  SELECT * FROM `questionvideo` WHERE `id`= #{id,jdbcType=INTEGER}
+    </select>
 </mapper>

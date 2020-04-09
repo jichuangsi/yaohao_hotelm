@@ -77,4 +77,9 @@ private DailyconsumptionDao dailyconsumptionDao;
     public Integer updateAll(DailyconsumptionPo po) {
         return dailyconsumptionDao.updateAll(po);
     }
+
+    @Override
+    public Integer delByid(Integer id) {
+        return dailyconsumptionDao.delById(id);
+    }
 }

@@ -96,7 +96,9 @@
 	"upType":"Consumption type",
 	"delete":"delete",
 	"anser":"Hotelm Questions Answer",
-	"dao":"Arrival account"
+	"dao":"Arrival account",
+	"img":"Upload pictures",
+	"video":"Upload video"
 
 
 }

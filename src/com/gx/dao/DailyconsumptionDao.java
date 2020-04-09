@@ -30,4 +30,6 @@ public interface DailyconsumptionDao {
     public List<DailyconsumptionPo> dailydateil(@Param("roomId")Integer roomId, @Param("cid")Integer cid,@Param("time")String time);
 
     public Integer updateAll(DailyconsumptionPo po);
+
+    public Integer delById(Integer id);
 }

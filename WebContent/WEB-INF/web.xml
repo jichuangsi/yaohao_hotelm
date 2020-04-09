@@ -11,6 +11,10 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath:applicationContext.xml,classpath:spring-mybatis.xml</param-value>
   </context-param>
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>bookdir</param-value>
+    </context-param>
   
   <listener>
     <description>spring监听器</description>
