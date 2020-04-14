@@ -41,4 +41,10 @@
     <delete id="delByquestionId">
         DELETE FROM `anser` WHERE `questionId`= #{questionId,jdbcType=INTEGER}
     </delete>
+    <select id="selectByImg"  resultType="java.lang.Integer">
+         SELECT COUNT(*) FROM `anser` WHERE `answer` like CONCAT('%',#{image,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="allAnser" resultType="java.lang.String">
+         SELECT answer FROM `anser`
+    </select>
 </mapper>

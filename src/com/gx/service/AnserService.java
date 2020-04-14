@@ -15,4 +15,6 @@ public interface AnserService {
 
     public Integer delById(Integer id);
     public Integer delByquestionId(Integer questionId);
+    public Integer selectByImg(String image);
+    public List<String> allAnser();
 }

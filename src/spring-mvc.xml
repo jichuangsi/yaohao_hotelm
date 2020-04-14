@@ -38,12 +38,11 @@ xmlns:context="http://www.springframework.org/schema/context"
 	   </mvc:message-converters>  
 	</mvc:annotation-driven>
 
-	<!--&lt;!&ndash; 定时任务配置 scheduler 方式 注解 &ndash;&gt;
+	<!-- 定时任务配置 scheduler 方式 注解 -->
 	<task:executor id="executor" pool-size="5"/>
 	<task:scheduler id="scheduler" pool-size="10"/>
-	<task:annotation-driven executor="executor" scheduler="scheduler"/>-->
+	<task:annotation-driven executor="executor" scheduler="scheduler"/>
 	<!-- 设置定时任务 -->
-<!--	<task:annotation-driven/>-->
 	<!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->  
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
 	<!--支持Json的Bean,配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->

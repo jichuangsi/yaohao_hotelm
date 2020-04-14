@@ -21,6 +21,10 @@
 
     <script type="text/javascript" src="${ctx}/js/page.js"></script>
     <link rel="stylesheet" href="${ctx}/css/page.css" type="text/css"></link>
+    <%--<!-- 配置文件 -->
+    <script type="text/javascript" src="${ctx}/js/ckeditor/config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="${ctx}/js/ckeditor/ckeditor.js"></script>--%>
 </head>
 <style>
     h4 {
@@ -95,7 +99,14 @@
     .imgfile{
        max-height: 100%;
         max-width: 100%;
-    margin: 0 auto;
+        margin: 0 auto;
+    }
+    img{
+        max-width:90%;
+        margin-left: 10%;
+    }
+    video{
+        width: 100%;
     }
 </style>
 <body>
@@ -110,13 +121,15 @@
         <div class="layui-row">
             <div class="layui-col-md6 gz layui-col-xs12  layui-col-md-offset3">
             <c:forEach items="${list.result}" var="items" varStatus="st">
-                <div class="comment_content" onclick="updateAnser(${items.id})">${items.answer}</div>
+                <div class="comment_content">
+                    <span style="font-weight: bold"  onclick="updateAnser(${items.id})">${st.index+1}.</span>
+                        ${items.answer}</div>
                 <hr>
             </c:forEach>
             </div>
         </div>
         <!-- 放视频 -->
-        <c:if test="${video.size()>0}">
+       <%-- <c:if test="${video.size()>0}">
         <div class="layui-row">
             <!-- 循环这里的  carousel-item-->
             <div class="layui-col-md6 gz layui-col-xs12  layui-col-md-offset3">
@@ -158,7 +171,7 @@
                 </div>
             </div>
         </div>
-        </c:if>
+        </c:if>--%>
         <div class="layui-row">
             <!-- 循环这里的  carousel-item-->
             <div class="layui-col-md6 gz layui-col-xs12  layui-col-md-offset3">
@@ -177,7 +190,7 @@
 
 
 
-<!--修改问题答案部分 -->
+<%--<!--修改问题答案部分 -->
 <div id="addAnser_apar" class="layui-fluid">
     <form class="layui-form" autocomplete="off" lay-filter="test2">
         <div class="layui-form-item">
@@ -185,7 +198,8 @@
             <div class="layui-input-block widths">
                 <input type="hidden" name="id" id="anserId" value="">
                 <input type="hidden" name="questionId" id="qId" value="">
-                <textarea class="textarea" name="answer" lay-verify="required" autoHeight="true"></textarea>
+               &lt;%&ndash; <textarea class="textarea" name="answer" lay-verify="required" autoHeight="true"></textarea>&ndash;%&gt;
+                <textarea name="answer" id="descriptions"/></textarea>
             </div>
         </div>
         <div class="layui-form-item">
@@ -206,6 +220,8 @@
             <label class="layui-form-label"><span lang>anser</span>：</label>
             <div class="layui-input-block widths">
                 <textarea class="textarea" id="titles" name="titles" autoHeight="true"></textarea>
+                   <!--在需要使用编辑器的地方插入textarea标签 -->
+                 &lt;%&ndash;  <textarea name="titles" id="description"/></textarea>&ndash;%&gt;
             </div>
         </div>
         <div class="layui-form-item">
@@ -228,8 +244,10 @@
 
         </div>
     </form>
-</div>
+</div>--%>
 <script>
+
+    console.log(${listimg})
     /* 分页要用的 */
     $(".tcdPageCode").createPage({
         pageCount:${list.totalPage},
@@ -238,9 +256,19 @@
             location.href = "${ctx}/Order/question.do?currentPage=" + p;
         }
     });
+
 </script>
 
 <script>
+    /*var my;
+    window.onload = function()
+    {
+        CKEDITOR.replace( 'description');
+    };
+    window.onload = function()
+    {
+        my=CKEDITOR.replace( 'descriptions');
+    };*/
     layui.use(['form', 'element'], function () {
         var form = layui.form,
             element = layui.element,
@@ -279,15 +307,16 @@
             });
         }
 
-        window.addAnser = function () {
-            AnserFlie();
+        window.addAnser = function (value) {
+          /*  AnserFlie();*/
+          window.location='${ctx}/Order/uedit.do?qId='+value;
         }
 
 
         function Anser() {
             index = layer.open({
                 type: 1,
-                area: ['40%', '50%'],
+                area: ['80%', '60%'],
                 anim: 2,
                 title: '修改问题回答',
                 maxmin: true,
@@ -297,25 +326,8 @@
         }
 
         window.updateAnser = function (value) {
-            var list;
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${ctx}/Order/getAnser.do",
-                data: "id=" + value,
-                async: false,
-                success: function (res) {
-                    list = res;
-                    form.val('test2', {
-                        "id": list.id,
-                        "answer": list.answer,
-                        "questionId": list.questionId
-                    });
-                    Anser();
-                    form.render();
+            window.location='${ctx}/Order/getAnser.do?id=' + value;
 
-                }
-            })
         }
 
 

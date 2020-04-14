@@ -15,4 +15,7 @@ public interface AnserDao {
 
     public Integer delById(@Param("id") Integer id);
     public Integer delByquestionId(@Param("questionId") Integer questionId);
+
+    public Integer selectByImg(String image);
+    public List<String> allAnser();
 }

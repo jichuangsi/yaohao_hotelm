@@ -66,7 +66,7 @@
                 <div class="layui-colla-item">
                     <h4 class="layui-colla-title">
                         <div class="layui-col-xs8 " style="padding-left: 15px;">
-                            <h2 style="font-size: 1rem;" onclick="anserlist(${item.qid})">${item.qid}.${item.title}</h2>
+                            <h2 style="font-size: 1rem;" onclick="anserlist(${item.qid})"><span style="color: black;font-weight: bold;font-size: 18px">${item.qid}.</span>${item.title}</h2>
                             <a style="margin-right: 50%;" href="#" class="layui-btn layui-btn-sm"
                                onclick="updates(${item.qid})" lang>amended</a>
                         </div>

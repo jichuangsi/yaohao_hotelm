@@ -43,4 +43,14 @@ public class AnserServiceImpl implements AnserService {
     public Integer delByquestionId(Integer questionId) {
         return anserDao.delByquestionId(questionId);
     }
+
+    @Override
+    public Integer selectByImg(String image) {
+        return anserDao.selectByImg(image);
+    }
+
+    @Override
+    public List<String> allAnser() {
+        return anserDao.allAnser();
+    }
 }
