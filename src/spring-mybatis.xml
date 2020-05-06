@@ -30,6 +30,7 @@
 	<!-- ========================================配置数据源========================================= -->
     <!-- 配置数据源，使用的是alibaba的Druid(德鲁伊)数据源 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="driverClassName" value="${driverClassName}"></property>
         <property name="url" value="${url}" />
         <property name="username" value="${username}" />
         <property name="password" value="${password}" />

@@ -145,6 +145,22 @@
 						</ul>
 					</li>
 					<li>
+						<a id="privateallId" onclick="privateapartmentall()" class="dropdown-toggle">
+							<i class="icon-home"></i>
+							<span class="menu-text" lang>privateall</span>
+							<b class="arrow icon-angle-down"></b>
+						</a>
+
+						<ul class="submenu">
+							<li>
+								<a id="homeTypeId" onclick="homeType()">
+									<i class="icon-double-angle-right"></i>
+									<span lang>hometye</span>
+								</a>
+							</li>
+						</ul>
+					</li>
+					<%--<li>
 						<a id="contractApartmentId" onclick="contractApartment()" class="dropdown-toggle">
 							<i class="icon-dashboard"></i>
 							<span class="menu-text" lang>contract</span>
@@ -176,7 +192,7 @@
 								</a>
 							</li>
 
-							<%--<li>
+							&lt;%&ndash;<li>
 								<a id="proomSetId" onclick="proomSet()">
 									<i class="icon-double-angle-right"></i>
 									<span>房间管理
@@ -199,9 +215,9 @@
 										<br>Supplier information
 									</span>
 								</a>
-							</li>--%>
+							</li>&ndash;%&gt;
 						</ul>
-					</li>
+					</li>--%>
 					<li>
 						<a id="setup" onclick="passengerManage()" class="dropdown-toggle">
 							<i class=" icon-wrench"></i>
@@ -653,8 +669,9 @@
                 document.getElementById('Mainid').src='${ctx}/Order/question.do';
                 // document.getElementById('Mainid').src='${ctx}/Order/date.do';
             }
-            //==============================================================================================================================//
 
+
+            ////////////////=====================================================================================================////
             function platformmanager() {
                 var a=document.getElementById("privateId").getElementsByTagName('span')[0].innerHTML;
                 document.getElementById("bigGuide").innerHTML=a+"";
@@ -671,6 +688,28 @@
                 document.getElementById("smallGuide").innerHTML=s+"";
                 document.getElementById('Mainid').src='${ctx}/Supplier/tolist.do';
             }
+
+            //==============================================================================================================================//
+
+
+
+            function privateapartmentall(){
+
+            }
+
+            function homeType() {
+                var a=document.getElementById("privateallId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("bigGuide").innerHTML=a+"";
+                var s=document.getElementById("homeTypeId").getElementsByTagName('span')[0].innerHTML;
+                document.getElementById("smallGuide").innerHTML=s+"";
+                var user=document.getElementById("user").value;
+                document.getElementById('Mainid').src='${ctx}/WholeHotel/homeType.do';
+                // document.getElementById('Mainid').src='${ctx}/Order/date.do';
+            }
+
+
+
+
 
             /*////////////////////////////////////合约//////////////////////////////*/
 

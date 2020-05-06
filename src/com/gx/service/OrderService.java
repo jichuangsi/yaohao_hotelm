@@ -2,8 +2,10 @@ package com.gx.service;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.po.RoomSetPo;
 import com.gx.vo.*;
 import com.gx.web.Order;
+import org.apache.ibatis.annotations.Param;
 import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +18,13 @@ public interface OrderService {
     @Transactional
     public Integer inserAll(OrderPo orderPo);
         //已确认
-    public Page<OrderDetailsVo> list(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    public Page<OrderDetailsVo> list(String orderNumber, String passengerId, Page<OrderDetailsVo> vo);
     //已入住
-    public Page<OrderDetailsVo> checkinorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    public Page<OrderDetailsVo> checkinorder(String orderNumber, String passengerId, Page<OrderDetailsVo> vo);
     //已退房
-    public Page<OrderDetailsVo> checkoutorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    public Page<OrderDetailsVo> checkoutorder(String orderNumber, String passengerId, Page<OrderDetailsVo> vo);
     //已到款
-    public Page<OrderDetailsVo> myaccount(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo);
+    public Page<OrderDetailsVo> myaccount(String orderNumber, String passengerId, Page<OrderDetailsVo> vo);
 
     /*//修改订单状态
     @Transactional
@@ -78,4 +80,21 @@ public interface OrderService {
     public List<IndayVo> updateCheckDay(String time,Integer roomId,Integer id);
 
     public Integer updateAll(OrderPo po);
+
+    ///==================================整租============================================================================
+    public Page<OrderDetailsVo> selectRoomByType(Integer id,String roomNumber,Page<OrderDetailsVo> vo);
+    public Integer countRoomByType(Integer id);
+    public List<DayRoomNumberVo>  selectDayRoomType(Timestamp time,Integer typeid);
+    //查询全空房
+    public List<RoomSetPo> selectEmptyRoom(Integer typeid);
+
+    //查询空房
+    public List<RoomSetPo> selectEmptyRoomByOrder(Integer typeid);
+    public Integer YZDay(String time,Integer roomId);
+    /*未确认*/
+    public Page<OrderDetailsVo> listUnconfirmed(String orderNumber,String passenger,
+                                                Page<OrderDetailsVo> vo);
+    /*已取消*/
+    public Page<OrderDetailsVo> listCancelled(String orderNumber,String passenger,
+                                              Page<OrderDetailsVo> vo);
 }

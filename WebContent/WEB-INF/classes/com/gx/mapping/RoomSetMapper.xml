@@ -91,6 +91,7 @@
            guestRoomLevelID LIKE CONCAT('%',#{guestRoomLevelID,jdbcType=VARCHAR},'%')
        </if>
     AND su.isenabled=0 AND su.have=1
+       AND g.status=1
      order by r.roomNumber ASC
     limit #{start},#{pageSize}
   </select>
@@ -108,6 +109,7 @@
           guestRoomLevelID LIKE CONCAT('%',#{guestRoomLevelID,jdbcType=INTEGER},'%')
       </if>
      AND su.isenabled=0 AND su.have=1
+      AND g.status=1
      order by r.roomNumber ASC
   </select>
 
@@ -121,12 +123,14 @@
     FROM room r INNER JOIN `guestroomlevel` g ON r.guestRoomLevelID=g.id
     INNER JOIN `supplier` su ON r.`supplierID`=su.id
     WHERE  r.id =#{id,jdbcType=INTEGER}
+     AND g.status=1
 
 </select>
 
 <select id="selectHave" resultType="com.gx.po.RoomSetPo">
     SELECT * FROM `room` r INNER JOIN `supplier` s ON s.id=r.`supplierID`
-	WHERE s.`have`=1
+    INNER JOIN `guestroomlevel` g ON g.`id`=r.`guestRoomLevelID`
+	WHERE s.`have`=1 AND g.`status`=1
 </select>
 
 
@@ -162,4 +166,25 @@
          UPDATE `room` SET `roomAmount`=#{roomAcount,jdbcType=INTEGER} WHERE `id` =#{id,jdbcType=INTEGER}
     </update>
 
+    <!--================================整租==========================================================-->
+    <select id="selectSupplierByGuest" resultType="com.gx.vo.WholeOrderRoomVo">
+         SELECT DISTINCT `supplierID`,`supplierName`
+   FROM `room` r INNER JOIN `supplier` s ON r.`supplierID`=s.`id`
+   INNER JOIN `guestroomlevel` g ON g.`id`=r.`guestRoomLevelID`
+   WHERE g.`status`=2
+   AND g.`id`=#{guestid,jdbcType=INTEGER}
+    </select>
+    <select id="selectSupplier" resultType="com.gx.vo.WholeOrderRoomVo">
+         SELECT *,g.`id` AS guestid ,s.`id` AS supplierid
+   FROM `room` r INNER JOIN `supplier` s ON r.`supplierID`=s.`id`
+   INNER JOIN `guestroomlevel` g ON g.`id`=r.`guestRoomLevelID`
+   WHERE g.`status`=2
+    </select>
+<select id="roomByHotelAndGuest" resultType="com.gx.po.RoomSetPo">
+     SELECT DISTINCT r.`id`,r.`roomNumber`
+   FROM `room` r INNER JOIN `supplier` s ON r.`supplierID`=s.`id`
+   INNER JOIN `guestroomlevel` g ON g.`id`=r.`guestRoomLevelID`
+   WHERE g.`status`=2
+   AND g.`id`=#{guestid,jdbcType=INTEGER} AND s.`id`=#{supplierId,jdbcType=INTEGER}
+</select>
 </mapper>

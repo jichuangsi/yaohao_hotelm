@@ -4,6 +4,15 @@ public class guestRoomLevelPo {
 
     private Integer id;
     private String guestRoomLevel;
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public Integer getId() {
         return id;

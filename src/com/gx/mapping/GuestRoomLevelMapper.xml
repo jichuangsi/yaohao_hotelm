@@ -16,15 +16,61 @@
 
 <!--   新增 -->
   <insert id="insertAll" parameterType="com.gx.po.guestRoomLevelPo" useGeneratedKeys="true"  keyProperty="id">
-     INSERT INTO guestroomlevel (`guestroomlevel`)
-     values (#{name,jdbcType=VARCHAR})
+     INSERT INTO guestroomlevel (`guestroomlevel`,`status`)
+     values (#{guestRoomLevel,jdbcType=VARCHAR},#{status,jdbcType=INTEGER})
   </insert>
   
-<!--   查询全部 -->
+<!--   查询床位出租全部 -->
   <select id="list" resultType="com.gx.po.guestRoomLevelPo">
-    SELECT * FROM guestroomlevel
+    SELECT * FROM guestroomlevel where status=1
   </select>
-  
 
-          
+  <!--   查询整租全部 -->
+  <select id="listwhole" resultType="com.gx.po.guestRoomLevelPo">
+    SELECT * FROM guestroomlevel where status=2
+    <if test="hometype!=null and hometype!=''">
+    AND  guestRoomLevel like CONCAT('%',#{hometype,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+
+  <update id="updateType" parameterType="com.gx.po.guestRoomLevelPo">
+    UPDATE `guestroomlevel`
+    SET
+      `guestRoomLevel` = #{guestRoomLevel,jdbcType=VARCHAR}
+    WHERE `id` =#{id,jdbcType=INTEGER}
+  </update>
+<select id="nameYZ" resultType="java.lang.Integer">
+  SELECT COUNT(*) FROM `guestroomlevel` WHERE `guestRoomLevel`=#{guestRoomLevel,jdbcType=VARCHAR} AND `id`!=#{id,jdbcType=INTEGER}
+</select>
+  <select id="YZ" resultType="java.lang.Integer">
+  SELECT COUNT(*) FROM `guestroomlevel` WHERE `guestRoomLevel`=#{guestRoomLevel,jdbcType=VARCHAR}
+  </select>
+  <select id="selectById" resultType="com.gx.po.guestRoomLevelPo">
+     SELECT * FROM `guestroomlevel` WHERE `id`=#{id,jdbcType=INTEGER}
+  </select>
+<!--  <select id="selectByWhole" resultType="com.gx.po.guestRoomLevelPo">
+    SELECT * FROM `guestroomlevel` WHERE `status`=2
+  </select>-->
+
+  <!--<select id="pageList" resultType="com.gx.po.guestRoomLevelPo">
+    SELECT * FROM guestroomlevel where status=2
+    <if test="hometype!=null and hometype!=''">
+      AND guestRoomLevel like CONCAT('%',#{hometype,jdbcType=VARCHAR},'%')
+    </if>
+    LIMIT #{start},#{size}
+  </select>-->
+
+  <select id="pagelistwhole" resultType="com.gx.po.guestRoomLevelPo">
+    SELECT * FROM guestroomlevel where status=2
+    <if test="hometype!=null and hometype!=''">
+      AND guestRoomLevel like CONCAT('%',#{hometype,jdbcType=VARCHAR},'%')
+    </if>
+    LIMIT #{start},#{size}
+  </select>
+  <select id="countlistwhole"  resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM guestroomlevel where status=2
+    <if test="hometype!=null and hometype!=''">
+      AND  guestRoomLevel like CONCAT('%',#{hometype,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
 </mapper>

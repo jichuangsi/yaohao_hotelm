@@ -33,6 +33,33 @@ public class OrderDetailsVo {
     private int type; //1自有 2合约
     private String in;
     private String out;
+    private Integer hometype;//房型合租整租Id
+    private String guestRoomLevel;//房型名称
+    private Integer guestRoomLevelID;//房型id
+
+    public Integer getGuestRoomLevelID() {
+        return guestRoomLevelID;
+    }
+
+    public void setGuestRoomLevelID(Integer guestRoomLevelID) {
+        this.guestRoomLevelID = guestRoomLevelID;
+    }
+
+    public String getGuestRoomLevel() {
+        return guestRoomLevel;
+    }
+
+    public void setGuestRoomLevel(String guestRoomLevel) {
+        this.guestRoomLevel = guestRoomLevel;
+    }
+
+    public Integer getHometype() {
+        return hometype;
+    }
+
+    public void setHometype(Integer hometype) {
+        this.hometype = hometype;
+    }
 
     public int getCheckinRoom() {
         return checkinRoom;

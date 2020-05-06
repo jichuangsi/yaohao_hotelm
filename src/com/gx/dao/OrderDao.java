@@ -2,6 +2,7 @@ package com.gx.dao;
 
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.po.RoomSetPo;
 import com.gx.vo.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,25 +15,25 @@ public interface OrderDao {
     @Transactional
     public Integer inserAll(OrderPo orderPo);
     //条件查询
-    public List<OrderDetailsVo> list( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId,
+    public List<OrderDetailsVo> list( @Param("orderNumber")String orderNumber,  @Param("passenger")String passenger,
                                       @Param("start")int start, @Param("size")int size);
 
 
 
-    public Integer countList( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId);
+    public Integer countList( @Param("orderNumber")String orderNumber,  @Param("passenger")String passenger);
 
     //已入住
-    public List<OrderDetailsVo> checkinorder(@Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId,
+    public List<OrderDetailsVo> checkinorder(@Param("orderNumber")String orderNumber,  @Param("passenger")String passenger,
                                              @Param("start")int start, @Param("size")int size);
-    public Integer countcheckinorder( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId);
+    public Integer countcheckinorder( @Param("orderNumber")String orderNumber,  @Param("passenger")String passenger);
     //已退房
-    public List<OrderDetailsVo> checkoutorder(@Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId,
+    public List<OrderDetailsVo> checkoutorder(@Param("orderNumber")String orderNumber,  @Param("passenger")String passenger,
                                               @Param("start")int start, @Param("size")int size);
-    public Integer countcheckoutorder( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId);
+    public Integer countcheckoutorder( @Param("orderNumber")String orderNumber,  @Param("passenger")String passenger);
     //已到款
-    public List<OrderDetailsVo> myaccount(@Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId,
+    public List<OrderDetailsVo> myaccount(@Param("orderNumber")String orderNumber,  @Param("passenger")String passenger,
                                           @Param("start")int start, @Param("size")int size);
-    public Integer countmyaccount( @Param("orderNumber")String orderNumber,  @Param("passengerId")Integer passengerId);
+    public Integer countmyaccount( @Param("orderNumber")String orderNumber,  @Param("passenger")String passenger);
 
 
 
@@ -118,4 +119,25 @@ public interface OrderDao {
                                     @Param("roomId")Integer roomId,@Param("id")Integer id);
 
     public Integer updateAll(OrderPo po);
+    //========================================整租======================================================================
+
+    public List<OrderDetailsVo> selectRoomByType(@Param("id")Integer id,@Param("roomNumber")String roomNumber,@Param("start")int start, @Param("size")int size);
+    public Integer countRoomByType(@Param("id")Integer id);
+    public Integer countRoomByTypes(@Param("id")Integer id,@Param("roomNumber")String roomNumber);
+    public List<DayRoomNumberVo>  selectDayRoomType(@Param("time")Timestamp time, @Param("typeid")Integer typeid);
+    //查询全空房
+    public List<RoomSetPo> selectEmptyRoom(@Param("typeid")Integer typeid);
+    //查询空房
+    public List<RoomSetPo> selectEmptyRoomByOrder(@Param("typeid")Integer typeid);
+
+    public Integer YZDay(@Param("time")String time, @Param("roomId")Integer roomId);
+
+    /*未确认*/
+    public List<OrderDetailsVo> listUnconfirmed(@Param("orderNumber")String orderNumber,  @Param("passenger")String passenger,
+                                                @Param("start")int start, @Param("size")int size);
+    public Integer countListUnconfirmed(@Param("orderNumber")String orderNumber, @Param("passenger")String passenger);
+    /*已取消*/
+    public List<OrderDetailsVo> listCancelled(@Param("orderNumber")String orderNumber, @Param("passenger")String passenger,
+                                                @Param("start")int start, @Param("size")int size);
+    public Integer countListCancelled(@Param("orderNumber")String orderNumber, @Param("passenger")String passenger);
 }

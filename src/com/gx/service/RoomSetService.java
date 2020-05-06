@@ -4,6 +4,7 @@ import com.gx.page.Page;
 import com.gx.po.RoomSetPo;
 import com.gx.vo.OrderTimeVo;
 import com.gx.vo.RoomVo;
+import com.gx.vo.WholeOrderRoomVo;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -36,4 +37,9 @@ public interface RoomSetService {
     public Integer roomAcountById(Integer id,Integer roomAcount);
 
     public List<RoomSetPo> roomByHotelm(Integer id);
+
+    //=====================================整租==========================================================================//
+    public List<WholeOrderRoomVo> selectSupplierByGuest(Integer guestid);
+    public List<WholeOrderRoomVo> selectSupplier();
+    public List<RoomSetPo> roomByHotelAndGuest(Integer guestid,Integer supplierId);
 }

@@ -4,7 +4,7 @@
 	"name":"enter one user name",
 	"login":"Land",
 	"add":"add",
-	"private":"PrivateApartment",
+	"private":"PrivateApartment Bed rental",
 	"in":"Occupancy in",
 	"myorder":"my order",
 	"financeial":"Financeial statistics",
@@ -98,7 +98,24 @@
 	"anser":"Hotelm Questions Answer",
 	"dao":"Arrival account",
 	"img":"Upload pictures",
-	"video":"Upload video"
+	"video":"Upload video",
+	"privateall":"PrivateApartment Whole rent",
+	"hometye":"House type",
+	"addroom":"Add room",
+	"checkroom":"View rooms",
+	"addtype":"New house type",
+	"addorder":"New order",
+	"homeType":"Room type",
+	"contract":"Contract",
+	"wholes":"Whole rent",
+	"intype":"Occupancy type",
+	"Unconfirmed":"Unconfirmed",
+	"Cancelled":"Cancelled",
+	"confirm":"confirm",
+	"cancel":"cancel",
+	"bedrent":"Bed Rent"
+
+
 
 
 }

@@ -3,6 +3,7 @@ package com.gx.service.impl;
 import com.gx.dao.OrderDao;
 import com.gx.page.Page;
 import com.gx.po.OrderPo;
+import com.gx.po.RoomSetPo;
 import com.gx.service.OrderService;
 import com.gx.vo.DayRoomNumberVo;
 import com.gx.vo.IndayVo;
@@ -28,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDetailsVo> list(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo) {
+    public Page<OrderDetailsVo> list(String orderNumber, String passengerId, Page<OrderDetailsVo> vo) {
         int start=0;
         if (vo.getCurrentPage()>1) {
             start=(vo.getCurrentPage()-1)*vo.getPageSize();
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDetailsVo> checkinorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo) {
+    public Page<OrderDetailsVo> checkinorder(String orderNumber, String passengerId, Page<OrderDetailsVo> vo) {
         int start=0;
         if (vo.getCurrentPage()>1) {
             start=(vo.getCurrentPage()-1)*vo.getPageSize();
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDetailsVo> checkoutorder(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo) {
+    public Page<OrderDetailsVo> checkoutorder(String orderNumber, String passengerId, Page<OrderDetailsVo> vo) {
         int start=0;
         if (vo.getCurrentPage()>1) {
             start=(vo.getCurrentPage()-1)*vo.getPageSize();
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderDetailsVo> myaccount(String orderNumber, Integer passengerId, Page<OrderDetailsVo> vo) {
+    public Page<OrderDetailsVo> myaccount(String orderNumber, String passengerId, Page<OrderDetailsVo> vo) {
         int start=0;
         if (vo.getCurrentPage()>1) {
             start=(vo.getCurrentPage()-1)*vo.getPageSize();
@@ -261,5 +262,77 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Integer updateAll(OrderPo po) {
         return orderDao.updateAll(po);
+    }
+
+    //===============================整和================================================================================
+
+    @Override
+    public Page<OrderDetailsVo> selectRoomByType(Integer id,String roomNumber, Page<OrderDetailsVo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<OrderDetailsVo> list=orderDao.selectRoomByType(id,roomNumber,start, vo.getPageSize());
+        vo.setResult(list);
+        Integer count=orderDao.countRoomByTypes(id,roomNumber);
+        if (count==null){
+            count=0;
+        }
+        vo.setTotal(count);
+        return vo;
+    }
+
+
+    @Override
+    public List<DayRoomNumberVo> selectDayRoomType(Timestamp time, Integer typeid) {
+        return orderDao.selectDayRoomType(time, typeid);
+    }
+
+    @Override
+    public Integer countRoomByType(Integer id) {
+        return orderDao.countRoomByType(id);
+    }
+
+    @Override
+    public List<RoomSetPo> selectEmptyRoom(Integer typeid) {
+        return orderDao.selectEmptyRoom(typeid);
+    }
+
+    @Override
+    public List<RoomSetPo> selectEmptyRoomByOrder(Integer typeid) {
+        return orderDao.selectEmptyRoomByOrder(typeid);
+    }
+
+    @Override
+    public Integer YZDay(String time, Integer roomId) {
+        return orderDao.YZDay(time, roomId);
+    }
+
+    @Override
+    public Page<OrderDetailsVo> listUnconfirmed(String orderNumber, String passenger,Page<OrderDetailsVo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<OrderDetailsVo> list=orderDao.listUnconfirmed(orderNumber,passenger, start, vo.getPageSize());
+        vo.setResult(list);
+        int count=orderDao.countListUnconfirmed(orderNumber,passenger);
+        vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
+        return vo;
+    }
+
+    @Override
+    public Page<OrderDetailsVo> listCancelled(String orderNumber, String passenger,Page<OrderDetailsVo> vo) {
+        int start=0;
+        if (vo.getCurrentPage()>1) {
+            start=(vo.getCurrentPage()-1)*vo.getPageSize();
+        }
+        List<OrderDetailsVo> list=orderDao.listCancelled(orderNumber,passenger, start, vo.getPageSize());
+        vo.setResult(list);
+        int count=orderDao.countListCancelled(orderNumber,passenger);
+        vo.setTotal(count);
+        vo.setTotalPage(vo.getTotal()%vo.getPageSize() != 0 ?vo.getTotal()/vo.getPageSize() + 1 : vo.getTotal()/vo.getPageSize());
+        return vo;
     }
 }

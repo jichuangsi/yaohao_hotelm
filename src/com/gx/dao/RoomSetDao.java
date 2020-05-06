@@ -4,6 +4,7 @@ import com.gx.page.Page;
 import com.gx.po.RoomSetPo;
 import com.gx.vo.OrderTimeVo;
 import com.gx.vo.RoomVo;
+import com.gx.vo.WholeOrderRoomVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Date;
@@ -72,4 +73,10 @@ public interface RoomSetDao {
     public Integer roomAcountById(@Param("id")Integer id,@Param("roomAcount")Integer roomAcount);
 
     public List<RoomSetPo> roomByHotelm(@Param("id")Integer id);
+
+    //===========================z整租===================================================//
+
+    public List<WholeOrderRoomVo> selectSupplierByGuest(Integer guestid);
+    public List<WholeOrderRoomVo> selectSupplier();
+    public List<RoomSetPo> roomByHotelAndGuest(@Param("guestid")Integer guestid,@Param("supplierId")Integer supplierId);
 }

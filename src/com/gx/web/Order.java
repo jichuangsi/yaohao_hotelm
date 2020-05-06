@@ -62,7 +62,7 @@ public class Order {
 
     //自有已订单
     @RequestMapping("/myorder")
-    public ModelAndView myorder(String orderNumber,Integer passengerId,Integer currentPage) {
+    public ModelAndView myorder(String orderNumber,String passengerId,Integer currentPage) {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/accommodation");
         if (currentPage==null) {
@@ -96,7 +96,7 @@ public class Order {
     //分页订单
     @ResponseBody
     @RequestMapping("/pageorder")
-    public Object pageorder(String orderNumber,Integer passengerId,Integer currentPage,Integer status) {
+    public Object pageorder(String orderNumber,String passengerId,Integer currentPage,Integer status) {
         if (currentPage==null) {
             currentPage=1;
         }else if (currentPage==0) {
@@ -112,6 +112,10 @@ public class Order {
             vo=this.orderService.checkoutorder(orderNumber, passengerId,vo);
         }else if (status==3){//已到账
             vo=this.orderService.myaccount(orderNumber, passengerId,vo);
+        }else if (status==4){//未确认
+            vo=this.orderService.listUnconfirmed(orderNumber, passengerId,vo);
+        }else if (status==5){//已取消
+            vo=this.orderService.listCancelled(orderNumber, passengerId,vo);
         }
         Gson gson=new Gson();
         return gson.toJson(vo);
@@ -119,7 +123,7 @@ public class Order {
 
 
     @RequestMapping("/pageorders")
-    public ModelAndView pageorders(String orderNumber,Integer passengerId,Integer currentPage,Integer status) {
+    public ModelAndView pageorders(String orderNumber,String passengerId,Integer currentPage,Integer status) {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/accommodation");
         if (currentPage==null) {
@@ -129,6 +133,9 @@ public class Order {
         }
         Page<OrderDetailsVo> vo=new Page<OrderDetailsVo>();
         vo.setCurrentPage(currentPage);
+        if (status==null){
+            status=0;
+        }
         if (status==0){//已确认
             vo=this.orderService.list(orderNumber, passengerId,vo);
             mv.addObject("status",0);
@@ -141,13 +148,22 @@ public class Order {
         }else if (status==3){//已到账
             vo=this.orderService.myaccount(orderNumber, passengerId,vo);
             mv.addObject("status",3);
+        }else if (status==4){//未确认
+            vo=this.orderService.listUnconfirmed(orderNumber, passengerId,vo);
+            mv.addObject("status",4);
+        }else if (status==5){//已取消
+            vo=this.orderService.listCancelled(orderNumber, passengerId,vo);
+            mv.addObject("status",5);
         }
+        mv.addObject("orderNumber",orderNumber);
+        mv.addObject("passengerId",passengerId);
         mv.addObject("lists",vo);
         return mv;
     }
+
     //已入住
     @RequestMapping("/checkinorder")
-    public ModelAndView checkinorder(String orderNumber,Integer passengerId,Integer currentPage) {
+    public ModelAndView checkinorder(String orderNumber,String passengerId,Integer currentPage) {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/accommodationin");
         if (currentPage==null) {
@@ -163,7 +179,7 @@ public class Order {
     }
     //已退房
     @RequestMapping("/checkoutorder")
-    public ModelAndView checkoutorder(String orderNumber,Integer passengerId,Integer currentPage) {
+    public ModelAndView checkoutorder(String orderNumber,String passengerId,Integer currentPage) {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/accommodationout");
         if (currentPage==null) {
@@ -179,7 +195,7 @@ public class Order {
     }
     //已到账
     @RequestMapping("/myaccount")
-    public ModelAndView myaccount(String orderNumber,Integer passengerId,Integer currentPage) {
+    public ModelAndView myaccount(String orderNumber,String passengerId,Integer currentPage) {
         ModelAndView mv = null;
         mv = new ModelAndView("/order/accommodationaccount");
         if (currentPage==null) {
@@ -1381,7 +1397,8 @@ public class Order {
 
         OrderDetailsVo orderPo1=orderService.selectById(orderPo.getId());//原来的order
         //自有房的订单
-        orderPo.setType(1);
+
+        /*orderPo.setType(1);*/
         //判断是否到账
         if (orderPo.getIsdao()==1){
             orderPo.setDaoTime(null);

@@ -82,8 +82,26 @@
                 <li lay-id="tab1" lang>checkedin</li>
                 <li lay-id="tab2" lang>Check-out</li>
                 <li lay-id="tab3" lang>arrival</li>
+                <li lay-id="tab4" lang>Unconfirmed</li>
+                <li lay-id="tab5" lang>Cancelled</li>
             </ul>
             <div class="layui-tab-content">
+                <div class="layui-row"><%--action="${ctx}/Hotelm/allorder.do"--%>
+                    <form class="layui-form layui-col-md12">
+                        <div class="layui-input-inline">
+                            <input type="text" name="orderNumber" id="orderNumber" value="${orderNumber}"
+                                   placeholder="订单号" autocomplete="off"
+                                   class="layui-input" style="width: 200px;">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input type="text" name="passengerId" id="passengerId" value="${passengerId}"
+                                   placeholder="订单人" autocomplete="off"
+                                   class="layui-input" style="width: 200px;">
+                        </div>
+                        <div class="layui-btn" lay-submit="" lay-filter="search"><i class="layui-icon">&#xe615;</i>
+                        </div>
+                    </form>
+                </div>
                 <%--1已确定--%>
                 <div class="layui-tab-item layui-show">
                     <div class="layui-row" id="list">
@@ -139,8 +157,20 @@
                                     </div>
                                     <div class="rmb-title layui-row">
                                         <div class="layui-col-xs2 layui-col-xs-offset6">
-                                    <span class="layui-btn layui-btn-normal layui-btn-sm"
-                                          onclick="checkin(${item.id})" lang>ins</span>
+                                            <c:if test="${item.type==1}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>bedrent</span>
+                                            </c:if>
+                                            <c:if test="${item.type==2}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>contract</span>
+                                            </c:if>
+                                            <c:if test="${item.type==3}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>wholes</span>
+                                            </c:if>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                  onclick="checkin(${item.id})" lang>ins</span>
                                             <span class="layui-btn layui-btn-normal layui-btn-sm toupdate"
                                                   onclick="updateOrder(${item.id},0)" lang>amended</span>
                                             <c:if test="${item.daoTime==null}">
@@ -210,9 +240,21 @@
                                                 lang>name</span>:${item.name}</span></div>
                                     </div>
                                     <div class="rmb-title layui-row">
-                                        <div class="layui-col-xs2 layui-col-xs-offset4"><span
-                                                class="layui-btn layui-btn-normal layui-btn-sm"
-                                                onclick="checkout(${item.id})" lang>out</span>
+                                        <div class="layui-col-xs2 layui-col-xs-offset4">
+                                            <c:if test="${item.type==1}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>bedrent</span>
+                                            </c:if>
+                                            <c:if test="${item.type==2}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>contract</span>
+                                            </c:if>
+                                            <c:if test="${item.type==3}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>wholes</span>
+                                            </c:if>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                  onclick="checkout(${item.id})" lang>out</span>
                                             <span class="layui-btn layui-btn-normal layui-btn-sm toupdate"
                                                   onclick="updateOrder(${item.id},1)" lang>amended</span>
                                             <c:if test="${item.isdao==1}">
@@ -282,11 +324,21 @@
                                         <div class="layui-col-xs7 "><span style="padding:0px 10px;"><span
                                                 lang>name</span>:${item.name}</span></div>
                                     </div>
-                                    <c:if test="${item.daoTime==null}">
-                                        <div class="layui-col-xs2 layui-col-xs-offset8"><span
-                                                class="layui-btn layui-btn-normal layui-btn-sm"
-                                                onclick="daoacount(${item.id})" lang>ins</span></div>
-                                    </c:if>
+                                    <div class="layui-col-xs2 layui-col-xs-offset8">
+                                        <c:if test="${item.type==1}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span>
+                                        </c:if>
+                                        <c:if test="${item.type==2}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span>
+                                        </c:if>
+                                        <c:if test="${item.type==3}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span>
+                                        </c:if>
+                                        <c:if test="${item.daoTime==null}">
+                                       <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                             onclick="daoacount(${item.id})" lang>ins</span>
+                                        </c:if>
+                                    </div>
                                 </div>
 
                             </div>
@@ -347,17 +399,188 @@
                                         <div class="layui-col-xs7 "><span style="padding:0px 10px;"><span
                                                 lang>name</span>:${item.name}</span></div>
                                     </div>
-                                    <c:if test="${item.daoTime==null}">
-                                        <div class="layui-col-xs2 layui-col-xs-offset8"><span
-                                                class="layui-btn layui-btn-normal layui-btn-sm"
-                                                onclick="daoacount(${item.id})" lang>ins</span></div>
-                                    </c:if>
+                                    <div class="layui-col-xs2 layui-col-xs-offset8">
+                                        <c:if test="${item.type==1}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span>
+                                        </c:if>
+                                        <c:if test="${item.type==2}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span>
+                                        </c:if>
+                                        <c:if test="${item.type==3}">
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span>
+                                        </c:if>
+                                        <c:if test="${item.daoTime==null}">
+                                       <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                             onclick="daoacount(${item.id})" lang>ins</span>
+                                        </c:if>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </div>
                 </div>
+                <%--未确认--%>
+                <div class="layui-tab-item">
+                    <div class="layui-row" id="list4">
+                        <c:forEach items="${lists.result}" var="item">
+                            <div class="layui-col-md6 layui-col-xs12 layui-col-md6">
+                                <div class="rmb-box-ht">
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs4"><span
+                                                class="layui-badge-rim">${item.platformName}</span>
+                                        </div>
+                                        <div class="layui-col-xs4 layui-col-md3">${item.orderNumber}</div>
+                                        <div class="layui-col-xs4"><span
+                                                class="layui-badge-rim">${item.supplierName}</span>
+                                        </div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2"><span
+                                                class="layui-badge layui-bg-gray">${item.checkinNumber}<span
+                                                lang>bed</span></span>
+                                        </div>
+                                        <div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+                                        <div class="layui-col-xs6 "><span><span
+                                                lang>phone</span>:${item.phoneNumber}</span>
+                                        </div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2"><span
+                                                class="layui-badge layui-bg-gray">${item.checkinDay}<span
+                                                lang>night</span></span>
+                                        </div>
+                                        <div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}"
+                                                                                         pattern="yyyy-MM-dd"/>
+						</span> <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}"
+                                                                           pattern="yyyy-MM-dd"/></span></div>
+                                        <div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span
+                                                lang>to</span> <span>${item.out}</span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs4"><span><span lang>total</span> ：<c:if
+                                                test="${item.currency==1}">RMB</c:if>
+							<c:if test="${item.currency==2}">PHP</c:if>
+                                                ${item.money}</span></div>
+                                        <div class="layui-col-xs3"><span><span
+                                                lang>accounts</span>：${item.accountName}</span></div>
+                                        <div class="layui-col-xs5"><span><span lang>payment</span>：<c:if
+                                                test="${item.daoTime!=null}">
+                                            <fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
+                                        </c:if></span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs7 "><span style="padding:0px 10px;"><span
+                                                lang>name</span>:${item.name}</span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2 layui-col-xs-offset6">
+                                            <c:if test="${item.type==1}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>bedrent</span>
+                                            </c:if>
+                                            <c:if test="${item.type==2}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>contract</span>
+                                            </c:if>
+                                            <c:if test="${item.type==3}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>wholes</span>
+                                            </c:if>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                  onclick="confirmOrder(${item.id})" lang>confirm</span>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                  onclick="cancelOrder(${item.id})" lang>cancel</span>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm toupdate"
+                                                  onclick="updateOrder(${item.id},0)" lang>amended</span>
+                                            <c:if test="${item.daoTime==null}">
+                                                <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                      onclick="daoacount(${item.id})" lang>dao</span>
+                                            </c:if>
+                                        </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+                <%--已取消--%>
+                <div class="layui-tab-item">
+                    <div class="layui-row" id="list5">
+                        <c:forEach items="${lists.result}" var="item">
+                            <div class="layui-col-md6 layui-col-xs12 layui-col-md6">
+                                <div class="rmb-box-ht">
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs4"><span
+                                                class="layui-badge-rim">${item.platformName}</span>
+                                        </div>
+                                        <div class="layui-col-xs4 layui-col-md3">${item.orderNumber}</div>
+                                        <div class="layui-col-xs4"><span
+                                                class="layui-badge-rim">${item.supplierName}</span>
+                                        </div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2"><span
+                                                class="layui-badge layui-bg-gray">${item.checkinNumber}<span
+                                                lang>bed</span></span>
+                                        </div>
+                                        <div class="layui-col-xs4">${item.roomNumber}<span lang>room</span></div>
+                                        <div class="layui-col-xs6 "><span><span
+                                                lang>phone</span>:${item.phoneNumber}</span>
+                                        </div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2"><span
+                                                class="layui-badge layui-bg-gray">${item.checkinDay}<span
+                                                lang>night</span></span>
+                                        </div>
+                                        <div class="layui-col-xs6"><span><fmt:formatDate value="${item.checkintime}"
+                                                                                         pattern="yyyy-MM-dd"/>
+						</span> <span lang>to</span> <span><fmt:formatDate value="${item.checkouttime}"
+                                                                           pattern="yyyy-MM-dd"/></span></div>
+                                        <div class="layui-col-xs4 layui-col-md3"><span>${item.in}</span> <span
+                                                lang>to</span> <span>${item.out}</span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs4"><span><span lang>total</span> ：<c:if
+                                                test="${item.currency==1}">RMB</c:if>
+							<c:if test="${item.currency==2}">PHP</c:if>
+                                                ${item.money}</span></div>
+                                        <div class="layui-col-xs3"><span><span
+                                                lang>accounts</span>：${item.accountName}</span></div>
+                                        <div class="layui-col-xs5"><span><span lang>payment</span>：<c:if
+                                                test="${item.daoTime!=null}">
+                                            <fmt:formatDate value="${item.daoTime}" pattern="yyyy-MM-dd"/>
+                                        </c:if></span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs7 "><span style="padding:0px 10px;"><span
+                                                lang>name</span>:${item.name}</span></div>
+                                    </div>
+                                    <div class="rmb-title layui-row">
+                                        <div class="layui-col-xs2 layui-col-xs-offset6">
+                                            <c:if test="${item.type==1}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>bedrent</span>
+                                            </c:if>
+                                            <c:if test="${item.type==2}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>contract</span>
+                                            </c:if>
+                                            <c:if test="${item.type==3}">
+                                                <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
+                                                      lang>wholes</span>
+                                            </c:if>
+                                            <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>Cancelled</span>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -395,9 +618,10 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>roomNumber</span>:</label>
                 <div class="layui-input-block widths">
-                    <select name="roomId" lay-verify="required" >
+                    <select name="roomId" lay-verify="required">
                         <c:forEach items="${list}" var="item">
-                            <option value="${item.id}" <c:if test="${item.id==vo.roomid}">selected </c:if>>${item.roomNumber}</option>
+                            <option value="${item.id}"
+                                    <c:if test="${item.id==vo.roomid}">selected </c:if>>${item.roomNumber}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -407,15 +631,19 @@
                 <div class="layui-input-block widths">
                     <select name="currency" lay-verify="required">
                         <option value="-1"></option>
-                        <option value="1" <c:if test="${1==vo.currency}">selected </c:if> lang>RMB</option>
-                        <option value="2" <c:if test="${2==vo.currency}">selected </c:if> lang>PHP</option>
+                        <option value="1"
+                                <c:if test="${1==vo.currency}">selected </c:if> lang>RMB
+                        </option>
+                        <option value="2"
+                                <c:if test="${2==vo.currency}">selected </c:if> lang>PHP
+                        </option>
                     </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>Price</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="money" class="layui-input "  value="${vo.money}">
+                    <input type="text" name="money" class="layui-input " value="${vo.money}">
                 </div>
             </div>
 
@@ -423,47 +651,51 @@
                 <label class="layui-form-label"><span lang>checkin</span>:</label>
                 <div class="layui-input-block widths">
                     <input type="text" name="checkinTime" id="checkinTime" class="layui-input time"
-                           lay-verify="required"  value="${vo.checkintime}">
+                           lay-verify="required" value="${vo.checkintime}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>checkout</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="checkoutTime" class="layui-input time" id="checkoutTime" lay-verify="required"  value="${vo.checkouttime}">
+                    <input type="text" name="checkoutTime" class="layui-input time" id="checkoutTime"
+                           lay-verify="required" value="${vo.checkouttime}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>name</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="pId" class="layui-input " lay-verify="required"  value="${vo.pId}">
-                    <input type="text" name="name" class="layui-input " lay-verify="required"  value="${vo.name}">
+                    <input type="text" name="pId" class="layui-input " lay-verify="required" value="${vo.pId}">
+                    <input type="text" name="name" class="layui-input " lay-verify="required" value="${vo.name}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>phone</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="phoneNumber" class="layui-input " lay-verify="required"  value="${vo.phoneNumber}">
+                    <input type="text" name="phoneNumber" class="layui-input " lay-verify="required"
+                           value="${vo.phoneNumber}">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>checknumber</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input " lay-verify="required"  value="${vo.checkinNumber}">
+                    <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input "
+                           lay-verify="required" value="${vo.checkinNumber}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>checkinRoom</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="text" name="checkinRoom" id="checkinRoom" class="layui-input " lay-verify="required"  value="${vo.checkinRoom}">
+                    <input type="text" name="checkinRoom" id="checkinRoom" class="layui-input " lay-verify="required"
+                           value="${vo.checkinRoom}">
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>account</span>:</label>
                 <div class="layui-input-block widths">
-                    <input type="radio" name="isdao" value="2" title="是"<c:if test="${2==vo.isdao}">checked </c:if>>
-                    <input type="radio" name="isdao" value="1" title="否"<c:if test="${1==vo.isdao}">checked </c:if>>
+                    <input type="radio" name="isdao" value="2" title="是" <c:if test="${2==vo.isdao}">checked </c:if>>
+                    <input type="radio" name="isdao" value="1" title="否" <c:if test="${1==vo.isdao}">checked </c:if>>
                 </div>
             </div>
             <div class="layui-form-item">
@@ -471,7 +703,8 @@
                 <div class="layui-input-block widths">
                     <select name="account" lay-verify="required">
                         <c:forEach items="${alist}" var="items">
-                            <option value="${items.id}" <c:if test="${items.id==vo.aid}">selected </c:if>>${items.name}</option>
+                            <option value="${items.id}"
+                                    <c:if test="${items.id==vo.aid}">selected </c:if>>${items.name}</option>
                         </c:forEach>
                     </select>
                 </div>
@@ -501,8 +734,9 @@
 <script>
     var ss = 0;
     var ps = 1;
-    layui.use(['element', 'flow'], function () {
+    layui.use(['element', 'flow', 'form'], function () {
         var element = layui.element,
+            form = layui.form,
             flow = layui.flow;
 
         element.render();
@@ -571,6 +805,8 @@
         });
 
         function funpage(status, p) {
+            var time = document.getElementById("orderNumber").value;
+            var passengerId = document.getElementById("passengerId").value;
             //获取hash来切换选项卡，假设当前地址的hash为lay-id对应的值
             var layid = location.hash.replace(/^#docDemoTabBrief=/, '');
             element.tabChange('docDemoTabBrief', layid); //假设当前地址为：http://a.com#test1=222，那么选项卡会自动切换到“发送消息”这一项
@@ -578,7 +814,7 @@
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
                 url: '${ctx}/Order/pageorder.do',       //地址 type 带参数
-                data: "status=" + status + "&currentPage=" + p,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                data: "orderNumber=" + time + "&status=" + status + "&currentPage=" + p+"&passengerId="+passengerId,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     console.log(result)
@@ -592,6 +828,10 @@
                         $('#list2').empty();
                     } else if (status == 3) {
                         $('#list3').empty();
+                    } else if (status == 4) {
+                        $('#list4').empty();
+                    } else if (status == 5) {
+                        $('#list5').empty();
                     }
                     $("#pages").empty();
                     var pageStr = '';
@@ -629,45 +869,117 @@
                         if (item.isdao == 2) {
                             listStr += formateDate(item.daoTime);
                         }
-                        listStr += '</span></div>';
+                        listStr += '</span></div></div>';
                         listStr += ' <div class="rmb-title layui-row">';
                         listStr += ' <div class="layui-col-xs7 "><span style="padding:0px 10px;"><span lang>name</span>:' + item.name + '</span></div>';
                         listStr += '</div>';
                         if (status == 0) {//确认
                             listStr += '<div class="rmb-title layui-row">';
                             listStr += ' <div class="layui-col-xs2 layui-col-xs-offset4">';
-                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin('+ item.id + ')" lang>ins</span>';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
+                            }
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkin(' + item.id + ')" lang>ins</span>';
                             if (item.isdao == 1) {
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
-                            listStr+='<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder('+item.id+',status)" lang>amended</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder(' + item.id + ',' + status + ')" lang>amended</span>';
                             listStr += '</div>';
                             listStr += '</div>';
                         } else if (status == 1) {//入住
                             listStr += '<div class="rmb-title layui-row">';
                             listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
+                            }
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
                             listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="checkout(' + item.id + ')" lang>out</span>';
                             if (item.isdao == 1) {
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
-                            listStr+='<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder('+item.id+',status)" lang>amended</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder(' + item.id + ',' + status + ')" lang>amended</span>';
                             listStr += '</div>';
                             listStr += '</div>'
                         } else if (status == 2) {//退房
-                            if (item.isdao == 1) {
-                                listStr += '<div class="rmb-title layui-row">';
-                                listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
-                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span></div>';
-                                listStr += '</div>';
+                            listStr += '<div class="rmb-title layui-row">';
+                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
                             }
-
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
+                            if (item.isdao == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
+                            }
+                            listStr += '</div></div>';
                         } else if (status == 3) {
-                            if (item.isdao == 1) {
-                                listStr += '<div class="rmb-title layui-row">';
-                                listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
-                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span></div>';
-                                listStr += '</div>';
+                            listStr += '<div class="rmb-title layui-row">';
+                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset8">';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
                             }
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
+                            if (item.isdao == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
+                            }
+                            listStr += '</div></div>';
+                        }
+                        if (status == 4) {//确认
+                            listStr += '<div class="rmb-title layui-row">';
+                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset4">';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
+                            }
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="confirmOrder(' + item.id + ')" lang>confirm</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="cancelOrder(' + item.id + ')" lang>cancel</span>';
+                            if (item.isdao == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
+                            }
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder(' + item.id + ',' + status + ')" lang>amended</span>';
+                            listStr += '</div>';
+                            listStr += '</div>';
+                        }
+                        if (status == 5) {//确认
+                            listStr += '<div class="rmb-title layui-row">';
+                            listStr += ' <div class="layui-col-xs2 layui-col-xs-offset4">';
+                            if (item.type == 1) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>bedrent</span> ';
+                            }
+                            if (item.type == 2) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>contract</span> ';
+                            }
+                            if (item.type == 3) {
+                                listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>wholes</span> ';
+                            }
+                            listStr += '<span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm" lang>Cancelled</span>';
+                            listStr += '</div>';
+                            listStr += '</div>';
                         }
 
                         listStr += '</div> </div> </div>';
@@ -681,13 +993,17 @@
                         $('#list2').append(listStr);
                     } else if (status == 3) {
                         $('#list3').append(listStr);
+                    } else if (status == 4) {
+                        $('#list4').append(listStr);
+                    } else if (status == 5) {
+                        $('#list5').append(listStr);
                     }
                     pageStr += ' <div class="row-fluid">';
                     pageStr += '<div class="tcdPageCode" style="text-align:center;"></div>';
                     pageStr += ' </div>';
                     $("#pages").append(pageStr);
 
-                  /*  ps = result.currentPage;*/
+                    /*  ps = result.currentPage;*/
                     /* 分页要用的 */
                     $(".tcdPageCode").createPage({
                         pageCount: result.totalPage,
@@ -731,32 +1047,49 @@
         }
 
 
-        window.updateOrder=function (value,value2) {
-            window.location='${ctx}/Order/toupdate.do?id='+value+'&status='+value2;
+        window.updateOrder = function (value, value2) {
+            window.location = '${ctx}/Order/toupdate.do?id=' + value + '&status=' + value2;
 
         }
 
-
-
-
-        /*$(document).on('click', '.updateOrder', function () {
-            getData($(this))
+        form.on('submit(search)', function () {
+            funpage(ss, ps);
         });
 
-        function getData(obj) {
+        window.confirmOrder = function (value) {
+            $.ajax({
+                cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                type: "POST",                                           //上面3行都是必须要的
+                url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
+                data: "orderNumber=" + value + "&status=2",                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                async: false,                                          // 是否 异步 提交
+                success: function (result) {                          // 不出现异常 进行立面方
+                    if (result != 1) {
+                        /*alert("新增失败"+' \n '+"Failed to add");        */             //提示框
+                        funpage(ss, ps);
+                    } else {
+                        funpage(ss, ps);
 
-
-            form.val('test', {
-                "roomNumber": roomNumber,
-                "roomId": id
-                /!*  "checkinTime": time + " 00:00:00"*!/
-            });
-            add();
-        }*/
-
-
-
-
+                    }
+                }
+            })
+        }
+        window.cancelOrder = function (value) {
+            $.ajax({
+                cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
+                type: "POST",                                           //上面3行都是必须要的
+                url: '${ctx}/Order/updateStatus.do',       //地址 type 带参数
+                data: "orderNumber=" + value + "&status=3",                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                async: false,                                          // 是否 异步 提交
+                success: function (result) {                          // 不出现异常 进行立面方
+                    if (result != 1) {
+                        funpage(ss, ps);
+                    } else {
+                        funpage(ss, ps);
+                    }
+                }
+            })
+        }
     });
 
 

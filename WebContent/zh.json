@@ -4,7 +4,7 @@
 	"name":"请输入用户名",
 	"login":"登陆",
 	"add":"新增",
-	"private":"自有公寓",
+	"private":"自有公寓-床位出租",
 	"in":"入住情况",
 	"myorder":"我的订单",
 	"financeial":"财务报表",
@@ -98,7 +98,22 @@
 	"anser":"酒店问题回答",
 	"dao":"到账",
 	"img":"上传图片",
-	"video":"上传视频"
+	"video":"上传视频",
+	"privateall":"自有公寓—整租",
+	"hometye":"房型看房",
+	"addroom":"添加房间",
+	"checkroom":"查看房间",
+	"addtype":"新增房型",
+	"addorder":"新增订单",
+	"homeType":"房型",
+	"contract":"合约房",
+	"wholes":"自有整租",
+	"intype":"入住类型",
+	"Unconfirmed":"未确认",
+	"Cancelled":"已取消",
+	"confirm":"确认",
+	"cancel":"取消",
+	"bedrent":"床位出租"
 
 
 }

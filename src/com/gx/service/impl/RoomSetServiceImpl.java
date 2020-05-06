@@ -6,6 +6,7 @@ import com.gx.po.RoomSetPo;
 import com.gx.service.RoomSetService;
 import com.gx.vo.OrderTimeVo;
 import com.gx.vo.RoomVo;
+import com.gx.vo.WholeOrderRoomVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,5 +98,20 @@ public class RoomSetServiceImpl implements RoomSetService {
 	@Override
 	public List<RoomSetPo> roomByHotelm(Integer id) {
 		return roomSetDao.roomByHotelm(id);
+	}
+
+	@Override
+	public List<WholeOrderRoomVo> selectSupplierByGuest(Integer guestid) {
+		return roomSetDao.selectSupplierByGuest(guestid);
+	}
+
+	@Override
+	public List<WholeOrderRoomVo> selectSupplier() {
+		return roomSetDao.selectSupplier();
+	}
+
+	@Override
+	public List<RoomSetPo> roomByHotelAndGuest(Integer guestid, Integer supplierId) {
+		return roomSetDao.roomByHotelAndGuest(guestid, supplierId);
 	}
 }

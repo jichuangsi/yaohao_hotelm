@@ -58,6 +58,7 @@
                 <div class="layui-input-block widths">
                     <input type="hidden" id="statuss" value="${status}"/>
                     <input type="hidden" name="id" value="${vo.id}"/>
+                    <input type="hidden" name="type" value="${vo.type}"/>
                     <input type="text" name="orderNumber" id="order" class="layui-input " value="${vo.orderNumber}" readonly>
                 </div>
             </div>
@@ -130,13 +131,22 @@
                     <input type="text" name="phoneNumber" class="layui-input " lay-verify="required"  value="${vo.phoneNumber}">
                 </div>
             </div>
-
+        <c:if test="${status!=4}"><%--未确认--%>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>checknumber</span>:</label>
                 <div class="layui-input-block widths">
                     <input type="text" name="checkinNumber" id="checkinNumber" class="layui-input " lay-verify="required"  value="${vo.checkinNumber}">
                 </div>
             </div>
+     </c:if>
+            <c:if test="${status==4}"><%--未确认--%>
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label"><span lang>checknumber</span>:</label>
+                    <div class="layui-input-block widths">
+                        <input type="text" name="checkinNumber"  class="layui-input " lay-verify="required"  value="1">
+                    </div>
+                </div>
+            </c:if>
             <div class="layui-form-item">
                 <label class="layui-form-label"><span lang>checkinRoom</span>:</label>
                 <div class="layui-input-block widths">
@@ -161,6 +171,17 @@
                     </select>
                 </div>
             </div>
+            <c:if test="${status==4}"><%--未确认--%>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span lang>intype</span>:</label>
+                    <div class="layui-input-block widths">
+                        <select name="type" lay-verify="required" id="rzlx" lay-filter="rzlx">
+                            <option value="3" lang>自有整租</option>
+                            <option value="2" lang>合约公寓</option>
+                        </select>
+                    </div>
+                </div>
+            </c:if>
             <div class="layui-form-item">
                 <div class="layui-input-block">
                     <div class="layui-btn" lay-submit lay-filter="addMenu" lang>Submission</div>
@@ -226,7 +247,7 @@
                         alert("新增成功！" + ' \n ' + "succeeded");
                         var statuss=$("#statuss").val();
                         console.log(statuss);
-                     location.href = '${ctx}/Order/pageorders.do?status='+statuss;
+                     location.href = '${ctx}/Order/pageorders.do?status=0';
                     }
                 }
             })
@@ -235,11 +256,21 @@
         });
 
         function day(param) {
+            var statuss=$("#statuss").val();
+            var url;
+            if (statuss==4){
+                if (param.status==1){//未确认
+
+                }
+                url='${ctx}/Order/updateCheckinDay.do';
+            }else {
+                url='${ctx}/Order/updateCheckinDay.do';
+            }
             var bl = true
             $.ajax({
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
-                url: '${ctx}/Order/updateCheckinDay.do',       //地址 type 带参数
+                url:url ,       //地址 type 带参数
                 data: param,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
