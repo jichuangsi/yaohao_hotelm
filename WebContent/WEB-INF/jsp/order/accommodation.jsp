@@ -156,7 +156,7 @@
                                                 lang>name</span>:${item.name}</span></div>
                                     </div>
                                     <div class="rmb-title layui-row">
-                                        <div class="layui-col-xs2 layui-col-xs-offset6">
+                                        <div class="layui-col-xs2 layui-col-xs-offset5">
                                             <c:if test="${item.type==1}">
                                                 <span class="layui-btn layui-btn-normal layui-bg-gray layui-btn-sm"
                                                       lang>bedrent</span>
@@ -177,6 +177,8 @@
                                                 <span class="layui-btn layui-btn-normal layui-btn-sm"
                                                       onclick="daoacount(${item.id})" lang>dao</span>
                                             </c:if>
+                                            <span class="layui-btn layui-btn-normal layui-btn-sm"
+                                                  onclick="cancelOrder(${item.id})" lang>cancel</span>
                                         </div>
 
                                     </div>
@@ -814,7 +816,7 @@
                 cache: false,                                             //是否使用缓存提交 如果为TRUE 会调用浏览器的缓存 而不会提交
                 type: "POST",                                           //上面3行都是必须要的
                 url: '${ctx}/Order/pageorder.do',       //地址 type 带参数
-                data: "orderNumber=" + time + "&status=" + status + "&currentPage=" + p+"&passengerId="+passengerId,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
+                data: "orderNumber=" + time + "&status=" + status + "&currentPage=" + p + "&passengerId=" + passengerId,                         // IDCardValue 自定义的。相当于name把值赋予给 他可以在servlet 获取
                 async: false,                                          // 是否 异步 提交
                 success: function (result) {                          // 不出现异常 进行立面方
                     console.log(result)
@@ -890,6 +892,7 @@
                                 listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="daoacount(' + item.id + ')" lang>dao</span>';
                             }
                             listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm toupdate" onclick="updateOrder(' + item.id + ',' + status + ')" lang>amended</span>';
+                            listStr += '<span class="layui-btn layui-btn-normal layui-btn-sm" onclick="cancelOrder('+item.id+')" lang>cancel</span>';
                             listStr += '</div>';
                             listStr += '</div>';
                         } else if (status == 1) {//入住
@@ -1021,6 +1024,8 @@
                     setLanguage(getCookieVal("lang"));
                 }
             })
+            registerWords();
+            setLanguage(getCookieVal("lang"));
             element.init();
         }
 

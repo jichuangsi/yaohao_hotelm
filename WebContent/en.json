@@ -4,7 +4,7 @@
 	"name":"enter one user name",
 	"login":"Land",
 	"add":"add",
-	"private":"PrivateApartment Bed rental",
+	"private":"PrivateApartment",
 	"in":"Occupancy in",
 	"myorder":"my order",
 	"financeial":"Financeial statistics",
@@ -99,7 +99,7 @@
 	"dao":"Arrival account",
 	"img":"Upload pictures",
 	"video":"Upload video",
-	"privateall":"PrivateApartment Whole rent",
+	"privateall":"Other houses",
 	"hometye":"House type",
 	"addroom":"Add room",
 	"checkroom":"View rooms",
@@ -111,7 +111,6 @@
 	"intype":"Occupancy type",
 	"Unconfirmed":"Unconfirmed",
 	"Cancelled":"Cancelled",
-	"confirm":"confirm",
 	"cancel":"cancel",
 	"bedrent":"Bed Rent"
 
